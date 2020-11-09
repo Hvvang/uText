@@ -1,0 +1,3 @@
+[33m1:[m  [36m#!/usr/bin/env zsh[m
+[33m2:[m [01;34mecho[m [31m"Hello world!"[m
+[33m3:[m 

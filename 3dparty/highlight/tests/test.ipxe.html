@@ -1,0 +1,629 @@
+<!-- Generator: GNU source-highlight 
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><i><font color="#9A1900">#!ipxe</font></i>
+
+<i><font color="#9A1900"># menu.ipxe</font></i>
+<i><font color="#9A1900">#</font></i>
+<i><font color="#9A1900"># Author: Robin Smidsrod</font></i>
+<i><font color="#9A1900"># Source: </font></i><u><font color="#0000FF">https://gist.github.com/robinsmidsrod/2234639</font></u>
+
+<i><font color="#9A1900"># Variables are specified in boot.ipxe.cfg</font></i>
+
+<i><font color="#9A1900"># Some menu defaults</font></i>
+<b><font color="#0000FF">set</font></b> <font color="#009900">menu-timeout</font> <font color="#993399">5000</font>
+<b><font color="#0000FF">set</font></b> <font color="#009900">submenu-timeout</font> <font color="#009900">${menu-timeout}</font>
+<b><font color="#0000FF">isset</font></b> <font color="#009900">${menu-default}</font> <font color="#990000">||</font> <b><font color="#0000FF">set</font></b> <font color="#009900">menu-default</font> exit
+
+<i><font color="#9A1900"># Figure out if client is 64-bit capable</font></i>
+<b><font color="#0000FF">cpuid</font></b> --ext <font color="#993399">29</font> <font color="#990000">&amp;&amp;</font> <b><font color="#0000FF">set</font></b> <font color="#009900">arch</font> x64 <font color="#990000">||</font> <b><font color="#0000FF">set</font></b> <font color="#009900">arch</font> x86
+<b><font color="#0000FF">cpuid</font></b> --ext <font color="#993399">29</font> <font color="#990000">&amp;&amp;</font> <b><font color="#0000FF">set</font></b> <font color="#009900">archl</font> amd64 <font color="#990000">||</font> <b><font color="#0000FF">set</font></b> <font color="#009900">archl</font> i386
+
+<i><font color="#9A1900">###################### MAIN MENU ####################################</font></i>
+
+<b><font color="#008080">:start</font></b>
+<b><font color="#0000FF">menu</font></b> iPXE boot menu for <font color="#009900">${initiator-iqn}</font>
+<b><font color="#0000FF">item</font></b> --gap --             ------------------------- Operating systems ------------------------------
+<b><font color="#0000FF">item</font></b> --key f freedos      Boot FreeDOS from iSCSI
+<b><font color="#0000FF">item</font></b> --key m msdos        Boot MS-DOS from iSCSI
+<b><font color="#0000FF">item</font></b> --key u ubuntu       Boot Ubuntu from iSCSI
+<b><font color="#0000FF">item</font></b> --key v vmware       Boot VMware ESXi from iSCSI
+<b><font color="#0000FF">item</font></b> --key w windows7     Boot Windows <font color="#993399">7</font> from iSCSI
+<b><font color="#0000FF">item</font></b> --key l menu-live    Live environments...
+<b><font color="#0000FF">item</font></b> --gap --             ------------------------- Tools and utilities ----------------------------
+<b><font color="#0000FF">item</font></b> --key p pxelinux     Load PXELinux menu
+<b><font color="#0000FF">item</font></b> --key r menu-recovery Recovery tools...
+<b><font color="#0000FF">item</font></b> --key d menu-diag    Diagnostics tools...
+<b><font color="#0000FF">item</font></b> --key i menu-install Installers...
+<b><font color="#0000FF">item</font></b> --gap --             ------------------------- Advanced options -------------------------------
+<b><font color="#0000FF">item</font></b> --key c config       Configure settings
+<b><font color="#0000FF">item</font></b> shell                Drop to iPXE shell
+<b><font color="#0000FF">item</font></b> reboot               Reboot computer
+<b><font color="#0000FF">item</font></b>
+<b><font color="#0000FF">item</font></b> --key x exit         Exit iPXE and continue BIOS boot
+<b><font color="#0000FF">choose</font></b> --timeout <font color="#009900">${menu-timeout}</font> --default <font color="#009900">${menu-default}</font> selected <font color="#990000">||</font> <b><font color="#0000FF">goto</font></b> <b><font color="#008080">cancel</font></b>
+<b><font color="#0000FF">set</font></b> <font color="#009900">menu-timeout</font> <font color="#993399">0</font>
+<b><font color="#0000FF">goto</font></b> <font color="#009900">${selected}</font>
+
+<b><font color="#008080">:cancel</font></b>
+<b><font color="#0000FF">echo</font></b> You cancelled the menu, dropping you to a shell
+
+<b><font color="#008080">:shell</font></b>
+<b><font color="#0000FF">echo</font></b> Type 'exit' to get the back to the menu
+<b><font color="#0000FF">shell</font></b>
+<b><font color="#0000FF">set</font></b> <font color="#009900">menu-timeout</font> <font color="#993399">0</font>
+<b><font color="#0000FF">set</font></b> <font color="#009900">submenu-timeout</font> <font color="#993399">0</font>
+<b><font color="#0000FF">goto</font></b> <b><font color="#008080">start</font></b>
+
+<b><font color="#008080">:failed</font></b>
+<b><font color="#0000FF">echo</font></b> Booting failed, dropping to shell
+<b><font color="#0000FF">goto</font></b> <b><font color="#008080">shell</font></b>
+
+<b><font color="#008080">:reboot</font></b>
+<b><font color="#0000FF">reboot</font></b>
+
+<b><font color="#008080">:exit</font></b>
+<b><font color="#0000FF">exit</font></b>
+
+<b><font color="#008080">:config</font></b>
+<b><font color="#0000FF">config</font></b>
+<b><font color="#0000FF">goto</font></b> <b><font color="#008080">start</font></b>
+
+<b><font color="#008080">:back</font></b>
+<b><font color="#0000FF">set</font></b> <font color="#009900">submenu-timeout</font> <font color="#993399">0</font>
+<b><font color="#0000FF">clear</font></b> <font color="#009900">submenu-default</font>
+<b><font color="#0000FF">goto</font></b> <b><font color="#008080">start</font></b>
+
+<i><font color="#9A1900">############ MAIN MENU ITEMS ############</font></i>
+
+<b><font color="#008080">:freedos</font></b>
+<b><font color="#0000FF">echo</font></b> Booting FreeDOS from iSCSI for <font color="#009900">${initiator-iqn}</font>
+<b><font color="#0000FF">set</font></b> <font color="#009900">root-path</font> <font color="#009900">${base-iscsi}</font>:<font color="#009900">${hostname}</font>.boot.freedos
+<b><font color="#0000FF">sanboot</font></b> <font color="#009900">${root-path}</font> <font color="#990000">||</font> <b><font color="#0000FF">goto</font></b> <b><font color="#008080">failed</font></b>
+<b><font color="#0000FF">goto</font></b> <b><font color="#008080">start</font></b>
+
+<b><font color="#008080">:msdos</font></b>
+<b><font color="#0000FF">echo</font></b> Booting MS-DOS from iSCSI for <font color="#009900">${initiator-iqn}</font>
+<b><font color="#0000FF">set</font></b> <font color="#009900">root-path</font> <font color="#009900">${base-iscsi}</font>:<font color="#009900">${hostname}</font>.boot.msdos
+<b><font color="#0000FF">sanboot</font></b> <font color="#009900">${root-path}</font> <font color="#990000">||</font> <b><font color="#0000FF">goto</font></b> <b><font color="#008080">failed</font></b>
+<b><font color="#0000FF">goto</font></b> <b><font color="#008080">start</font></b>
+
+<b><font color="#008080">:ubuntu</font></b>
+<b><font color="#0000FF">echo</font></b> Booting Ubuntu from iSCSI for <font color="#009900">${initiator-iqn}</font>
+<b><font color="#0000FF">set</font></b> <font color="#009900">root-path</font> <font color="#009900">${base-iscsi}</font>:<font color="#009900">${hostname}</font>.boot.ubuntu
+<b><font color="#0000FF">sanboot</font></b> <font color="#009900">${root-path}</font> <font color="#990000">||</font> <b><font color="#0000FF">goto</font></b> <b><font color="#008080">failed</font></b>
+<b><font color="#0000FF">goto</font></b> <b><font color="#008080">start</font></b>
+
+<b><font color="#008080">:vmware</font></b>
+<b><font color="#0000FF">echo</font></b> Booting VMware ESXi from iSCSI for <font color="#009900">${initiator-iqn}</font>
+<b><font color="#0000FF">set</font></b> <font color="#009900">root-path</font> <font color="#009900">${base-iscsi}</font>:<font color="#009900">${hostname}</font>.boot.vmware
+<b><font color="#0000FF">sanboot</font></b> <font color="#009900">${root-path}</font> <font color="#990000">||</font> <b><font color="#0000FF">goto</font></b> <b><font color="#008080">failed</font></b>
+<b><font color="#0000FF">goto</font></b> <b><font color="#008080">start</font></b>
+
+<b><font color="#008080">:windows7</font></b>
+<b><font color="#0000FF">echo</font></b> Booting Windows <font color="#993399">7</font> from iSCSI for <font color="#009900">${initiator-iqn}</font>
+<i><font color="#9A1900"># Force gateway to be the iSCSI target server (kludge for stupid window behavior)</font></i>
+<b><font color="#0000FF">set</font></b> <font color="#009900">netX/gateway</font> <font color="#009900">${iscsi-server}</font>
+<b><font color="#0000FF">set</font></b> <font color="#009900">root-path</font> <font color="#009900">${base-iscsi}</font>:<font color="#009900">${hostname}</font>.boot.windows7
+<b><font color="#0000FF">sanboot</font></b> <font color="#009900">${root-path}</font> <font color="#990000">||</font> <b><font color="#0000FF">goto</font></b> <b><font color="#008080">failed</font></b>
+<b><font color="#0000FF">goto</font></b> <b><font color="#008080">start</font></b>
+
+<b><font color="#008080">:pxelinux</font></b>
+<b><font color="#0000FF">set</font></b> <font color="#009900">210:string</font> tftp://<font color="#009900">${next-server}</font>/
+<b><font color="#0000FF">chain</font></b> <font color="#009900">${210:string}</font>pxelinux.<font color="#993399">0</font> <font color="#990000">||</font> <b><font color="#0000FF">goto</font></b> <b><font color="#008080">failed</font></b>
+<b><font color="#0000FF">goto</font></b> <b><font color="#008080">start</font></b>
+
+<i><font color="#9A1900">###################### RECOVERY MENU ################################</font></i>
+
+<b><font color="#008080">:menu-recovery</font></b>
+<b><font color="#0000FF">menu</font></b> Recovery tools
+<b><font color="#0000FF">item</font></b> sysrcd          SystemRescueCD <font color="#009900">${sysrcd-version}</font>
+<b><font color="#0000FF">item</font></b> spinrite        SpinRite <font color="#009900">${spinrite-version}</font>
+<b><font color="#0000FF">item</font></b> spinrite-msdos  SpinRite <font color="#009900">${spinrite-version}</font> (using MS-DOS <font color="#993399">6.22</font>)
+<b><font color="#0000FF">item</font></b> macrium-winpe Macrium Reflect <font color="#009900">${macrium-version}</font> Rescue CD (WinPE <font color="#993399">4.0</font> <font color="#009900">${arch}</font>)
+<b><font color="#0000FF">item</font></b> macrium-winpe-sanboot   Macrium Reflect <font color="#009900">${macrium-version}</font> Rescue CD (WinPE <font color="#993399">4.0</font> <font color="#009900">${arch}</font> with sanboot)
+<b><font color="#0000FF">item</font></b> macrium-linux   Macrium Reflect <font color="#009900">${macrium-version}</font> Rescue CD (Linux <font color="#009900">${arch}</font>)
+<b><font color="#0000FF">item</font></b> macrium-linux-sanboot   Macrium Reflect <font color="#009900">${macrium-version}</font> Rescue CD (Linux <font color="#009900">${arch}</font> with sanboot)
+<b><font color="#0000FF">item</font></b> firefly         Firefly IllumOS recovery environment <font color="#009900">${firefly-version}</font>
+<b><font color="#0000FF">item</font></b> freedos-direct  FreeDOS <font color="#993399">1.1</font> (directly using iPXE)
+<b><font color="#0000FF">item</font></b>
+<b><font color="#0000FF">item</font></b> --key <font color="#993399">0x08</font> back Back to top menu...
+<b><font color="#0000FF">iseq</font></b> <font color="#009900">${menu-default}</font> menu-recovery <font color="#990000">&amp;&amp;</font> <b><font color="#0000FF">isset</font></b> <font color="#009900">${submenu-default}</font> <font color="#990000">&amp;&amp;</font> <b><font color="#0000FF">goto</font></b> <b><font color="#008080">menu-recovery-timed</font></b> <font color="#990000">||</font>
+<b><font color="#0000FF">choose</font></b> selected <font color="#990000">&amp;&amp;</font> <b><font color="#0000FF">goto</font></b> <font color="#009900">${selected}</font> <font color="#990000">||</font> <b><font color="#0000FF">goto</font></b> <b><font color="#008080">start</font></b>
+<b><font color="#008080">:menu-recovery-timed</font></b>
+<b><font color="#0000FF">choose</font></b> --timeout <font color="#009900">${submenu-timeout}</font> --default <font color="#009900">${submenu-default}</font> selected <font color="#990000">&amp;&amp;</font> <b><font color="#0000FF">goto</font></b> <font color="#009900">${selected}</font> <font color="#990000">||</font> <b><font color="#0000FF">goto</font></b> <b><font color="#008080">start</font></b>
+
+<b><font color="#008080">:spinrite</font></b>
+<b><font color="#0000FF">sanboot</font></b> --no-describe --drive <font color="#993399">0x00</font> <font color="#009900">${sanboot-url}</font>spinrite-<font color="#009900">${spinrite-version}</font>/spinrite-<font color="#009900">${spinrite-version}</font>.img <font color="#990000">||</font> <b><font color="#0000FF">goto</font></b> <b><font color="#008080">failed</font></b>
+<i><font color="#9A1900">#sanboot --no-describe --drive 0x081 ${sanboot-url}spinrite-${spinrite-version}/spinrite-${spinrite-version}.iso</font></i>
+<i><font color="#9A1900">#initrd spinrite/spinrite-${spinrite-version}.img</font></i>
+<i><font color="#9A1900">#chain memdisk</font></i>
+<b><font color="#0000FF">goto</font></b> <b><font color="#008080">start</font></b>
+
+<b><font color="#008080">:spinrite-msdos</font></b>
+<b><font color="#0000FF">sanboot</font></b> --no-describe --drive <font color="#993399">0x00</font> <font color="#009900">${sanboot-url}</font>spinrite-<font color="#009900">${spinrite-version}</font>/spinrite-<font color="#009900">${spinrite-version}</font>-msdos.img <font color="#990000">||</font> <b><font color="#0000FF">goto</font></b> <b><font color="#008080">failed</font></b>
+<b><font color="#0000FF">goto</font></b> <b><font color="#008080">start</font></b>
+
+<b><font color="#008080">:sysrcd</font></b>
+<b><font color="#0000FF">echo</font></b> Booting SystemRescueCD <font color="#009900">${sysrcd-version}</font> x86 for <font color="#009900">${initiator-iqn}</font>
+<i><font color="#9A1900"># Fixup needed after copying files from downloaded ISO to directory:</font></i>
+<i><font color="#9A1900">#  cd path/to/sysrcd-iso-unpacked-files/isolinux &amp;&amp; \</font></i>
+<i><font color="#9A1900">#   perl -p -i -e 's{/bootdisk}{../bootdisk}' isolinux.cfg &amp;&amp; \</font></i>
+<i><font color="#9A1900">#   perl -p -i -e 's{scandelay=1}{scandelay=1 dodhcp netboot=</font></i><u><font color="#0000FF">nfs://nas.smidsrod.lan</font></u><i><font color="#9A1900">:/raid/boot/sysrcd-3.8.0-x86}g' isolinux.cfg &amp;&amp; \</font></i>
+<i><font color="#9A1900">#   perl -p -i -e 's{setkmap=us}{setkmap=us dodhcp netboot=</font></i><u><font color="#0000FF">nfs://nas.smidsrod.lan</font></u><i><font color="#9A1900">:/raid/boot/sysrcd-3.8.0-x86}g' isolinux.cfg &amp;&amp; \</font></i>
+<i><font color="#9A1900">#   perl -p -i -e 's{rescuecd_us}{rescuecd_no}; s{US}{NO}; s{setkmap=us}{setkmap=no}g; s{american}{norwegian};' isolinux.cfg &amp;&amp; \</font></i>
+<i><font color="#9A1900">#   cd -</font></i>
+<i><font color="#9A1900"># PXELinux options, see </font></i><u><font color="#0000FF">http://syslinux.zytor.com/wiki/index.php/PXELINUX</font></u><i><font color="#9A1900"> for details</font></i>
+<b><font color="#0000FF">set</font></b> <font color="#009900">210:string</font> <font color="#009900">${boot-url}</font>sysrcd-<font color="#009900">${sysrcd-version}</font>-x86/isolinux/
+<b><font color="#0000FF">set</font></b> <font color="#009900">209:string</font> isolinux.cfg
+<b><font color="#0000FF">set</font></b> <font color="#009900">filename</font> <font color="#009900">${210:string}</font>pxelinux.<font color="#993399">0</font>
+<b><font color="#0000FF">chain</font></b> <font color="#009900">${filename}</font> <font color="#990000">||</font> <b><font color="#0000FF">goto</font></b> <b><font color="#008080">failed</font></b>
+<b><font color="#0000FF">goto</font></b> <b><font color="#008080">start</font></b>
+
+<b><font color="#008080">:macrium-winpe</font></b>
+<b><font color="#0000FF">echo</font></b> Booting Macrium Reflect <font color="#009900">${macrium-version}</font> (WinPE <font color="#993399">4.0</font> <font color="#009900">${arch}</font>) for <font color="#009900">${initiator-iqn}</font>
+<b><font color="#0000FF">set</font></b> <font color="#009900">base-url</font> macrium-<font color="#009900">${macrium-version}</font>/macrium-<font color="#009900">${macrium-version}</font>-rescue-winpe-<font color="#993399">4.0</font>-<font color="#009900">${arch}</font>
+<b><font color="#0000FF">kernel</font></b> wimboot
+<b><font color="#0000FF">initrd</font></b> <font color="#009900">${base-url}</font>/bootmgr          bootmgr
+<b><font color="#0000FF">initrd</font></b> <font color="#009900">${base-url}</font>/Boot/BCD         BCD
+<b><font color="#0000FF">initrd</font></b> <font color="#009900">${base-url}</font>/Boot/boot.sdi    boot.sdi
+<b><font color="#0000FF">initrd</font></b> <font color="#009900">${base-url}</font>/sources/boot.wim boot.wim
+<b><font color="#0000FF">boot</font></b> <font color="#990000">||</font> <b><font color="#0000FF">goto</font></b> <b><font color="#008080">failed</font></b>
+<b><font color="#0000FF">goto</font></b> <b><font color="#008080">start</font></b>
+
+<b><font color="#008080">:macrium-linux</font></b>
+<b><font color="#0000FF">echo</font></b> Booting Macrium Reflect <font color="#009900">${macrium-version}</font> (Linux <font color="#009900">${arch}</font>) for <font color="#009900">${initiator-iqn}</font>
+<b><font color="#0000FF">set</font></b> <font color="#009900">base-url</font> macrium-<font color="#009900">${macrium-version}</font>/macrium-<font color="#009900">${macrium-version}</font>-rescue-linux
+<b><font color="#0000FF">kernel</font></b> <font color="#009900">${base-url}</font>/vmlinuz
+<b><font color="#0000FF">initrd</font></b> <font color="#009900">${base-url}</font>/initramfs.xz
+<b><font color="#0000FF">imgargs</font></b> vmlinuz vga=<font color="#993399">0x317</font>
+<b><font color="#0000FF">boot</font></b> <font color="#990000">||</font> <b><font color="#0000FF">goto</font></b> <b><font color="#008080">failed</font></b>
+<b><font color="#0000FF">goto</font></b> <b><font color="#008080">start</font></b>
+
+<b><font color="#008080">:macrium-winpe-sanboot</font></b>
+<b><font color="#0000FF">sanboot</font></b> --no-describe <font color="#009900">${sanboot-url}</font>macrium-<font color="#009900">${macrium-version}</font>/macrium-<font color="#009900">${macrium-version}</font>-rescue-winpe-<font color="#993399">4.0</font>-<font color="#009900">${arch}</font>.iso <font color="#990000">||</font> <b><font color="#0000FF">goto</font></b> <b><font color="#008080">failed</font></b>
+<b><font color="#0000FF">goto</font></b> <b><font color="#008080">start</font></b>
+
+<b><font color="#008080">:macrium-linux-sanboot</font></b>
+<b><font color="#0000FF">sanboot</font></b> --no-describe <font color="#009900">${sanboot-url}</font>macrium-<font color="#009900">${macrium-version}</font>/macrium-<font color="#009900">${macrium-version}</font>-rescue-linux.iso <font color="#990000">||</font> <b><font color="#0000FF">goto</font></b> <b><font color="#008080">failed</font></b>
+<b><font color="#0000FF">goto</font></b> <b><font color="#008080">start</font></b>
+
+<b><font color="#008080">:firefly</font></b>
+<b><font color="#0000FF">echo</font></b> Booting Firefly <font color="#009900">${firefly-version}</font> for <font color="#009900">${initiator-iqn}</font>
+<b><font color="#0000FF">set</font></b> <font color="#009900">base-url</font> firefly-<font color="#009900">${firefly-version}</font>/boot
+<i><font color="#9A1900"># </font></i><u><font color="#0000FF">http://alexeremin.blogspot.no/2013/05/firefly-failsafe-image-for-illumos.html</font></u>
+<i><font color="#9A1900"># </font></i><u><font color="#0000FF">http://sourceforge.net/projects/fireflyfailsafe/files/</font></u>
+<i><font color="#9A1900"># Download ISO, unpack ISO and copy files to boot-url</font></i>
+<i><font color="#9A1900"># The ramdisk is compressed with gzip, which must be unpacked</font></i>
+<i><font color="#9A1900"># to work with iPXE</font></i>
+<i><font color="#9A1900"># mv firefly firefly.gz</font></i>
+<i><font color="#9A1900"># gunzip firefly.gz</font></i>
+<b><font color="#0000FF">kernel</font></b> <font color="#009900">${base-url}</font>/platform/i86pc/kernel/amd64/unix
+<b><font color="#0000FF">module</font></b> <font color="#009900">${base-url}</font>/firefly
+<b><font color="#0000FF">boot</font></b> <font color="#990000">||</font> <b><font color="#0000FF">goto</font></b> <b><font color="#008080">failed</font></b>
+<b><font color="#0000FF">goto</font></b> <b><font color="#008080">start</font></b>
+
+<b><font color="#008080">:freedos-direct</font></b>
+<b><font color="#0000FF">echo</font></b> Booting FreeDOS <font color="#993399">1.1</font> KERNEL.SYS for <font color="#009900">${initiator-iqn}</font>
+<b><font color="#0000FF">set</font></b> <font color="#009900">base-url</font> freedos-<font color="#993399">1.1</font>/fd11src/FREEDOS/SETUP/ODIN
+<i><font color="#9A1900"># TODO: Work-in-progress</font></i>
+<b><font color="#0000FF">kernel</font></b> <font color="#009900">${base-url}</font>/KERNEL.SYS
+<b><font color="#0000FF">boot</font></b> <font color="#990000">||</font> <b><font color="#0000FF">goto</font></b> <b><font color="#008080">failed</font></b>
+<b><font color="#0000FF">goto</font></b> <b><font color="#008080">start</font></b>
+
+<i><font color="#9A1900">###################### DIAGNOSTICS MENU #############################</font></i>
+
+<b><font color="#008080">:menu-diag</font></b>
+<b><font color="#0000FF">menu</font></b> Diagnostic tools
+<b><font color="#0000FF">item</font></b> hdt           HDT <font color="#009900">${hdt-version}</font>
+<b><font color="#0000FF">item</font></b> memtest       Memtest86+ <font color="#993399">4.20</font>
+<b><font color="#0000FF">item</font></b> memtest-ipxe  Memtest86+ <font color="#993399">4.20</font> (iPXE)
+<b><font color="#0000FF">item</font></b> breakin       Breakin <font color="#993399">3.71</font>
+<b><font color="#0000FF">item</font></b> dban          Darik's Boot and Nuke <font color="#993399">2.2</font>.<font color="#993399">7</font>
+<b><font color="#0000FF">item</font></b> etdump        Bart's etdump <font color="#993399">1.2</font>
+<b><font color="#0000FF">item</font></b> wdcdiag       Western Digital Diagnostics <font color="#993399">5</font>.04f
+<b><font color="#0000FF">item</font></b>
+<b><font color="#0000FF">item</font></b> --key <font color="#993399">0x08</font> back Back to top menu...
+<b><font color="#0000FF">iseq</font></b> <font color="#009900">${menu-default}</font> menu-diag <font color="#990000">&amp;&amp;</font> <b><font color="#0000FF">isset</font></b> <font color="#009900">${submenu-default}</font> <font color="#990000">&amp;&amp;</font> <b><font color="#0000FF">goto</font></b> <b><font color="#008080">menu-diag-timed</font></b> <font color="#990000">||</font>
+<b><font color="#0000FF">choose</font></b> selected <font color="#990000">&amp;&amp;</font> <b><font color="#0000FF">goto</font></b> <font color="#009900">${selected}</font> <font color="#990000">||</font> <b><font color="#0000FF">goto</font></b> <b><font color="#008080">start</font></b>
+<b><font color="#008080">:menu-diag-timed</font></b>
+<b><font color="#0000FF">choose</font></b> --timeout <font color="#009900">${submenu-timeout}</font> --default <font color="#009900">${submenu-default}</font> selected <font color="#990000">&amp;&amp;</font> <b><font color="#0000FF">goto</font></b> <font color="#009900">${selected}</font> <font color="#990000">||</font> <b><font color="#0000FF">goto</font></b> <b><font color="#008080">start</font></b>
+
+<b><font color="#008080">:hdt</font></b>
+<i><font color="#9A1900"># </font></i><u><font color="#0000FF">http://hdt-project.org/</font></u>
+<b><font color="#0000FF">sanboot</font></b> --no-describe --drive <font color="#993399">0x00</font> <font color="#009900">${sanboot-url}</font>hdt-<font color="#009900">${hdt-version}</font>.img <font color="#990000">||</font> <b><font color="#0000FF">goto</font></b> <b><font color="#008080">failed</font></b>
+<b><font color="#0000FF">goto</font></b> <b><font color="#008080">start</font></b>
+
+<b><font color="#008080">:memtest</font></b>
+<i><font color="#9A1900"># TODO: Fix the URI parser to make the + sign work</font></i>
+<i><font color="#9A1900">#chain memtest86+-4.20.elf.img - || goto failed</font></i>
+<b><font color="#0000FF">chain</font></b> memtest86plus-<font color="#993399">4.20</font>.elf.img - <font color="#990000">||</font> <b><font color="#0000FF">goto</font></b> <b><font color="#008080">failed</font></b>
+<b><font color="#0000FF">goto</font></b> <b><font color="#008080">start</font></b>
+
+<b><font color="#008080">:memtest-ipxe</font></b>
+<b><font color="#0000FF">chain</font></b> memtest.<font color="#993399">0</font> passes=<font color="#993399">1</font> <font color="#990000">&amp;&amp;</font> <b><font color="#0000FF">set</font></b> <font color="#009900">memtest</font> GOOD <font color="#990000">||</font> <b><font color="#0000FF">set</font></b> <font color="#009900">memtest</font> BAD
+<b><font color="#0000FF">set</font></b> <font color="#009900">memtest_errno:uint8</font> <font color="#009900">${errno}</font>
+<b><font color="#0000FF">iseq</font></b> <font color="#009900">${memtest}</font> GOOD <font color="#990000">&amp;&amp;</font> <b><font color="#0000FF">goto</font></b> <b><font color="#008080">memtest-info</font></b> <font color="#990000">||</font>
+<b><font color="#0000FF">iseq</font></b> <font color="#009900">${memtest_errno}</font> <font color="#993399">0x1</font> <font color="#990000">&amp;&amp;</font> <b><font color="#0000FF">set</font></b> <font color="#009900">memtest</font> BAD <font color="#990000">||</font> <b><font color="#0000FF">set</font></b> <font color="#009900">memtest</font> UNKNOWN
+<b><font color="#008080">:memtest-info</font></b>
+<b><font color="#0000FF">menu</font></b> Your memory seems to be <font color="#009900">${memtest}</font>
+<b><font color="#0000FF">item</font></b> memtest-report   Report memtest result to web service
+<b><font color="#0000FF">item</font></b> --key <font color="#993399">0x08</font> menu-diag Back to diagnostics menu...
+<b><font color="#0000FF">choose</font></b> --default menu-diag selected <font color="#990000">&amp;&amp;</font> <b><font color="#0000FF">goto</font></b> <font color="#009900">${selected}</font> <font color="#990000">||</font> <b><font color="#0000FF">goto</font></b> <b><font color="#008080">start</font></b>
+
+<b><font color="#008080">:memtest-report</font></b>
+<b><font color="#0000FF">chain</font></b> <font color="#009900">${memtest-report-url}</font>?result=<font color="#009900">${memtest}</font>&amp;mac=<font color="#009900">${mac}</font>&amp;uuid=<font color="#009900">${uuid}</font>&amp;hostname=<font color="#009900">${hostname}</font> <font color="#990000">||</font>
+<b><font color="#0000FF">goto</font></b> <b><font color="#008080">menu-diag</font></b>
+
+<b><font color="#008080">:breakin</font></b>
+<i><font color="#9A1900"># Stress-testing and diagnostics utility</font></i>
+<i><font color="#9A1900"># </font></i><u><font color="#0000FF">http://www.advancedclustering.com/software/breakin.html</font></u>
+<i><font color="#9A1900"># Set sshpasswd=yourpassword for remote access</font></i>
+<i><font color="#9A1900"># Set startup= to 'cloner' or 'rescue' for more features</font></i>
+<i><font color="#9A1900"># When startup=cloner, server= and image= can also be set</font></i>
+<i><font color="#9A1900"># </font></i><u><font color="#0000FF">http://www.advancedclustering.com/software/cloner.html</font></u>
+<b><font color="#0000FF">kernel</font></b> breakin-<font color="#993399">3.71</font>/kernel-<font color="#993399">3.71</font>
+<b><font color="#0000FF">initrd</font></b> breakin-<font color="#993399">3.71</font>/initrd-<font color="#993399">3.71</font>.cpio.lzma
+<b><font color="#0000FF">imgargs</font></b> kernel-<font color="#993399">3.71</font> startup=breakin
+<b><font color="#0000FF">boot</font></b> <font color="#990000">||</font> <b><font color="#0000FF">goto</font></b> <b><font color="#008080">failed</font></b>
+<b><font color="#0000FF">goto</font></b> <b><font color="#008080">start</font></b>
+
+<b><font color="#008080">:dban</font></b>
+<b><font color="#0000FF">kernel</font></b> dban-<font color="#993399">2.2</font>.<font color="#993399">7</font>/DBAN.BZI
+<b><font color="#0000FF">imgargs</font></b> DBAN.BZI nuke="dwipe --method gutmann --rounds <font color="#993399">2</font> --verify last" silent vga=<font color="#993399">785</font>
+<b><font color="#0000FF">boot</font></b> <font color="#990000">||</font> <b><font color="#0000FF">goto</font></b> <b><font color="#008080">failed</font></b>
+<b><font color="#0000FF">goto</font></b> <b><font color="#008080">start</font></b>
+
+<b><font color="#008080">:etdump</font></b>
+<i><font color="#9A1900"># Booting it with memdisk makes it read/write, while sanboot forces read/only</font></i>
+<i><font color="#9A1900">#sanboot --drive 0x00 ${sanboot-url}freedos-etdump-floppy.img</font></i>
+<b><font color="#0000FF">initrd</font></b> freedos-etdump-floppy.img
+<b><font color="#0000FF">chain</font></b> memdisk <font color="#990000">||</font> <b><font color="#0000FF">goto</font></b> <b><font color="#008080">failed</font></b>
+<b><font color="#0000FF">goto</font></b> <b><font color="#008080">start</font></b>
+
+<b><font color="#008080">:wdcdiag</font></b>
+<i><font color="#9A1900"># Extracted the bootable floppy image from diag-5.04f.iso</font></i>
+<b><font color="#0000FF">sanboot</font></b> --drive <font color="#993399">0x00</font> <font color="#009900">${sanboot-url}</font>western-digital/diag-<font color="#993399">5</font>.04f.img <font color="#990000">||</font> <b><font color="#0000FF">goto</font></b> <b><font color="#008080">failed</font></b>
+<b><font color="#0000FF">goto</font></b> <b><font color="#008080">start</font></b>
+
+<i><font color="#9A1900">############################ INSTALLER MENU #########################</font></i>
+
+<b><font color="#008080">:menu-install</font></b>
+<b><font color="#0000FF">menu</font></b> Installers for <font color="#009900">${initiator-iqn}</font>
+<b><font color="#0000FF">item</font></b> freedos-install      Install FreeDOS <font color="#993399">1.1</font> to iSCSI
+<b><font color="#0000FF">item</font></b> msdos-install        Install MS-DOS <font color="#993399">6.22</font> to iSCSI
+<b><font color="#0000FF">item</font></b> ubuntu-install       Install Ubuntu <font color="#993399">12.04</font> <font color="#009900">${archl}</font> to iSCSI
+<b><font color="#0000FF">item</font></b> windows7-install     Install Windows <font color="#993399">7</font> to iSCSI
+<b><font color="#0000FF">item</font></b> vmware-x64-install   Install VMware ESXi <font color="#993399">5.0</font> (x64) to iSCSI
+<b><font color="#0000FF">item</font></b> vmware-x86-install   Install VMware ESXi <font color="#993399">3.5</font> (x86) to iSCSI
+<b><font color="#0000FF">item</font></b> winpe                Hook Windows <font color="#993399">7</font> iSCSI and boot WinPE
+<b><font color="#0000FF">item</font></b> winpe-wimboot        Boot WinPE <font color="#009900">${arch}</font> using wimboot
+<b><font color="#0000FF">item</font></b> ubuntu-installer-remote Install Ubuntu <font color="#993399">12.04</font> <font color="#009900">${archl}</font> from public archive
+<b><font color="#0000FF">item</font></b> ubuntu-install-local Install Ubuntu <font color="#993399">12.04</font> <font color="#009900">${archl}</font> to local drive(s)
+<b><font color="#0000FF">item</font></b> xenclient-install   Install XenClient <font color="#993399">2.1</font> to local drive
+<b><font color="#0000FF">item</font></b> windows7-hookonly   Hook Windows <font color="#993399">7</font> iSCSI and boot local CD
+<b><font color="#0000FF">item</font></b>
+<b><font color="#0000FF">item</font></b> --key <font color="#993399">0x08</font> back      Back to top menu...
+<b><font color="#0000FF">iseq</font></b> <font color="#009900">${menu-default}</font> menu-install <font color="#990000">&amp;&amp;</font> <b><font color="#0000FF">isset</font></b> <font color="#009900">${submenu-default}</font> <font color="#990000">&amp;&amp;</font> <b><font color="#0000FF">goto</font></b> <b><font color="#008080">menu-install-timed</font></b> <font color="#990000">||</font>
+<b><font color="#0000FF">choose</font></b> selected <font color="#990000">&amp;&amp;</font> <b><font color="#0000FF">goto</font></b> <font color="#009900">${selected}</font> <font color="#990000">||</font> <b><font color="#0000FF">goto</font></b> <b><font color="#008080">start</font></b>
+<b><font color="#008080">:menu-install-timed</font></b>
+<b><font color="#0000FF">choose</font></b> --timeout <font color="#009900">${submenu-timeout}</font> --default <font color="#009900">${submenu-default}</font> selected <font color="#990000">&amp;&amp;</font> <b><font color="#0000FF">goto</font></b> <font color="#009900">${selected}</font> <font color="#990000">||</font> <b><font color="#0000FF">goto</font></b> <b><font color="#008080">start</font></b>
+
+<b><font color="#008080">:freedos-install</font></b>
+<b><font color="#0000FF">echo</font></b> Booting FreeDOS <font color="#993399">1.1</font> installer to iSCSI for <font color="#009900">${initiator-iqn}</font>
+<b><font color="#0000FF">set</font></b> <font color="#009900">root-path</font> <font color="#009900">${base-iscsi}</font>:<font color="#009900">${hostname}</font>.boot.freedos
+<b><font color="#0000FF">sanhook</font></b> <font color="#009900">${root-path}</font> <font color="#990000">||</font> <b><font color="#0000FF">goto</font></b> <b><font color="#008080">failed</font></b>
+<b><font color="#0000FF">sanboot</font></b> --drive <font color="#993399">0x81</font> <font color="#009900">${sanboot-url}</font>freedos-<font color="#993399">1.1</font>/fd11src.iso <font color="#990000">||</font> <b><font color="#0000FF">goto</font></b> <b><font color="#008080">failed</font></b>
+<b><font color="#0000FF">goto</font></b> <b><font color="#008080">start</font></b>
+
+<b><font color="#008080">:msdos-install</font></b>
+<b><font color="#0000FF">echo</font></b> Booting MS-DOS <font color="#993399">6.22</font> installer to iSCSI for <font color="#009900">${initiator-iqn}</font>
+<b><font color="#0000FF">set</font></b> <font color="#009900">root-path</font> <font color="#009900">${base-iscsi}</font>:<font color="#009900">${hostname}</font>.boot.msdos
+<b><font color="#0000FF">sanhook</font></b> <font color="#009900">${root-path}</font> <font color="#990000">||</font> <b><font color="#0000FF">goto</font></b> <b><font color="#008080">failed</font></b>
+<b><font color="#0000FF">sanboot</font></b> --no-describe --drive <font color="#993399">0x00</font> <font color="#009900">${sanboot-url}</font>msdos-<font color="#993399">6.22</font>/disk1.img <font color="#990000">||</font> <b><font color="#0000FF">goto</font></b> <b><font color="#008080">failed</font></b>
+<b><font color="#0000FF">goto</font></b> <b><font color="#008080">start</font></b>
+
+<b><font color="#008080">:ubuntu-install</font></b>
+<b><font color="#0000FF">echo</font></b> Starting Ubuntu <font color="#993399">12.04</font> <font color="#009900">${archl}</font> installer for <font color="#009900">${initiator-iqn}</font>
+<i><font color="#9A1900"># Hook iSCSI drive</font></i>
+<b><font color="#0000FF">set</font></b> <font color="#009900">root-path</font> <font color="#009900">${base-iscsi}</font>:<font color="#009900">${hostname}</font>.boot.ubuntu
+<i><font color="#9A1900">#sanhook ${root-path} || goto failed</font></i>
+<i><font color="#9A1900"># Start ubuntu-installer. Remember that the iSCSI target must be writable</font></i>
+<i><font color="#9A1900"># by anyone, as debian-installer generates a randomized initiator-iqn in</font></i>
+<i><font color="#9A1900"># /etc/iscsi/initiatorname.iscsi</font></i>
+<i><font color="#9A1900"># The preseed script used takes care of rewriting it to the</font></i>
+<i><font color="#9A1900"># hostname-based IQN used in this script.</font></i>
+<i><font color="#9A1900"># This kernel param which open-iscsi README.Debian mentions doesn't work</font></i>
+<i><font color="#9A1900"># inside debian-installer, unfortunately: iscsi_initiator=${initiator-iqn}</font></i>
+<i><font color="#9A1900"># Hard workaround available here:</font></i>
+<i><font color="#9A1900"># </font></i><u><font color="#0000FF">http://umfcloudpilot.eduserv.org.uk/entries/20299686-enable-pre-seed-or-kickstart-seeding-of-iscsi-intiator-iqn-in-ubuntu-server</font></u>
+<b><font color="#0000FF">set</font></b> <font color="#009900">base-url</font> <font color="#009900">${boot-url}</font>ubuntu-<font color="#993399">12.04</font>-server-<font color="#009900">${archl}</font>
+<b><font color="#0000FF">kernel</font></b> <font color="#009900">${base-url}</font>/install/netboot/ubuntu-installer/<font color="#009900">${archl}</font>/linux
+<b><font color="#0000FF">initrd</font></b> <font color="#009900">${base-url}</font>/install/netboot/ubuntu-installer/<font color="#009900">${archl}</font>/initrd.gz
+<b><font color="#0000FF">imgargs</font></b> linux auto=true fb=false url=<font color="#009900">${base-url}</font>/./preseed.cfg DEBCONF_DEBUG=<font color="#993399">5</font> netcfg/get_hostname=<font color="#009900">${hostname}</font> partman-iscsi/login/address=<font color="#009900">${iscsi-server}</font> partman-iscsi/login/targets=<font color="#009900">${base-iqn}</font>:<font color="#009900">${hostname}</font>.boot.ubuntu partman-iscsi/login/username=<font color="#009900">${username}</font> partman-iscsi/login/password=<font color="#009900">${password}</font>
+<b><font color="#0000FF">boot</font></b> <font color="#990000">||</font> <b><font color="#0000FF">goto</font></b> <b><font color="#008080">failed</font></b>
+<b><font color="#0000FF">goto</font></b> <b><font color="#008080">start</font></b>
+
+<b><font color="#008080">:ubuntu-install-local</font></b>
+<b><font color="#0000FF">echo</font></b> Starting Ubuntu <font color="#993399">12.04</font> <font color="#009900">${archl}</font> local installer for <font color="#009900">${initiator-iqn}</font>
+<b><font color="#0000FF">set</font></b> <font color="#009900">base-url</font> <font color="#009900">${boot-url}</font>ubuntu-<font color="#993399">12.04</font>-server-<font color="#009900">${archl}</font>
+<b><font color="#0000FF">kernel</font></b> <font color="#009900">${base-url}</font>/install/netboot/ubuntu-installer/<font color="#009900">${archl}</font>/linux
+<b><font color="#0000FF">initrd</font></b> <font color="#009900">${base-url}</font>/install/netboot/ubuntu-installer/<font color="#009900">${archl}</font>/initrd.gz
+<b><font color="#0000FF">imgargs</font></b> linux auto=true fb=false url=<font color="#009900">${base-url}</font>/./preseed.cfg
+<b><font color="#0000FF">boot</font></b> <font color="#990000">||</font> <b><font color="#0000FF">goto</font></b> <b><font color="#008080">failed</font></b>
+<b><font color="#0000FF">goto</font></b> <b><font color="#008080">start</font></b>
+
+<b><font color="#008080">:windows7-install</font></b>
+<b><font color="#0000FF">echo</font></b> Starting Windows <font color="#993399">7</font> <font color="#009900">${arch}</font> installer for <font color="#009900">${initiator-iqn}</font>
+<i><font color="#9A1900"># Force gateway to be the iSCSI target server (kludge for stupid window behavior)</font></i>
+<b><font color="#0000FF">set</font></b> <font color="#009900">netX/gateway</font> <font color="#009900">${iscsi-server}</font>
+<i><font color="#9A1900"># Hook iSCSI drive</font></i>
+<b><font color="#0000FF">set</font></b> <font color="#009900">root-path</font> <font color="#009900">${base-iscsi}</font>:<font color="#009900">${hostname}</font>.boot.windows7
+<b><font color="#0000FF">sanhook</font></b> <font color="#009900">${root-path}</font> <font color="#990000">||</font> <b><font color="#0000FF">goto</font></b> <b><font color="#008080">failed</font></b>
+<i><font color="#9A1900"># Start Windows 7 installer DVD</font></i>
+<i><font color="#9A1900">#sanboot --no-describe --drive 0x81 ${sanboot-url}windows-7/ultimate-${arch}-en.iso || goto failed</font></i>
+<i><font color="#9A1900"># Better solution, according to Oliver Rath on the mailing-list</font></i>
+<i><font color="#9A1900"># Requires massive amounts of RAM, though</font></i>
+<i><font color="#9A1900">#initrd windows-7/ultimate-${arch}-en.iso</font></i>
+<i><font color="#9A1900">#chain memdisk iso raw || goto failed</font></i>
+<i><font color="#9A1900"># This method uses wimboot</font></i>
+<b><font color="#0000FF">set</font></b> <font color="#009900">base-url</font> windows-<font color="#993399">7</font>/ultimate-<font color="#009900">${arch}</font>-en
+<b><font color="#0000FF">kernel</font></b> wimboot
+<b><font color="#0000FF">initrd</font></b> <font color="#009900">${base-url}</font>/bootmgr                     bootmgr
+<b><font color="#0000FF">initrd</font></b> <font color="#009900">${base-url}</font>/boot/bcd                    BCD
+<b><font color="#0000FF">initrd</font></b> <font color="#009900">${base-url}</font>/boot/fonts/wgl4_boot.ttf    wgl4_boot.ttf
+<b><font color="#0000FF">initrd</font></b> <font color="#009900">${base-url}</font>/boot/boot.sdi               boot.sdi
+<b><font color="#0000FF">initrd</font></b> <font color="#009900">${base-url}</font>/sources/boot.wim            boot.wim
+<b><font color="#0000FF">boot</font></b> <font color="#990000">||</font> <b><font color="#0000FF">goto</font></b> <b><font color="#008080">failed</font></b>
+<b><font color="#0000FF">goto</font></b> <b><font color="#008080">start</font></b>
+
+<b><font color="#008080">:vmware-x64-install</font></b>
+<b><font color="#0000FF">echo</font></b> Booting VMware <font color="#993399">64</font>-bit installer for <font color="#009900">${initiator-iqn}</font>
+<b><font color="#0000FF">set</font></b> <font color="#009900">root-path</font> <font color="#009900">${base-iscsi}</font>:<font color="#009900">${hostname}</font>.boot.vmware
+<b><font color="#0000FF">sanhook</font></b> <font color="#009900">${root-path}</font> <font color="#990000">||</font> <b><font color="#0000FF">goto</font></b> <b><font color="#008080">failed</font></b>
+<b><font color="#0000FF">initrd</font></b> vmware/vmware-esxi-<font color="#993399">5.0</font>-x64.iso
+<b><font color="#0000FF">chain</font></b> memdisk iso <font color="#990000">||</font> <b><font color="#0000FF">goto</font></b> <b><font color="#008080">failed</font></b>
+<b><font color="#0000FF">goto</font></b> <b><font color="#008080">start</font></b>
+
+<b><font color="#008080">:vmware-x86-install</font></b>
+<b><font color="#0000FF">echo</font></b> Booting VMware <font color="#993399">32</font>-bit installer for <font color="#009900">${initiator-iqn}</font>
+<b><font color="#0000FF">set</font></b> <font color="#009900">root-path</font> <font color="#009900">${base-iscsi}</font>:<font color="#009900">${hostname}</font>.boot.vmware
+<b><font color="#0000FF">sanhook</font></b> <font color="#009900">${root-path}</font> <font color="#990000">||</font> <b><font color="#0000FF">goto</font></b> <b><font color="#008080">failed</font></b>
+<b><font color="#0000FF">initrd</font></b> vmware/vmware-esxi-<font color="#993399">3.5</font>-x86.iso
+<b><font color="#0000FF">chain</font></b> memdisk iso <font color="#990000">||</font> <b><font color="#0000FF">goto</font></b> <b><font color="#008080">failed</font></b>
+<b><font color="#0000FF">goto</font></b> <b><font color="#008080">start</font></b>
+
+<b><font color="#008080">:winpe</font></b>
+<b><font color="#0000FF">echo</font></b> Booting Windows PE <font color="#009900">${arch}</font> installer for <font color="#009900">${initiator-iqn}</font>
+<b><font color="#0000FF">echo</font></b> (for installing Windows <font color="#993399">7</font>)
+<i><font color="#9A1900"># Force gateway to be the iSCSI target server (kludge for stupid window behavior)</font></i>
+<b><font color="#0000FF">set</font></b> <font color="#009900">netX/gateway</font> <font color="#009900">${iscsi-server}</font>
+
+<b><font color="#0000FF">set</font></b> <font color="#009900">root-path</font> <font color="#009900">${base-iscsi}</font>:<font color="#009900">${hostname}</font>.boot.windows7
+<b><font color="#0000FF">sanhook</font></b> <font color="#009900">${root-path}</font> <font color="#990000">||</font> <b><font color="#0000FF">goto</font></b> <b><font color="#008080">failed</font></b>
+
+<i><font color="#9A1900"># Remember to map the install volume with the following command:</font></i>
+<i><font color="#9A1900"># net use y: \\nas\wds /user:NAS\robin</font></i>
+<i><font color="#9A1900"># Use Y:\Operating Systems\Windows 7 x64\setup.exe to install</font></i>
+
+<i><font color="#9A1900"># Boots WinPE via native MS TFTP support</font></i>
+<i><font color="#9A1900">#chain tftp://${next-server}/%5CBoot%5CPXE%5Cpxeboot.n12</font></i>
+<i><font color="#9A1900"># Better solution, according to Oliver Rath on the mailing-list</font></i>
+<i><font color="#9A1900"># Requires decent amounts of RAM, though</font></i>
+<i><font color="#9A1900"># Details on how to generate winpe-x64.iso from you Windows 7 install DVD</font></i>
+<i><font color="#9A1900"># can be found here: </font></i><u><font color="#0000FF">http://technet.microsoft.com/en-us/library/cc722358</font></u><i><font color="#9A1900">%28v=ws.10%29.aspx</font></i>
+<b><font color="#0000FF">initrd</font></b> windows-<font color="#993399">7</font>/winpe-<font color="#009900">${arch}</font>.iso
+<b><font color="#0000FF">chain</font></b> memdisk iso raw <font color="#990000">||</font> <b><font color="#0000FF">goto</font></b> <b><font color="#008080">failed</font></b>
+<b><font color="#0000FF">goto</font></b> <b><font color="#008080">start</font></b>
+
+<b><font color="#008080">:winpe-wimboot</font></b>
+<b><font color="#0000FF">echo</font></b> Booting Windows PE <font color="#009900">${arch}</font> installer for <font color="#009900">${initiator-iqn}</font>
+<i><font color="#9A1900">#echo (for installing Windows 7)</font></i>
+
+<i><font color="#9A1900"># Force gateway to be the iSCSI target server (kludge for stupid window behavior)</font></i>
+<b><font color="#0000FF">set</font></b> <font color="#009900">netX/gateway</font> <font color="#009900">${iscsi-server}</font>
+
+<b><font color="#0000FF">set</font></b> <font color="#009900">root-path</font> <font color="#009900">${base-iscsi}</font>:<font color="#009900">${hostname}</font>.boot.windows7
+<b><font color="#0000FF">sanhook</font></b> <font color="#009900">${root-path}</font> <font color="#990000">||</font> <b><font color="#0000FF">goto</font></b> <b><font color="#008080">failed</font></b>
+
+<i><font color="#9A1900"># Remember to map the install volume with the following command:</font></i>
+<i><font color="#9A1900"># net use y: \\nas\wds /user:NAS\robin</font></i>
+<i><font color="#9A1900"># Use Y:\Operating Systems\Windows 7 x64\setup.exe to install</font></i>
+
+<i><font color="#9A1900"># Boots WinPE via iPXE wimboot binary</font></i>
+<i><font color="#9A1900"># BCD is from </font></i><u><font color="#0000FF">http://www.fensystems.co.uk/~mcb30/BCD</font></u>
+<i><font color="#9A1900"># wimboot prebuilt from </font></i><u><font color="#0000FF">http://www.fensystems.co.uk/~mcb30/wimboot</font></u>
+<i><font color="#9A1900">#         source at </font></i><u><font color="#0000FF">http://git.ipxe.org/wimboot.git</font></u>
+<i><font color="#9A1900"># bootmgr.exe from the same package that enables PXE booting for Windows</font></i>
+<i><font color="#9A1900">#             (most likely WDS tools)</font></i>
+<b><font color="#0000FF">set</font></b> <font color="#009900">base-url</font> winpe/<font color="#009900">${arch}</font>
+<b><font color="#0000FF">kernel</font></b> wimboot
+<b><font color="#0000FF">initrd</font></b> <font color="#009900">${base-url}</font>/media/bootmgr                     bootmgr
+<b><font color="#0000FF">initrd</font></b> <font color="#009900">${base-url}</font>/media/Boot/BCD                    BCD
+<b><font color="#0000FF">initrd</font></b> <font color="#009900">${base-url}</font>/media/Boot/Fonts/segmono_boot.ttf segmono_boot.ttf
+<b><font color="#0000FF">initrd</font></b> <font color="#009900">${base-url}</font>/media/Boot/Fonts/segoe_slboot.ttf segoe_slboot.ttf
+<b><font color="#0000FF">initrd</font></b> <font color="#009900">${base-url}</font>/media/Boot/Fonts/wgl4_boot.ttf    wgl4_boot.ttf
+<b><font color="#0000FF">initrd</font></b> <font color="#009900">${base-url}</font>/media/Boot/boot.sdi               boot.sdi
+<b><font color="#0000FF">initrd</font></b> <font color="#009900">${base-url}</font>/media/sources/boot.wim            boot.wim
+<b><font color="#0000FF">boot</font></b> <font color="#990000">||</font> <b><font color="#0000FF">goto</font></b> <b><font color="#008080">failed</font></b>
+<b><font color="#0000FF">goto</font></b> <b><font color="#008080">start</font></b>
+
+<b><font color="#008080">:ubuntu-installer-remote</font></b>
+<b><font color="#0000FF">echo</font></b> Starting Ubuntu <font color="#993399">12.04</font> <font color="#009900">${archl}</font> installer for <font color="#009900">${initiator-iqn}</font>
+<b><font color="#0000FF">set</font></b> <font color="#009900">base-url</font> http://no.archive.ubuntu.com/ubuntu/dists/precise/main/installer-<font color="#009900">${archl}</font>/current/images/netboot/ubuntu-installer/<font color="#009900">${archl}</font>
+<b><font color="#0000FF">kernel</font></b> <font color="#009900">${base-url}</font>/linux
+<b><font color="#0000FF">initrd</font></b> <font color="#009900">${base-url}</font>/initrd.gz
+<i><font color="#9A1900">#imgargs linux auto=true url=</font></i><u><font color="#0000FF">http://yourserver/some/path/preseed.cfg</font></u>
+<b><font color="#0000FF">boot</font></b> <font color="#990000">||</font> <b><font color="#0000FF">goto</font></b> <b><font color="#008080">failed</font></b>
+<b><font color="#0000FF">goto</font></b> <b><font color="#008080">start</font></b>
+
+<b><font color="#008080">:xenclient-install</font></b>
+<b><font color="#0000FF">echo</font></b> Booting XenClient <font color="#993399">2.1</font> installer for <font color="#009900">${initiator-iqn}</font>
+<i><font color="#9A1900"># XenClient doesn't seem to support installing to iSCSI volumes</font></i>
+<i><font color="#9A1900"># It only supports installing using iBFT</font></i>
+<i><font color="#9A1900">#set root-path ${base-iscsi}:${hostname}.boot.xenclient</font></i>
+<i><font color="#9A1900">#sanhook ${root-path} || goto failed</font></i>
+<i><font color="#9A1900"># The xenclient-2.1 folder is just the unpacked contents of the installer ISO</font></i>
+<i><font color="#9A1900"># Make sure you modify the isolinux.cfg and point it at your answer file URL</font></i>
+<i><font color="#9A1900"># You can find an example of the answer file in the "Setup and Usage Guide"</font></i>
+<b><font color="#0000FF">set</font></b> <font color="#009900">210:string</font> <font color="#009900">${boot-url}</font>xenclient-<font color="#993399">2.1</font>/isolinux/
+<b><font color="#0000FF">set</font></b> <font color="#009900">209:string</font> isolinux.cfg
+<b><font color="#0000FF">set</font></b> <font color="#009900">filename</font> <font color="#009900">${210:string}</font>pxelinux.<font color="#993399">0</font>
+<b><font color="#0000FF">chain</font></b> <font color="#009900">${filename}</font> <font color="#990000">||</font> <b><font color="#0000FF">goto</font></b> <b><font color="#008080">failed</font></b>
+<b><font color="#0000FF">goto</font></b> <b><font color="#008080">start</font></b>
+
+<b><font color="#008080">:windows7-hookonly</font></b>
+<b><font color="#0000FF">echo</font></b> Hooking Windows <font color="#993399">7</font> iSCSI volume for <font color="#009900">${initiator-iqn}</font>
+<i><font color="#9A1900"># Force gateway to be the iSCSI target server (kludge for stupid window behavior)</font></i>
+<b><font color="#0000FF">set</font></b> <font color="#009900">netX/gateway</font> <font color="#009900">${iscsi-server}</font>
+<i><font color="#9A1900"># Hook iSCSI drive</font></i>
+<b><font color="#0000FF">set</font></b> <font color="#009900">root-path</font> <font color="#009900">${base-iscsi}</font>:<font color="#009900">${hostname}</font>.boot.windows7
+<b><font color="#0000FF">sanhook</font></b> --drive <font color="#993399">0x81</font> <font color="#009900">${root-path}</font> <font color="#990000">||</font> <b><font color="#0000FF">goto</font></b> <b><font color="#008080">failed</font></b>
+<b><font color="#0000FF">echo</font></b> Start Windows <font color="#993399">7</font> installer DVD from local drive
+<b><font color="#0000FF">sanboot</font></b> --no-describe --drive <font color="#993399">0x80</font> <font color="#009900">${sanboot-url}</font>windows-<font color="#993399">7</font>/ultimate-<font color="#009900">${arch}</font>-en.iso <font color="#990000">||</font> <b><font color="#0000FF">goto</font></b> <b><font color="#008080">failed</font></b>
+<b><font color="#0000FF">goto</font></b> <b><font color="#008080">start</font></b>
+
+<i><font color="#9A1900">###################### LIVE ENVIRONMENT MENU ########################</font></i>
+
+<b><font color="#008080">:menu-live</font></b>
+<b><font color="#0000FF">menu</font></b> Live environments for <font color="#009900">${initiator-iqn}</font>
+<b><font color="#0000FF">item</font></b> openelec-generic-live     Boot OpenELEC Generic <font color="#009900">${openelec-version}</font> <font color="#009900">${archl}</font>
+<b><font color="#0000FF">item</font></b> ubuntu-live-<font color="#993399">1204</font>          Boot Ubuntu LiveCD <font color="#993399">12.04</font> <font color="#009900">${archl}</font>
+<b><font color="#0000FF">item</font></b> slitaz-live               Boot SliTaz <font color="#993399">4.0</font> LiveCD
+<b><font color="#0000FF">item</font></b> smartos                   Boot SmartOS
+<b><font color="#0000FF">item</font></b> smartos-pre-ept           Boot SmartOS (pre-ept)
+<b><font color="#0000FF">item</font></b> kms-test                  Boot KMS test kernel
+<b><font color="#0000FF">item</font></b> tinycore-live-core        Boot TinyCoreLinux <font color="#009900">${tc-version}</font> Core
+<b><font color="#0000FF">item</font></b> tinycore-live-tinycore    Boot TinyCoreLinux <font color="#009900">${tc-version}</font> TinyCore
+<b><font color="#0000FF">item</font></b> tinycore-live-coreplus    Boot TinyCoreLinux <font color="#009900">${tc-version}</font> CorePlus
+<b><font color="#0000FF">item</font></b> coreos                    Boot CoreOS <font color="#009900">${coreos-version}</font>
+<b><font color="#0000FF">item</font></b>
+<b><font color="#0000FF">item</font></b> --key <font color="#993399">0x08</font> back      Back to top menu...
+<b><font color="#0000FF">iseq</font></b> <font color="#009900">${menu-default}</font> menu-live <font color="#990000">&amp;&amp;</font> <b><font color="#0000FF">isset</font></b> <font color="#009900">${submenu-default}</font> <font color="#990000">&amp;&amp;</font> <b><font color="#0000FF">goto</font></b> <b><font color="#008080">menu-live-timed</font></b> <font color="#990000">||</font>
+<b><font color="#0000FF">choose</font></b> selected <font color="#990000">&amp;&amp;</font> <b><font color="#0000FF">goto</font></b> <font color="#009900">${selected}</font> <font color="#990000">||</font> <b><font color="#0000FF">goto</font></b> <b><font color="#008080">start</font></b>
+<b><font color="#008080">:menu-live-timed</font></b>
+<b><font color="#0000FF">choose</font></b> --timeout <font color="#009900">${submenu-timeout}</font> --default <font color="#009900">${submenu-default}</font> selected <font color="#990000">&amp;&amp;</font> <b><font color="#0000FF">goto</font></b> <font color="#009900">${selected}</font> <font color="#990000">||</font> <b><font color="#0000FF">goto</font></b> <b><font color="#008080">start</font></b>
+
+<b><font color="#008080">:openelec-generic-live</font></b>
+<b><font color="#0000FF">echo</font></b> Booting OpenELEC Generic <font color="#009900">${openelec-version}</font> for <font color="#009900">${initiator-iqn}</font>
+<b><font color="#0000FF">set</font></b> <font color="#009900">base-url</font> openelec-generic-<font color="#009900">${archl}</font>-<font color="#009900">${openelec-version}</font>
+<b><font color="#0000FF">kernel</font></b> <font color="#009900">${base-url}</font>/target/KERNEL
+<b><font color="#0000FF">initrd</font></b> <font color="#009900">${base-url}</font>/target/SYSTEM
+<i><font color="#9A1900"># Config from: </font></i><u><font color="#0000FF">http://wiki.openelec.tv/index.php</font></u><i><font color="#9A1900">?title=Network_Boot_-_NFS</font></i>
+<i><font color="#9A1900"># and </font></i><u><font color="#0000FF">http://wiki.openelec.tv/index.php</font></u><i><font color="#9A1900">?title=Installation#Network_Boot_.28PXE.29</font></i>
+<i><font color="#9A1900"># NFS/NBD/iSCSI boot support only works on version &gt;= 2 of OpenELEC</font></i>
+<i><font color="#9A1900"># The NFS server must be specified as an IP, name resolution doesn't work :(</font></i>
+<b><font color="#0000FF">imgargs</font></b> KERNEL ip=dhcp boot=NFS=<font color="#009900">${nfs-server}</font>:<font color="#009900">${nfs-root}${base-url}</font>/target disk=NFS=<font color="#009900">${openelec-storage-dir}</font> overlay
+<b><font color="#0000FF">boot</font></b> <font color="#990000">||</font> <b><font color="#0000FF">goto</font></b> <b><font color="#008080">failed</font></b>
+<b><font color="#0000FF">goto</font></b> <b><font color="#008080">start</font></b>
+
+<b><font color="#008080">:ubuntu-live-1204</font></b>
+<i><font color="#9A1900"># See </font></i><u><font color="#0000FF">http://manpages.ubuntu.com/manpages/precise/man7/casper.7.html</font></u><i><font color="#9A1900"> for casper cmdline details</font></i>
+<b><font color="#0000FF">echo</font></b> Booting Ubuntu Live <font color="#993399">12.04</font> <font color="#009900">${archl}</font> for <font color="#009900">${initiator-iqn}</font>
+<b><font color="#0000FF">set</font></b> <font color="#009900">base-url</font> ubuntu-<font color="#993399">12.04</font>-dvd-<font color="#009900">${archl}</font>
+<b><font color="#0000FF">kernel</font></b> <font color="#009900">${base-url}</font>/casper/vmlinuz
+<b><font color="#0000FF">initrd</font></b> <font color="#009900">${base-url}</font>/casper/initrd.lz
+<b><font color="#0000FF">imgargs</font></b> vmlinuz root=/dev/nfs boot=casper netboot=nfs nfsroot=<font color="#009900">${nfs-server}</font>:<font color="#009900">${nfs-root}${base-url}</font> locale=en_US.UTF-<font color="#993399">8</font> keyboard-configuration/layoutcode=no mirror/country=NO
+<b><font color="#0000FF">shell</font></b>
+<b><font color="#0000FF">boot</font></b> <font color="#990000">||</font> <b><font color="#0000FF">goto</font></b> <b><font color="#008080">failed</font></b>
+<b><font color="#0000FF">goto</font></b> <b><font color="#008080">start</font></b>
+
+<b><font color="#008080">:slitaz-live</font></b>
+<b><font color="#0000FF">echo</font></b> Booting SliTaz <font color="#993399">4.0</font> LiveCD for <font color="#009900">${initiator-iqn}</font>
+<b><font color="#0000FF">set</font></b> <font color="#009900">base-url</font> slitaz-<font color="#993399">4.0</font>/
+<b><font color="#0000FF">kernel</font></b> <font color="#009900">${base-url}</font>/boot/bzImage
+<b><font color="#0000FF">initrd</font></b> <font color="#009900">${base-url}</font>/boot/rootfs4.gz
+<b><font color="#0000FF">initrd</font></b> <font color="#009900">${base-url}</font>/boot/rootfs3.gz
+<b><font color="#0000FF">initrd</font></b> <font color="#009900">${base-url}</font>/boot/rootfs2.gz
+<b><font color="#0000FF">initrd</font></b> <font color="#009900">${base-url}</font>/boot/rootfs1.gz
+<b><font color="#0000FF">imgargs</font></b> bzImage rw root=/dev/null vga=normal autologin lang=en_US kmap=no-latin1
+<b><font color="#0000FF">boot</font></b> <font color="#990000">||</font> <b><font color="#0000FF">goto</font></b> <b><font color="#008080">failed</font></b>
+<b><font color="#0000FF">goto</font></b> <b><font color="#008080">start</font></b>
+
+<b><font color="#008080">:smartos</font></b>
+<b><font color="#0000FF">echo</font></b> Booting SmartOS for <font color="#009900">${initiator-iqn}</font>
+<i><font color="#9A1900"># Hook iSCSI root volume (optional, not yet working)</font></i>
+<b><font color="#0000FF">sanhook</font></b> <font color="#009900">${base-iscsi}</font>:<font color="#009900">${hostname}</font>.boot.smartos <font color="#990000">||</font>
+<b><font color="#0000FF">set</font></b> <font color="#009900">base-url</font> smartos
+<i><font color="#9A1900"># See </font></i><u><font color="#0000FF">http://nahamu.github.com/2011/08/17/smartos-pxe.html</font></u><i><font color="#9A1900"> for details</font></i>
+<i><font color="#9A1900"># See </font></i><u><font color="#0000FF">http://wiki.smartos.org/display/DOC/Getting</font></u><i><font color="#9A1900">+Started+with+SmartOS</font></i>
+<i><font color="#9A1900"># </font></i><u><font color="#0000FF">http://wiki.smartos.org/display/DOC/PXE</font></u><i><font color="#9A1900">+Booting+SmartOS</font></i>
+<i><font color="#9A1900"># </font></i><u><font color="#0000FF">http://wiki.smartos.org/display/DOC/SmartOS</font></u><i><font color="#9A1900">+Command+Line+Tips#SmartOSCommandLineTips-FiguringoutwheretoconfigureadditionalNetworkinterfacesorVLANs</font></i>
+<i><font color="#9A1900"># </font></i><u><font color="#0000FF">http://wiki.smartos.org/display/DOC/extra</font></u><i><font color="#9A1900">+configuration+options</font></i>
+<i><font color="#9A1900"># </font></i><u><font color="#0000FF">http://wiki.smartos.org/display/DOC/Managing</font></u><i><font color="#9A1900">+NICs</font></i>
+<b><font color="#0000FF">kernel</font></b> <font color="#009900">${base-url}</font>/platform/i86pc/kernel/amd64/unix
+<b><font color="#0000FF">initrd</font></b> <font color="#009900">${base-url}</font>/platform/i86pc/amd64/boot_archive
+<i><font color="#9A1900"># This doesn't work, but I would very much like it to</font></i>
+<i><font color="#9A1900">#initrd ${base-url}/config/${hostname}.txt /usbkey/config</font></i>
+<i><font color="#9A1900"># smartos=true to run smartos "installer" (and disable noimport=true)</font></i>
+<i><font color="#9A1900"># You can also run it manually, it's at /smartdc/bin/smartos_prompt_config.sh</font></i>
+<i><font color="#9A1900"># keyboard-layout=norway doesn't work anymore (it used to)</font></i>
+<i><font color="#9A1900">#imgargs unix -v -B console=text,standalone=true,noimport=true,keyboard-layout=norway,hostname=${hostname},root_shadow='${root-shadow}'</font></i>
+<b><font color="#0000FF">imgargs</font></b> unix -B console=text,standalone=true,hostname=<font color="#009900">${hostname}</font>,admin_nic=<font color="#009900">${mac}</font>,admin_ip=dhcp,admin_gateway=dhcp,external_nic=<font color="#009900">${mac}</font>,external_ip=dhcp,external_gateway=dhcp,dns_resolvers=<font color="#009900">${dns}</font>,dns_domain=<font color="#009900">${domain}</font>,ntp_hosts=pool.ntp.org,root_shadow='<font color="#009900">${root-shadow}</font>'
+<b><font color="#0000FF">boot</font></b> <font color="#990000">||</font> <b><font color="#0000FF">goto</font></b> <b><font color="#008080">failed</font></b>
+<b><font color="#0000FF">goto</font></b> <b><font color="#008080">start</font></b>
+
+<b><font color="#008080">:smartos-pre-ept</font></b>
+<b><font color="#0000FF">echo</font></b> Starting SmartOS (pre-ept branch) for <font color="#009900">${initiator-iqn}</font>
+<i><font color="#9A1900"># pre-ept image downloaded from </font></i><u><font color="#0000FF">http://alpha.sysmgr.org/smartos-20120223-jmc2.iso</font></u>
+<i><font color="#9A1900"># Posted by LeftWing on #illumos / FreeNode at 2012-04-11 09:09 UTC+2</font></i>
+<b><font color="#0000FF">set</font></b> <font color="#009900">base-url</font> smartos/pre-ept
+<b><font color="#0000FF">kernel</font></b> <font color="#009900">${base-url}</font>/platform/i86pc/kernel/amd64/unix
+<b><font color="#0000FF">module</font></b> <font color="#009900">${base-url}</font>/platform/i86pc/amd64/boot_archive
+<b><font color="#0000FF">imgargs</font></b> unix -v -B console=text,standalone=true,noimport=true,root_shadow='<font color="#009900">${root-shadow}</font>'
+<b><font color="#0000FF">boot</font></b> <font color="#990000">||</font> <b><font color="#0000FF">goto</font></b> <b><font color="#008080">failed</font></b>
+<b><font color="#0000FF">goto</font></b> <b><font color="#008080">start</font></b>
+
+<b><font color="#008080">:kms-test</font></b>
+<b><font color="#0000FF">echo</font></b> Booting KMS-enabled Linux kernel for <font color="#009900">${initiator-iqn}</font>
+<b><font color="#0000FF">set</font></b> <font color="#009900">base-url</font> kms_test
+<b><font color="#0000FF">kernel</font></b> <font color="#009900">${base-url}</font>/vmlinuz
+<b><font color="#0000FF">initrd</font></b> <font color="#009900">${base-url}</font>/initrd <font color="#990000">||</font>
+<b><font color="#0000FF">imgargs</font></b> vmlinuz rw root=/dev/nfs nfsroot=<font color="#009900">${nfs-server}</font>:/raid/kms_test ip=dhcp <font color="#990000">||</font>
+<b><font color="#0000FF">boot</font></b> <font color="#990000">||</font> <b><font color="#0000FF">goto</font></b> <b><font color="#008080">failed</font></b>
+<b><font color="#0000FF">goto</font></b> <b><font color="#008080">start</font></b>
+
+<i><font color="#9A1900"># TinyCore is work-in-progress</font></i>
+<i><font color="#9A1900"># Current problems is that tce=/mnt/nfs/cde works, but dir is not writable by tc user,</font></i>
+<i><font color="#9A1900"># keymap is not loaded, and it seems like there is something I'm not understanding properly</font></i>
+<i><font color="#9A1900"># about the TC boot process</font></i>
+<i><font color="#9A1900"># More to read on </font></i><u><font color="#0000FF">http://distro.ibiblio.org/tinycorelinux/concepts.html</font></u>
+<i><font color="#9A1900"># and </font></i><u><font color="#0000FF">http://wiki.tinycorelinux.net/wiki</font></u><i><font color="#9A1900">:netbooting</font></i>
+<b><font color="#008080">:tinycore-live-core</font></b>
+<b><font color="#0000FF">echo</font></b> Booting TinyCoreLinux Live Core <font color="#009900">${tc-version}</font> for <font color="#009900">${inititator-iqn}</font>
+<b><font color="#0000FF">set</font></b> <font color="#009900">base-url</font> tinycore/Core-<font color="#009900">${tc-version}</font>/
+<b><font color="#0000FF">kernel</font></b> <font color="#009900">${base-url}</font>/boot/vmlinuz
+<b><font color="#0000FF">initrd</font></b> <font color="#009900">${base-url}</font>/boot/core.gz
+<b><font color="#0000FF">imgargs</font></b> vmlinuz loglevel=<font color="#993399">3</font>
+<b><font color="#0000FF">boot</font></b> <font color="#990000">||</font> <b><font color="#0000FF">goto</font></b> <b><font color="#008080">failed</font></b>
+<b><font color="#0000FF">goto</font></b> <b><font color="#008080">start</font></b>
+
+<b><font color="#008080">:tinycore-live-tinycore</font></b>
+<b><font color="#0000FF">echo</font></b> Booting TinyCoreLinux Live TinyCore <font color="#009900">${tc-version}</font> for <font color="#009900">${inititator-iqn}</font>
+<b><font color="#0000FF">set</font></b> <font color="#009900">base-url</font> tinycore/TinyCore-<font color="#009900">${tc-version}</font>
+<b><font color="#0000FF">kernel</font></b> <font color="#009900">${base-url}</font>/boot/vmlinuz
+<b><font color="#0000FF">initrd</font></b> <font color="#009900">${base-url}</font>/boot/core.gz
+<b><font color="#0000FF">imgargs</font></b> vmlinuz nfsmount=<font color="#009900">${nfs-server}</font>:<font color="#009900">${nfs-root}${base-url}</font> host=<font color="#009900">${hostname}</font> lang=us kmap=nb loglevel=<font color="#993399">3</font> syslog  tce=/mnt/nfs/cde
+<b><font color="#0000FF">boot</font></b> <font color="#990000">||</font> <b><font color="#0000FF">goto</font></b> <b><font color="#008080">failed</font></b>
+<b><font color="#0000FF">goto</font></b> <b><font color="#008080">start</font></b>
+
+<b><font color="#008080">:tinycore-live-coreplus</font></b>
+<b><font color="#0000FF">echo</font></b> Booting TinyCoreLinux Live CorePlus <font color="#009900">${tc-version}</font> for <font color="#009900">${inititator-iqn}</font>
+<b><font color="#0000FF">set</font></b> <font color="#009900">base-url</font> tinycore/CorePlus-<font color="#009900">${tc-version}</font>
+<b><font color="#0000FF">kernel</font></b> <font color="#009900">${base-url}</font>/boot/vmlinuz
+<b><font color="#0000FF">initrd</font></b> <font color="#009900">${base-url}</font>/boot/core.gz
+<b><font color="#0000FF">imgargs</font></b> vmlinuz nfsmount=<font color="#009900">${nfs-server}</font>:<font color="#009900">${nfs-root}${base-url}</font> host=<font color="#009900">${hostname}</font> lang=us kmap=nb loglevel=<font color="#993399">3</font> syslog  tce=/mnt/nfs/cde showapps desktop=flwm_topside
+<b><font color="#0000FF">boot</font></b> <font color="#990000">||</font> <b><font color="#0000FF">goto</font></b> <b><font color="#008080">failed</font></b>
+<b><font color="#0000FF">goto</font></b> <b><font color="#008080">start</font></b>
+
+<b><font color="#008080">:coreos</font></b>
+<b><font color="#0000FF">echo</font></b> Booting CoresOS <font color="#009900">${coreos-version}</font> for <font color="#009900">${inititator-iqn}</font>
+<i><font color="#9A1900">#set base-url ${boot-url}/coreos/CorePlus-${tc-version}</font></i>
+<b><font color="#0000FF">set</font></b> <font color="#009900">base-url</font> http://storage.core-os.net/coreos/<font color="#009900">${archl}</font>-generic/<font color="#009900">${coreos-version}</font>
+<b><font color="#0000FF">kernel</font></b> <font color="#009900">${base-url}</font>/coreos_production_pxe.vmlinuz
+<b><font color="#0000FF">initrd</font></b> <font color="#009900">${base-url}</font>/coreos_production_pxe_image.cpio.gz
+<b><font color="#0000FF">imgargs</font></b> coreos_production_pxe.vmlinuz root=squashfs: state=tmpfs: sshkey="<font color="#009900">${coreos-sshkey}</font>"
+<b><font color="#0000FF">boot</font></b> <font color="#990000">||</font> <b><font color="#0000FF">goto</font></b> <b><font color="#008080">failed</font></b>
+<b><font color="#0000FF">goto</font></b> <b><font color="#008080">start</font></b>
+</tt></pre>

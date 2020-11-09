@@ -1,0 +1,1404 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This manual is for GNU Source-highlight Library 
+(version 3.1.9, 9 October 2018),
+which given a source file, produces a document with syntax highlighting.
+
+Copyright (C) 2005-2008 Lorenzo Bettini, http://www.lorenzobettini.it.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.1 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, with no Front-Cover Texts, and no Back-Cover
+Texts. A copy of the license is included in the section entitled "GNU
+Free Documentation License." -->
+<!-- Created by GNU Texinfo 6.5, http://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>GNU Source-highlight Library 3.1.9</title>
+
+<meta name="description" content="GNU Source-highlight Library 3.1.9">
+<meta name="keywords" content="GNU Source-highlight Library 3.1.9">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="makeinfo">
+<link href="#Top" rel="start" title="Top">
+<link href="#Concept-Index" rel="index" title="Concept Index">
+<link href="#SEC_Contents" rel="contents" title="Table of Contents">
+<link href="dir.html#Top" rel="up" title="(dir)">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+blockquote.smallindentedblock {margin-right: 0em; font-size: smaller}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smalllisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: inherit; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: inherit; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en">
+<h1 class="settitle" align="center">GNU Source-highlight Library 3.1.9</h1>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<a name="SEC_Contents"></a>
+<h2 class="contents-heading">Table of Contents</h2>
+
+<div class="contents">
+
+<ul class="no-bullet">
+  <li><a name="toc-Introduction-1" href="#Introduction">1 Introduction</a></li>
+  <li><a name="toc-Installation-1" href="#Installation">2 Installation</a></li>
+  <li><a name="toc-Use-of-GNU-Source_002dhighlight-Library-1" href="#Use-of-GNU-Source_002dhighlight-Library">3 Use of GNU Source-highlight Library</a>
+  <ul class="no-bullet">
+    <li><a name="toc-Using-Automake-and-Autotools-1" href="#Using-Automake-and-Autotools">3.1 Using Automake and Autotools</a></li>
+  </ul></li>
+  <li><a name="toc-Main-Classes-1" href="#Main-Classes">4 Main Classes</a>
+  <ul class="no-bullet">
+    <li><a name="toc-SourceHighlight-class-1" href="#SourceHighlight-class">4.1 SourceHighlight class</a></li>
+    <li><a name="toc-Customizing-Formatting-1" href="#Customizing-Formatting">4.2 Customizing Formatting</a>
+    <ul class="no-bullet">
+      <li><a name="toc-Completely-Customized-Formatting-1" href="#Completely-Customized-Formatting">4.2.1 Completely Customized Formatting</a></li>
+      <li><a name="toc-Style_002dbased-Customized-Formatting-1" href="#Style_002dbased-Customized-Formatting">4.2.2 Style-based Customized Formatting</a></li>
+    </ul></li>
+    <li><a name="toc-Events-and-Listeners-1" href="#Events-and-Listeners">4.3 Events and Listeners</a></li>
+    <li><a name="toc-Settings-1" href="#Settings">4.4 Settings</a></li>
+    <li><a name="toc-Utility-functions-1" href="#Utility-functions">4.5 Utility functions</a></li>
+    <li><a name="toc-Global-instances-1" href="#Global-instances">4.6 Global instances</a></li>
+  </ul></li>
+  <li><a name="toc-Reporting-Bugs" href="#Problems">5 Reporting Bugs</a></li>
+  <li><a name="toc-Mailing-Lists-1" href="#Mailing-Lists">6 Mailing Lists</a></li>
+  <li><a name="toc-Concept-Index-1" href="#Concept-Index">Concept Index</a></li>
+</ul>
+</div>
+
+
+<a name="Top"></a>
+<div class="header">
+<p>
+Next: <a href="#Introduction" accesskey="n" rel="next">Introduction</a>, Previous: <a href="dir.html#Top" accesskey="p" rel="prev">(dir)</a>, Up: <a href="dir.html#Top" accesskey="u" rel="up">(dir)</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Concept-Index" title="Index" rel="index">Index</a>]</p>
+</div>
+<a name="GNU-Source_002dhighlight-Library"></a>
+<h1 class="top">GNU Source-highlight Library</h1>
+
+<p>GNU Source-highlight, given a source file, produces a document with
+syntax highlighting.
+</p>
+<p>This is Edition 3.1.9 of the Source-highlight Library manual.
+</p>
+<p>This file documents GNU Source-highlight Library version 3.1.9.
+</p>
+<p>This manual is for GNU Source-highlight Library 
+(version 3.1.9, 9 October 2018),
+which given a source file, produces a document with syntax highlighting.
+</p>
+<p>Copyright &copy; 2005-2008 Lorenzo Bettini, <a href="http://www.lorenzobettini.it">http://www.lorenzobettini.it</a>.
+</p>
+<blockquote>
+<p>Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.1 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, with no Front-Cover Texts, and no Back-Cover
+Texts. A copy of the license is included in the section entitled &ldquo;GNU
+Free Documentation License.&rdquo;
+</p></blockquote>
+
+
+
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top">&bull; <a href="#Introduction" accesskey="1">Introduction</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">What&rsquo;s it for?
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="#Installation" accesskey="2">Installation</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="#Use-of-GNU-Source_002dhighlight-Library" accesskey="3">Use of GNU Source-highlight Library</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="#Main-Classes" accesskey="4">Main Classes</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="#Global-instances" accesskey="5">Global instances</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="#Problems" accesskey="6">Problems</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Reporting bugs.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="#Mailing-Lists" accesskey="7">Mailing Lists</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="#Concept-Index" accesskey="8">Concept Index</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Index of concepts.
+</td></tr>
+</table>
+
+<hr>
+<a name="Introduction"></a>
+<div class="header">
+<p>
+Next: <a href="#Installation" accesskey="n" rel="next">Installation</a>, Previous: <a href="#Top" accesskey="p" rel="prev">Top</a>, Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Concept-Index" title="Index" rel="index">Index</a>]</p>
+</div>
+<a name="Introduction-1"></a>
+<h2 class="chapter">1 Introduction</h2>
+
+<a name="index-introduction"></a>
+<a name="index-features"></a>
+<p>GNU Source-highlight, given a source file, produces a document with
+syntax highlighting.   See <a href="source-highlight.html#Introduction">(source-highlight)Introduction</a> for a
+wider introduction about GNU Source-highlight.
+</p>
+<p>This file documents the Library provided by GNU Source-highlight, thus
+its audience is programmers only, who want to use source-highlight
+features inside their programs, not the users of Source-highlight.
+This library is part of GNU Source-highlight since version 3.0.
+</p>
+<p>However, the main principles of GNU Source-highlight will be given for
+granted, together with all the notions for writing language definition
+files, output definition files, and so on.  Again, we refer to the
+documentation of GNU Source-highlight for all these features.
+</p>
+<hr>
+<a name="Installation"></a>
+<div class="header">
+<p>
+Next: <a href="#Use-of-GNU-Source_002dhighlight-Library" accesskey="n" rel="next">Use of GNU Source-highlight Library</a>, Previous: <a href="#Introduction" accesskey="p" rel="prev">Introduction</a>, Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Concept-Index" title="Index" rel="index">Index</a>]</p>
+</div>
+<a name="Installation-1"></a>
+<h2 class="chapter">2 Installation</h2>
+
+<p>GNU Source-highlight library is part of GNU Source-highlight, thus it
+will be installed together with Source-highlight itself; we refer to
+See <a href="source-highlight.html#Installation">(source-highlight)Installation</a> for further instructions on
+installing GNU Source-highlight.  Here we detail only the parts
+concerning the library.
+</p>
+<a name="index-_002d_002dwith_002ddoxygen"></a>
+<a name="index-doxygen"></a>
+<p>If you want to build and install the API documentation of
+Source-highlight library, you need to run <code>configure</code> with the
+option <code>--with-doxygen</code>, but you need the program <em>Doxygen</em>,
+<a href="http://www.doxygen.org">http://www.doxygen.org</a>, to build the documentation.
+The documentation will be installed in the following directory:
+</p>
+<dl compact="compact">
+<dt><code>Library API documentation</code></dt>
+<dd><p><code>prefix/share/doc/source-highlight/api</code>
+</p></dd>
+<dt><code>library examples</code></dt>
+<dd><p><code>prefix/share/doc/source-highlight/examples</code>
+</p></dd>
+<dt><code>conf files</code></dt>
+<dd><p><code>prefix/share/source-highlight</code>
+</p></dd>
+</dl>
+
+<hr>
+<a name="Use-of-GNU-Source_002dhighlight-Library"></a>
+<div class="header">
+<p>
+Next: <a href="#Main-Classes" accesskey="n" rel="next">Main Classes</a>, Previous: <a href="#Installation" accesskey="p" rel="prev">Installation</a>, Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Concept-Index" title="Index" rel="index">Index</a>]</p>
+</div>
+<a name="Use-of-GNU-Source_002dhighlight-Library-1"></a>
+<h2 class="chapter">3 Use of GNU Source-highlight Library</h2>
+
+<a name="index-libsource_002dhighlight"></a>
+<p>You can use GNU Source-highlight library in your programs, by including
+its headers and linking to the file
+<samp>libsource-highlight</samp>.ext<a name="DOCF1" href="#FOOT1"><sup>1</sup></a>.
+</p>
+<a name="index-namespace"></a>
+<a name="index-headers"></a>
+<p>All the classes of the library are part of the namespace
+<code>srchilite</code>, and all the header files are in the subdirectory
+<code>srchilite</code>.
+</p>
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top">&bull; <a href="#Using-Automake-and-Autotools" accesskey="1">Using Automake and Autotools</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+</table>
+
+<hr>
+<a name="Using-Automake-and-Autotools"></a>
+<div class="header">
+<p>
+Previous: <a href="#Use-of-GNU-Source_002dhighlight-Library" accesskey="p" rel="prev">Use of GNU Source-highlight Library</a>, Up: <a href="#Use-of-GNU-Source_002dhighlight-Library" accesskey="u" rel="up">Use of GNU Source-highlight Library</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Concept-Index" title="Index" rel="index">Index</a>]</p>
+</div>
+<a name="Using-Automake-and-Autotools-1"></a>
+<h3 class="section">3.1 Using Automake and Autotools</h3>
+
+<a name="index-autotools"></a>
+<a name="index-pkg_002dconfig"></a>
+<p>The easiest way to use GNU Source-highlight library in your program is
+to rely on autotools, i.e., <em>Automake</em>, <em>Autoconf</em>, etc.  In
+particular, the library is installed with a
+<code>pkg-config</code><a name="DOCF2" href="#FOOT2"><sup>2</sup></a> 
+configuration file (metadata file), <samp>source-highlight.pc</samp>.
+</p>
+<p>pkg-config is a tool for helping compiling applications and
+libraries. It helps you insert the correct compiler options on the
+command line so an application can use Source-highlight library simply
+by running
+</p>
+<div class="example">
+<pre class="example">gcc -o test test.c `pkg-config --libs --cflags source-highlight`  
+</pre></div>
+
+<p>rather than hard-coding values on where to find the library.  Moreover,
+this will provide also with the correct compiler flags and libraries
+used by Source-highlight library itself, e.g., Boost Regex library.
+</p>
+<a name="index-PKG_005fCONFIG_005fPATH"></a>
+<p>Note that <code>pkg-config</code> searches for <samp>.pc</samp> files in its
+standard directories.  If you installed the library in a non standard
+directory, you&rsquo;ll need to set the <code>PKG_CONFIG_PATH</code> environment
+variable accordingly.  
+For instance, if I install the library into
+<code>/usr/local/lib</code>, the <samp>.pc</samp> file will be installed into
+<code>/usr/local/lib/pkgconfig</code>, and then I&rsquo;ll need to call
+<code>pkg-config</code> as follows:
+</p>
+<div class="example">
+<pre class="example">PKG_CONFIG_PATH=/usr/local/lib/pkgconfig \
+        pkg-config --libs --cflags source-highlight
+</pre></div>
+
+<p>In your <samp>configure.ac</samp> you can use the autoconf macro provided
+by <code>pkg-config</code>; here is an example:
+</p>
+<div class="example">
+<pre class="example"># Checks for libraries.
+PKG_CHECK_MODULES(SRCHILITE, [source-highlight &gt;= 3.0])
+AC_SUBST(SRCHILITE_CFLAGS)
+AC_SUBST(SRCHILITE_LIBS)
+</pre></div>
+
+<p>Then, you can use the variables <code>SRCHILITE_CFLAGS</code> and
+<code>SRCHILITE_LIBS</code> in your makefiles accordingly.
+For instance,
+</p>
+<div class="example">
+<pre class="example">...
+AM_CPPFLAGS = $(SRCHILITE_CFLAGS)
+...
+LDADD = $(SRCHILITE_LIBS)
+...
+</pre></div>
+
+<hr>
+<a name="Main-Classes"></a>
+<div class="header">
+<p>
+Next: <a href="#Global-instances" accesskey="n" rel="next">Global instances</a>, Previous: <a href="#Use-of-GNU-Source_002dhighlight-Library" accesskey="p" rel="prev">Use of GNU Source-highlight Library</a>, Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Concept-Index" title="Index" rel="index">Index</a>]</p>
+</div>
+<a name="Main-Classes-1"></a>
+<h2 class="chapter">4 Main Classes</h2>
+
+<p>Here we present the main classes of the Source-highlight library,
+together with some example of use.
+For the documentation of all the classes (and methods of the classes)
+we refer to the generated API documentation (see See <a href="#Installation">Installation</a>).
+</p>
+<p>You will note that often, methods and constructors of the
+classes of the libraries do not take a pointer or a reference
+to a class, say <code>MyClass</code>, but an object of type <code>MyClassPtr</code>;
+these are
+<a name="index-shared-pointers"></a>
+<em>shared pointers</em>, in particular the ones provided by the Boost
+libraries (they are typedefs using, e.g.,
+<code>boost::shared_ptr&lt;MyClass&gt;</code>).  This will avoid dangerous dangling
+pointers and possible memory leaks in the library.
+</p>
+<p>If on the contrary, a method or a constructor in a class of the library
+takes a standard pointer, say <code>MyClass *</code>, then that class will
+NEVER delete such pointer.  It is up to the actual owner the object of
+<code>MyClass *</code> to delete the object when it is not needed anymore.
+</p>
+<p>The classes of the libraries can raise exceptions if errors are
+encountered (e.g., an input file cannot be opened, or a language
+definition file cannot be parsed); the exception classes can be found in
+the API documentation, and all exception classes inherit from
+<a name="index-std_003a_003aexception-class"></a>
+<code>std::exception</code> class.
+</p>
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top">&bull; <a href="#SourceHighlight-class" accesskey="1">SourceHighlight class</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="#Customizing-Formatting" accesskey="2">Customizing Formatting</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="#Events-and-Listeners" accesskey="3">Events and Listeners</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="#Settings" accesskey="4">Settings</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="#Utility-functions" accesskey="5">Utility functions</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+</table>
+
+<hr>
+<a name="SourceHighlight-class"></a>
+<div class="header">
+<p>
+Next: <a href="#Customizing-Formatting" accesskey="n" rel="next">Customizing Formatting</a>, Previous: <a href="#Main-Classes" accesskey="p" rel="prev">Main Classes</a>, Up: <a href="#Main-Classes" accesskey="u" rel="up">Main Classes</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Concept-Index" title="Index" rel="index">Index</a>]</p>
+</div>
+<a name="SourceHighlight-class-1"></a>
+<h3 class="section">4.1 SourceHighlight class</h3>
+
+<p>The <a name="index-SourceHighlight-class"></a>
+<code>SourceHighlight</code> class is the class of the library that basically
+implements all the functionalities used by the program
+<a name="index-source_002dhighlight"></a>
+<code>source-highlight</code> itself; thus it highlights an input file generating
+an output file.  It can be configured with many options, and basically
+it has a get/set methods for all the command line options of
+<a name="index-source_002dhighlight-1"></a>
+<code>source-highlight</code> (we refer also to See <a href="source-highlight.html#Invoking-source_002dhighlight">(source-highlight)Invoking
+source-highlight</a>).
+</p>
+<p>For instance, the following example
+(<samp>source-highlight-console-main.cpp</samp>) highlights an input file to
+the console (the colors are obtained through ANSI color escape sequences
+(so you need a console program that supports this):
+</p>
+<div class="example">
+<pre class="example">
+
+<b>#ifdef</b> HAVE_CONFIG_H
+<b>#include</b> <tt>&quot;config.h&quot;</tt>
+<b>#endif</b>
+
+<b>#include</b> <tt>&lt;iostream&gt;</tt>
+<b>#include</b> <tt>&quot;srchilite/sourcehighlight.h&quot;</tt>
+<b>#include</b> <tt>&quot;srchilite/langmap.h&quot;</tt>
+
+<b>using</b> <b>namespace</b> std;
+
+<b>#ifndef</b> DATADIR
+<b>#define</b> DATADIR <tt>&quot;&quot;</tt>
+<b>#endif</b>
+
+<b>int</b> main(<b>int</b> argc, <b>char</b> *argv[]) {
+    <span class="roman"><i>// we highlight to the console, through ANSI escape sequences</i></span>
+    srchilite::SourceHighlight sourceHighlight(<tt>&quot;esc.outlang&quot;</tt>);
+
+    <span class="roman"><i>// make sure we find the .lang and .outlang files</i></span>
+    sourceHighlight.setDataDir(DATADIR);
+
+    <span class="roman"><i>// by default we highlight C++ code</i></span>
+    string inputLang = <tt>&quot;cpp.lang&quot;</tt>;
+
+    <b>if</b> (argc &gt; 1) {
+        <span class="roman"><i>// we have a file name so we detect the input source language</i></span>
+        srchilite::LangMap langMap(DATADIR, <tt>&quot;lang.map&quot;</tt>);
+        string lang = langMap.getMappedFileNameFromFileName(argv[1]);
+        <b>if</b> (lang != <tt>&quot;&quot;</tt>) {
+            inputLang = lang;
+        } <span class="roman"><i>// otherwise we default to C++</i></span>
+
+        <span class="roman"><i>// output file name is empty =&gt; cout</i></span>
+        sourceHighlight.highlight(argv[1], <tt>&quot;&quot;</tt>, inputLang);
+    } <b>else</b> {
+        <span class="roman"><i>// input file name is empty =&gt; cin</i></span>
+        sourceHighlight.highlight(<tt>&quot;&quot;</tt>, <tt>&quot;&quot;</tt>, inputLang);
+    }
+
+    <b>return</b> 0;
+}
+
+</pre></div>
+
+<p>Note that if a file name is passed at the command line, the program
+tries to detect the source language by using a <a name="index-LangMap-class"></a>
+<code>LangMap</code> class
+object, specifying the map file <samp>lang.map</samp>, which is the one
+mapping file extensions to language definition files (e.g., if the file
+name has extension <samp>.java</samp> it will use the corresponding
+<samp>java.lang</samp>).  Otherwise we assume that we want to highlight
+a C++ file.
+</p>
+<p>All the highlighting is performed by the <a name="index-highlight-method"></a>
+<code>highlight</code> method; since
+we don&rsquo;t specify an output file name it will output the highlighted
+result directly to the console.  In case we don&rsquo;t have an input filename
+either, <a name="index-highlight-method-1"></a>
+<code>highlight</code> method will read from the standard input.  Since
+the highlighting takes place one line per time, you can test the program
+this way: you&rsquo;ll enter a line on the console and when you press enter,
+the program will echo the same line highlighted.
+</p>
+<p>The <code>DATADIR</code> is not even mandatory, provided you installed
+Source-highlight correctly, or that you set it up, using
+<a name="index-source_002dhighlight_002dsettings"></a>
+<code>source-highlight-settings</code> program.
+</p>
+<hr>
+<a name="Customizing-Formatting"></a>
+<div class="header">
+<p>
+Next: <a href="#Events-and-Listeners" accesskey="n" rel="next">Events and Listeners</a>, Previous: <a href="#SourceHighlight-class" accesskey="p" rel="prev">SourceHighlight class</a>, Up: <a href="#Main-Classes" accesskey="u" rel="up">Main Classes</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Concept-Index" title="Index" rel="index">Index</a>]</p>
+</div>
+<a name="Customizing-Formatting-1"></a>
+<h3 class="section">4.2 Customizing Formatting</h3>
+
+<p>The formatting of Source-highlight library, i.e., how to actually perform
+the highlighting, or what to do when we need to highlight something, can
+be completely customized; the library detects (using regular expressions
+based on language definition files) that something must be highlighted
+as, say, a keyword, and you can then do whatever you want with this
+information.  The default formatting strategy is to output an
+highlighted text using a specific formatting format, but you&rsquo;re free to
+do whatever you like, if you want.
+</p>
+<p>This formatting abstraction is done through <a name="index-Formatter-class"></a>
+<code>Formatter</code> class, which
+basically declares only the abstract <a name="index-format-method"></a>
+<code>format</code> method which takes as
+parameters the string to format, and further (possibly empty) additional
+parameters, implemented by <a name="index-FormatterParams-class"></a>
+<code>FormatterParams</code> class.  Note that the
+<a name="index-format-method-1"></a>
+<code>format</code> method does not get as an argument how the passed string
+must be formatted (e.g., as a keyword, as a type, etc.); this
+information must be stored in the formatter from the start.  Indeed, the
+mapping between a language element and a formatter is performed by
+<a name="index-FormatterManager-class"></a>
+<code>FormatterManager</code> class.  An object of this class must be created
+by specifying a default formatter object, that will be used when the
+formatter manager will be queried for a formatter for a specific
+language element that it is not able to handle (in this it will fall
+back by returning the default formatter).
+</p>
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top">&bull; <a href="#Completely-Customized-Formatting" accesskey="1">Completely Customized Formatting</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="#Style_002dbased-Customized-Formatting" accesskey="2">Style-based Customized Formatting</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+</table>
+
+<hr>
+<a name="Completely-Customized-Formatting"></a>
+<div class="header">
+<p>
+Next: <a href="#Style_002dbased-Customized-Formatting" accesskey="n" rel="next">Style-based Customized Formatting</a>, Previous: <a href="#Customizing-Formatting" accesskey="p" rel="prev">Customizing Formatting</a>, Up: <a href="#Customizing-Formatting" accesskey="u" rel="up">Customizing Formatting</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Concept-Index" title="Index" rel="index">Index</a>]</p>
+</div>
+<a name="Completely-Customized-Formatting-1"></a>
+<h4 class="subsection">4.2.1 Completely Customized Formatting</h4>
+
+<p>You can implement a completely customized formatting strategy.  For
+instance, this is a customized formatter (<samp>infoformatter.h</samp>) which,
+when requested to format a string, it simply writes this information
+specifying which kind of language element it is, and the position in the
+line (the <a name="index-start-field"></a>
+<code>start</code> field in <a name="index-FormatterParams-class-1"></a>
+<code>FormatterParams</code> class).  Note that
+the language element is stored in a field of the class, and it is set at
+object creation time.  We avoid to write anything if we are requested to
+format something as <code>&quot;normal&quot;</code>, or if the string to format is empty.
+</p>
+<div class="example">
+<pre class="example"><b>class</b> InfoFormatter: <b>public</b> srchilite::Formatter {
+    <span class="roman"><i>/// the language element represented by this formatter</i></span>
+    std::string elem;
+
+<b>public</b>:
+    InfoFormatter(<b>const</b> std::string &amp;elem_ = <tt>&quot;normal&quot;</tt>) :
+        elem(elem_) {
+    }
+
+    <b>virtual</b> <b>void</b> format(<b>const</b> std::string &amp;s,
+            <b>const</b> srchilite::FormatterParams *params = 0) {
+        <span class="roman"><i>// do not print anything if normal or string to format is empty</i></span>
+        <b>if</b> (elem != <tt>&quot;normal&quot;</tt> || !s.size()) {
+            std::cout &lt;&lt; elem &lt;&lt; <tt>&quot;: &quot;</tt> &lt;&lt; s;
+            <b>if</b> (params)
+                std::cout &lt;&lt; <tt>&quot;, start: &quot;</tt> &lt;&lt; params-&gt;start;
+            std::cout &lt;&lt; std::endl;
+        }
+    }
+};
+
+<span class="roman"><i>/// shared pointer for InfoFormatter</i></span>
+<b>typedef</b> boost::shared_ptr&lt;InfoFormatter&gt; InfoFormatterPtr;
+
+
+</pre></div>
+
+<p>For convenience we also declare a typedef for the shared pointer (since
+the formatter manager takes only shared pointers to formatters).
+</p>
+<p>In order to customize the formatting, there are some more steps
+to do, and in particular, you cannot use <a name="index-SourceHighlight-class-1"></a>
+<code>SourceHighlight</code> class anymore
+but you need to use more classes.
+</p>
+<p>First of all, you need <a name="index-LangDefManager-class"></a>
+<code>LangDefManager</code> class which takes care of
+building the regular expressions starting from a language definition
+file; in order to do this it uses a <a name="index-HighlightRuleFactory-class"></a>
+<code>HighlightRuleFactory</code> class
+object; for the moment, only the implementation based on boost regular
+expression exists, so you can simply pass an object of
+<a name="index-RegexRuleFactory-class"></a>
+<code>RegexRuleFactory</code> class.  Once you have an object of
+<a name="index-LangDefManager-class-1"></a>
+<code>LangDefManager</code> class, you can use the
+<a name="index-getHighlightState-method"></a>
+<code>getHighlightState</code> method to build the 
+<a name="index-automaton"></a>
+automaton to perform the
+highlight (in particular the initial state of such automaton, of
+<a name="index-HighlightState-class"></a>
+<code>HighlightState</code> class), and you should pass this to an object that
+can use the automaton to perform the highlighting.  To do this, you can
+use <a name="index-SourceHighlighter-class"></a>
+<code>SourceHighlighter</code> class whose objects can be used to highlight
+a line of text, using <a name="index-highlightParagraph-method"></a>
+<code>highlightParagraph</code> method.
+</p>
+<p>You can then create a <a name="index-FormatterManager-class-1"></a>
+<code>FormatterManager</code> class object and populate
+it with your formatters and set it to the <a name="index-SourceHighlighter-class-1"></a>
+<code>SourceHighlighter</code> class
+object.  The following example (<samp>infoformatter-main.cpp</samp>) shows how
+to perform these steps; note that we can share the same formatter for
+different language elements:
+</p>
+<div class="example">
+<pre class="example">
+
+<b>#ifdef</b> HAVE_CONFIG_H
+<b>#include</b> <tt>&quot;config.h&quot;</tt>
+<b>#endif</b>
+
+<b>#include</b> <tt>&lt;iostream&gt;</tt>
+<b>#include</b> <tt>&quot;srchilite/langdefmanager.h&quot;</tt>
+<b>#include</b> <tt>&quot;srchilite/regexrulefactory.h&quot;</tt>
+<b>#include</b> <tt>&quot;srchilite/sourcehighlighter.h&quot;</tt>
+<b>#include</b> <tt>&quot;srchilite/formattermanager.h&quot;</tt>
+<b>#include</b> <tt>&quot;infoformatter.h&quot;</tt>
+
+<b>using</b> <b>namespace</b> std;
+
+<b>#ifndef</b> DATADIR
+<b>#define</b> DATADIR <tt>&quot;&quot;</tt>
+<b>#endif</b>
+
+<b>int</b> main() {
+    srchilite::RegexRuleFactory ruleFactory;
+    srchilite::LangDefManager langDefManager(&amp;ruleFactory);
+
+    <span class="roman"><i>// we highlight C++ code for simplicity</i></span>
+    srchilite::SourceHighlighter highlighter(langDefManager.getHighlightState(
+            DATADIR, <tt>&quot;cpp.lang&quot;</tt>));
+
+    srchilite::FormatterManager formatterManager(InfoFormatterPtr(
+            <b>new</b> InfoFormatter));
+    InfoFormatterPtr keywordFormatter(<b>new</b> InfoFormatter(<tt>&quot;keyword&quot;</tt>));
+
+    formatterManager.addFormatter(<tt>&quot;keyword&quot;</tt>, keywordFormatter);
+    formatterManager.addFormatter(<tt>&quot;string&quot;</tt>, InfoFormatterPtr(<b>new</b> InfoFormatter(
+            <tt>&quot;string&quot;</tt>)));
+    <span class="roman"><i>// for &quot;type&quot; we use the same formatter as for &quot;keyword&quot;</i></span>
+    formatterManager.addFormatter(<tt>&quot;type&quot;</tt>, keywordFormatter);
+    formatterManager.addFormatter(<tt>&quot;comment&quot;</tt>, InfoFormatterPtr(
+            <b>new</b> InfoFormatter(<tt>&quot;comment&quot;</tt>)));
+    formatterManager.addFormatter(<tt>&quot;symbol&quot;</tt>, InfoFormatterPtr(<b>new</b> InfoFormatter(
+            <tt>&quot;symbol&quot;</tt>)));
+    formatterManager.addFormatter(<tt>&quot;number&quot;</tt>, InfoFormatterPtr(<b>new</b> InfoFormatter(
+            <tt>&quot;number&quot;</tt>)));
+    formatterManager.addFormatter(<tt>&quot;preproc&quot;</tt>, InfoFormatterPtr(
+            <b>new</b> InfoFormatter(<tt>&quot;preproc&quot;</tt>)));
+    highlighter.setFormatterManager(&amp;formatterManager);
+
+    <span class="roman"><i>// make sure it uses additional information</i></span>
+    srchilite::FormatterParams params;
+    highlighter.setFormatterParams(&amp;params);
+
+    string line;
+    <span class="roman"><i>// we now highlight a line a time</i></span>
+    <b>while</b> (getline(cin, line)) {
+        <span class="roman"><i>// reset position counter within a line</i></span>
+        params.start = 0;
+
+        highlighter.highlightParagraph(line);
+    }
+
+    <b>return</b> 0;
+}
+
+</pre></div>
+
+<p>Note that, since we highlight a line a time, we must reset the
+<a name="index-start-field-1"></a>
+<code>start</code> field each time we start to examine a new line.
+</p>
+<p>For simplicity this example highlights only C++ code and reads directly
+from the standard input and writes to the standard output.  This is a
+run of the example reading from the standard input (so each time you
+insert a line you get the output of your formatters):
+</p>
+<div class="example">
+<pre class="example">// this is a comment
+comment: //, start: 0
+comment:  this is a comment, start: 2
+#include &lt;foobar.h&gt;
+preproc: #include, start: 0
+string: &lt;foobar.h&gt;, start: 9
+int abc = 100 + 5;
+keyword: int, start: 0
+symbol: =, start: 8
+number: 100, start: 10
+symbol: +, start: 14
+number: 5, start: 16
+symbol: ;, start: 17
+</pre></div>
+
+<hr>
+<a name="Style_002dbased-Customized-Formatting"></a>
+<div class="header">
+<p>
+Previous: <a href="#Completely-Customized-Formatting" accesskey="p" rel="prev">Completely Customized Formatting</a>, Up: <a href="#Customizing-Formatting" accesskey="u" rel="up">Customizing Formatting</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Concept-Index" title="Index" rel="index">Index</a>]</p>
+</div>
+<a name="Style_002dbased-Customized-Formatting-1"></a>
+<h4 class="subsection">4.2.2 Style-based Customized Formatting</h4>
+
+<p>Source-highlight can rely on style (and css style) files for generating
+formatting.  Usually, the formatters are built according to the output
+format, specified through <samp>.outlang</samp> files, See <a href="source-highlight.html#Output-Language-Definitions">(source-highlight)Output
+Language Definitions</a>.  However, you can also create
+your own formatters based on the information of the style file (or css
+style file).  During the parsing of these style files, a
+<a name="index-FormatterFactory-class"></a>
+<code>FormatterFactory</code> class object is used by the library, and you can
+provide a customized factory (the one that is used by the library is
+<a name="index-TextStyleFormatterFactory-class"></a>
+<code>TextStyleFormatterFactory</code> class).  The only abstract method
+of <a name="index-FormatterFactory-class-1"></a>
+<code>FormatterFactory</code> class is <a name="index-createFormatter-method"></a>
+<code>createFormatter</code> method.
+</p>
+<p>In order to parse a style file, you can use the static methods of the
+<a name="index-StyleFileParser-class"></a>
+<code>StyleFileParser</code> class, which require the file name of the style
+file (and possibly the path to search for the style file, otherwise the
+default one is used), the factory to create formatters, and a reference
+to a string where the document background color will be stored.  The
+methods are <a name="index-parseStyleFile-method"></a>
+<code>parseStyleFile</code> method and
+<a name="index-parseCssStyleFile-method"></a>
+<code>parseCssStyleFile</code> method.
+</p>
+<p>For instance, let&rsquo;s create a customized formatter
+<samp>styleformatter.h</samp> that simply prints how a language element will
+be formatted (but no formatting will take place); for the sake of
+simplicity we will use only public fields:
+</p>
+<div class="example">
+<pre class="example"><b>struct</b> StyleFormatter: <b>public</b> srchilite::Formatter {
+    <span class="roman"><i>/// the language element represented by this formatter</i></span>
+    std::string elem;
+
+    <b>bool</b> bold, italic, underline, fixed, not_fixed;
+
+    std::string color;
+
+    std::string bgColor;
+
+    StyleFormatter(<b>const</b> std::string &amp;elem_ = <tt>&quot;normal&quot;</tt>) :
+        elem(elem_), bold(<b>false</b>), italic(<b>false</b>), underline(<b>false</b>),
+                fixed(<b>false</b>), not_fixed(<b>false</b>) {
+    }
+
+    <b>virtual</b> <b>void</b> format(<b>const</b> std::string &amp;s,
+            <b>const</b> srchilite::FormatterParams *params = 0) {
+        <span class="roman"><i>// do not print anything if normal or string to format is empty</i></span>
+        <b>if</b> (elem != <tt>&quot;normal&quot;</tt> || !s.size()) {
+            std::cout &lt;&lt; elem &lt;&lt; <tt>&quot;: </tt>\&quot;<tt>&quot;</tt> &lt;&lt; s &lt;&lt; <tt>&quot;</tt>\&quot;<tt>&quot;</tt> &lt;&lt; std::endl;
+            std::cout &lt;&lt; <tt>&quot;formatted as: &quot;</tt> &lt;&lt; (bold ? <tt>&quot;bold &quot;</tt> : <tt>&quot;&quot;</tt>)
+                    &lt;&lt; (italic ? <tt>&quot;italic &quot;</tt> : <tt>&quot;&quot;</tt>) &lt;&lt; (underline ? <tt>&quot;underline &quot;</tt>
+                    : <tt>&quot;&quot;</tt>);
+            std::cout &lt;&lt; (color.size() ? <tt>&quot;color: &quot;</tt> + color + <tt>&quot; &quot;</tt> : <tt>&quot;&quot;</tt>);
+            std::cout &lt;&lt; (bgColor.size() ? <tt>&quot;bgcolor: &quot;</tt> + bgColor : <tt>&quot;&quot;</tt>)
+                    &lt;&lt; std::endl;
+        }
+    }
+};
+
+<span class="roman"><i>/// shared pointer for StyleFormatter</i></span>
+<b>typedef</b> boost::shared_ptr&lt;StyleFormatter&gt; StyleFormatterPtr;
+
+
+</pre></div>
+
+<p>Now, we create a customized factory (file
+<samp>styleformatterfactory.h</samp>), implementing the method
+<a name="index-createFormatter-method-1"></a>
+<code>createFormatter</code> method.  Note that the base class
+<a name="index-FormatterFactory-class-2"></a>
+<code>FormatterFactory</code> class does not provide any means to store the
+created formatters, so it&rsquo;s up to the derived classes to store the
+created formatters somewhere:
+</p>
+<div class="example">
+<pre class="example"><b>struct</b> StyleFormatterFactory: <b>public</b> srchilite::FormatterFactory {
+    StyleFormatterMap formatterMap;
+
+    <b>bool</b> hasFormatter(<b>const</b> string &amp;key) <b>const</b> {
+        <b>return</b> formatterMap.find(key) != formatterMap.end();
+    }
+
+    <b>bool</b> createFormatter(<b>const</b> string &amp;key, <b>const</b> string &amp;color,
+            <b>const</b> string &amp;bgcolor,
+            srchilite::StyleConstantsPtr styleconstants) {
+
+        <b>if</b> (hasFormatter(key))
+            <b>return</b> <b>false</b>;
+
+        StyleFormatter *formatter = <b>new</b> StyleFormatter(key);
+        formatterMap[key] = StyleFormatterPtr(formatter);
+
+        <b>if</b> (styleconstants.get()) {
+            <b>for</b> (srchilite::StyleConstantsIterator it =
+                    styleconstants-&gt;begin(); it
+                    != styleconstants-&gt;end(); ++it) {
+                <b>switch</b> (*it) {
+                <b>case</b> srchilite::ISBOLD:
+                    formatter-&gt;bold = <b>true</b>;
+                    <b>break</b>;
+                <b>case</b> srchilite::ISITALIC:
+                    formatter-&gt;italic = <b>true</b>;
+                    <b>break</b>;
+                <b>case</b> srchilite::ISUNDERLINE:
+                    formatter-&gt;underline = <b>true</b>;
+                    <b>break</b>;
+                <b>case</b> srchilite::ISFIXED:
+                    formatter-&gt;fixed = <b>true</b>;
+                    <b>break</b>;
+                <b>case</b> srchilite::ISNOTFIXED:
+                    formatter-&gt;not_fixed = <b>true</b>;
+                    <b>break</b>;
+                <b>case</b> srchilite::ISNOREF: <span class="roman"><i>// ignore references here</i></span>
+                    <b>break</b>;
+                }
+            }
+        }
+
+        formatter-&gt;color = color;
+        formatter-&gt;bgColor = bgcolor;
+
+        <b>return</b> <b>true</b>;
+    }
+};
+
+
+</pre></div>
+
+<p>The <a name="index-createFormatter-method-2"></a>
+<code>createFormatter</code> method will be called when parsing a style
+file to create a formatter corresponding to a specific language element;
+this method should return false if the creation of a formatter failed
+(e.g., in this case, if a formatter for a given element had already been
+created).  The method is passed the language element name, the colors
+for the element as specified in the style file (that can be empty if no
+color was specified), and a <a name="index-StyleConstants-enum"></a>
+<code>StyleConstants</code> enum shared pointer
+with formatting informations such as, boldface, italics, etc.  The
+factory can use this information to create the customized formatter.
+</p>
+<p>Now, we can use this customized formatter factory in our program
+(file <samp>styleformatter-main.cpp</samp>):
+</p>
+<div class="example">
+<pre class="example">
+
+<b>#ifdef</b> HAVE_CONFIG_H
+<b>#include</b> <tt>&quot;config.h&quot;</tt>
+<b>#endif</b>
+
+<b>#include</b> <tt>&lt;iostream&gt;</tt>
+<b>#include</b> <tt>&quot;srchilite/langdefmanager.h&quot;</tt>
+<b>#include</b> <tt>&quot;srchilite/regexrulefactory.h&quot;</tt>
+<b>#include</b> <tt>&quot;srchilite/sourcehighlighter.h&quot;</tt>
+<b>#include</b> <tt>&quot;srchilite/formattermanager.h&quot;</tt>
+<b>#include</b> <tt>&quot;srchilite/stylefileparser.h&quot;</tt> <span class="roman"><i>// for parsing style files</i></span>
+<b>#include</b> <tt>&quot;styleformatterfactory.h&quot;</tt>
+
+<b>using</b> <b>namespace</b> std;
+
+<b>#ifndef</b> DATADIR
+<b>#define</b> DATADIR <tt>&quot;&quot;</tt>
+<b>#endif</b>
+
+<b>int</b> main() {
+    srchilite::RegexRuleFactory ruleFactory;
+    srchilite::LangDefManager langDefManager(&amp;ruleFactory);
+
+    <span class="roman"><i>// we highlight C++ code for simplicity</i></span>
+    srchilite::SourceHighlighter highlighter(langDefManager.getHighlightState(
+            DATADIR, <tt>&quot;cpp.lang&quot;</tt>));
+
+    <span class="roman"><i>// our factory for our formatters</i></span>
+    StyleFormatterFactory factory;
+
+    <span class="roman"><i>// the background color for the document (not used here)</i></span>
+    string docBgColor;
+
+    <span class="roman"><i>// let&rsquo;s parse the default.style and create our formatters</i></span>
+    srchilite::StyleFileParser::parseStyleFile(DATADIR, <tt>&quot;default.style&quot;</tt>,
+            &amp;factory, docBgColor);
+
+    <span class="roman"><i>// now we need to fill up the formatter manager with our formatters</i></span>
+    srchilite::FormatterManager formatterManager(StyleFormatterPtr(
+            <b>new</b> StyleFormatter));
+    <b>for</b> (StyleFormatterMap::const_iterator it = factory.formatterMap.begin(); it
+            != factory.formatterMap.end(); ++it) {
+        formatterManager.addFormatter(it-&gt;first, it-&gt;second);
+    }
+    highlighter.setFormatterManager(&amp;formatterManager);
+
+    string line;
+    <span class="roman"><i>// we now highlight a line a time</i></span>
+    <b>while</b> (getline(cin, line)) {
+        highlighter.highlightParagraph(line);
+    }
+
+    <b>return</b> 0;
+}
+
+</pre></div>
+
+<p>Note that, once we created all the formatters with our factory (while
+parsing the style file <samp>default.style</samp>), we still need to manually
+set these formatters in the <a name="index-FormatterManager-class-2"></a>
+<code>FormatterManager</code> class object used by
+our highlighter.
+</p>
+<p>For simplicity this example highlights only C++ code and reads directly
+from the standard input and writes to the standard output.  This is a
+run of the example reading from the standard input (so each time you
+insert a line you get the output of your formatters):
+</p>
+<div class="example">
+<pre class="example">/// my class TODO: nothing special
+comment: &quot;///&quot;
+formatted as: italic color: brown 
+comment: &quot; my class &quot;
+formatted as: italic color: brown 
+todo: &quot;TODO:&quot;
+formatted as: bold bgcolor: cyan
+comment: &quot; nothing special&quot;
+formatted as: italic color: brown 
+#include &lt;foobar.h&gt;
+preproc: &quot;#include&quot;
+formatted as: bold color: darkblue 
+string: &quot;&lt;foobar.h&gt;&quot;
+formatted as: color: red 
+</pre></div>
+
+
+<hr>
+<a name="Events-and-Listeners"></a>
+<div class="header">
+<p>
+Next: <a href="#Settings" accesskey="n" rel="next">Settings</a>, Previous: <a href="#Customizing-Formatting" accesskey="p" rel="prev">Customizing Formatting</a>, Up: <a href="#Main-Classes" accesskey="u" rel="up">Main Classes</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Concept-Index" title="Index" rel="index">Index</a>]</p>
+</div>
+<a name="Events-and-Listeners-1"></a>
+<h3 class="section">4.3 Events and Listeners</h3>
+
+<p>During the highlighting (and regular expression matching) the library
+generates events that can be &ldquo;listened&rdquo; by using a customized event
+listener.  An event is represented by an object of
+<a name="index-HighlightEvent-class"></a>
+<code>HighlightEvent</code> class, which stores the <a name="index-HighlightToken-class"></a>
+<code>HighlightToken</code> class
+object and the type (an <a name="index-HighlightEventType-enum"></a>
+<code>HighlightEventType</code> enum) of the event.
+</p>
+<p>A customized listener can be implemented by deriving from
+<a name="index-HighlightEventListener-class"></a>
+<code>HighlightEventListener</code> class and by defining the virtual method
+<a name="index-notify-method"></a>
+<code>notify</code> method, which, of course, takes an
+<a name="index-HighlightEvent-class-1"></a>
+<code>HighlightEvent</code> class object as parameter.
+</p>
+<p>For instance, <a name="index-source_002dhighlight-2"></a>
+<code>source-highlight</code> implements the debugging
+functionalities by using a customized listener,
+<a name="index-DebugListener-class"></a>
+<code>DebugListener</code> class, whose method implementation we report here as
+an example:
+</p>
+<div class="example">
+<pre class="example"><b>void</b> DebugListener::notify(<b>const</b> HighlightEvent &amp;event) {
+    <b>switch</b> (event.type) {
+    <b>case</b> HighlightEvent::FORMAT:
+        <span class="roman"><i>// print information about the rule</i></span>
+        <b>if</b> (event.token.rule) {
+            os &lt;&lt; event.token.rule-&gt;getAdditionalInfo() &lt;&lt; endl;
+            os &lt;&lt; <tt>&quot;expression: </tt>\&quot;<tt>&quot;</tt> &lt;&lt; event.token.rule-&gt;toString() &lt;&lt; <tt>&quot;</tt>\&quot;<tt>&quot;</tt>
+                    &lt;&lt; endl;
+        }
+
+        <span class="roman"><i>// now format the matched strings</i></span>
+        <b>for</b> (MatchedElements::const_iterator it = event.token.matched.begin(); it
+                != event.token.matched.end(); ++it) {
+            os &lt;&lt; <tt>&quot;formatting </tt>\&quot;<tt>&quot;</tt> &lt;&lt; it-&gt;second &lt;&lt; <tt>&quot;</tt>\&quot;<tt> as &quot;</tt> &lt;&lt; it-&gt;first
+                    &lt;&lt; endl;
+        }
+        step();
+        <b>break</b>;
+    <b>case</b> HighlightEvent::FORMATDEFAULT:
+        os &lt;&lt; <tt>&quot;formatting </tt>\&quot;<tt>&quot;</tt> &lt;&lt; event.token.matched.front().second
+                &lt;&lt; <tt>&quot;</tt>\&quot;<tt> as default&quot;</tt> &lt;&lt; endl;
+        step();
+        <b>break</b>;
+    <b>case</b> HighlightEvent::ENTERSTATE:
+        os &lt;&lt; <tt>&quot;entering state: &quot;</tt> &lt;&lt; event.token.rule-&gt;getNextState()-&gt;getId()
+                &lt;&lt; endl;
+        <b>break</b>;
+    <b>case</b> HighlightEvent::EXITSTATE:
+        <b>int</b> level = event.token.rule-&gt;getExitLevel();
+        os &lt;&lt; <tt>&quot;exiting state, level: &quot;</tt>;
+        <b>if</b> (level &lt; 0)
+            os &lt;&lt; <tt>&quot;all&quot;</tt>;
+        <b>else</b>
+            os &lt;&lt; level;
+        os &lt;&lt; endl;
+        <b>break</b>;
+    }
+}
+
+</pre></div>
+
+<hr>
+<a name="Settings"></a>
+<div class="header">
+<p>
+Next: <a href="#Utility-functions" accesskey="n" rel="next">Utility functions</a>, Previous: <a href="#Events-and-Listeners" accesskey="p" rel="prev">Events and Listeners</a>, Up: <a href="#Main-Classes" accesskey="u" rel="up">Main Classes</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Concept-Index" title="Index" rel="index">Index</a>]</p>
+</div>
+<a name="Settings-1"></a>
+<h3 class="section">4.4 Settings</h3>
+
+<p>Source-highlight library reads language map files, language definition files,
+output format definitions, styles, and other files it needs during the
+execution from a specific directory, which we call
+<a name="index-data-dir"></a>
+<em>data dir</em>; 
+the library comes with an hardcoded value for this path, which is
+based on the <code>--prefix</code> value specified at configuration
+time (in particular, it is <code>prefix/share/source-highlight</code>).
+In particular, the user can set the value also with the environment
+variable
+<a name="index-SOURCE_005fHIGHLIGHT_005fDATADIR"></a>
+<code>SOURCE_HIGHLIGHT_DATADIR</code> (see also the program
+<a name="index-source_002dhighlight_002dsettings-1"></a>
+<code>source-highlight-settings</code> which can store settings in a configuration
+file of the user&rsquo;s home, See <a href="source-highlight.html#The-program-source_002dhighlight_002dsettings">(source-highlight)The program
+source-highlight-settings</a>).
+</p>
+<p>When running the program <a name="index-source_002dhighlight-3"></a>
+<code>source-highlight</code> this value can be overridden with
+the command line option <code>--data-dir</code>
+(See <a href="source-highlight.html#Configuration-files">(source-highlight)Configuration files</a>).
+</p>
+<p>When using the Source-highlight library from a program, one might need to
+change the value for data dir, dynamically, and in a consistent way,
+i.e., to have a static and single point where this setting can be set
+and retrieved.  Note that for the moment, the only setting you can
+manage is the value of data dir.
+</p>
+<p>The library provides the <a name="index-Settings-class"></a>
+<code>Settings</code> class for this purpose.
+Although you can create objects of this class to mainuplate, check and
+save settings (you may want to look at the source code of the program
+<a name="index-source_002dhighlight_002dsettings-2"></a>
+<code>source-highlight-settings</code>), you probably only need the static methods
+of this class.  You can set the global value of data dir with the
+<a name="index-setGlobalDataDir-method"></a>
+<code>setGlobalDataDir</code> method.  The <a name="index-retrieveDataDir-method"></a>
+<code>retrieveDataDir</code> method
+retrieves the value for the data dir.  If the global value was set with
+<a name="index-setGlobalDataDir-method-1"></a>
+<code>setGlobalDataDir</code> method then always returns this global
+value. Otherwise, it returns the value of the environment variable
+<a name="index-SOURCE_005fHIGHLIGHT_005fDATADIR-1"></a>
+<code>SOURCE_HIGHLIGHT_DATADIR</code> if set. Otherwise, it returns the value
+read from the configuration file.  If also the reading of configuration
+file fails, then it returns the hardcoded value.
+</p>
+<hr>
+<a name="Utility-functions"></a>
+<div class="header">
+<p>
+Previous: <a href="#Settings" accesskey="p" rel="prev">Settings</a>, Up: <a href="#Main-Classes" accesskey="u" rel="up">Main Classes</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Concept-Index" title="Index" rel="index">Index</a>]</p>
+</div>
+<a name="Utility-functions-1"></a>
+<h3 class="section">4.5 Utility functions</h3>
+
+<p>If you need to get a list of all the files in the data dir with a
+specific role (e.g., language definition files, style files, etc.) you
+can use the static methods of the <a name="index-SourceHighlightUtils-class"></a>
+<code>SourceHighlightUtils</code> class,
+which will take care of using the data dir specified in the settings
+(<a href="#Settings">Settings</a>).
+</p>
+<hr>
+<a name="Global-instances"></a>
+<div class="header">
+<p>
+Next: <a href="#Problems" accesskey="n" rel="next">Problems</a>, Previous: <a href="#Main-Classes" accesskey="p" rel="prev">Main Classes</a>, Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Concept-Index" title="Index" rel="index">Index</a>]</p>
+</div>
+<a name="Global-instances-1"></a>
+<h3 class="section">4.6 Global instances</h3>
+
+<p>The <a name="index-Instances-class"></a>
+<code>Instances</code> class provides access to static instances of some
+classes that can be used, e.g., to read a language definition file and
+create the <a name="index-automaton-1"></a>
+automaton for the highlighting, using
+<a name="index-LangDefManager-class-2"></a>
+<code>LangDefManager</code> class, or to access the map of language definition
+files, using <a name="index-LangMap-class-1"></a>
+<code>LangMap</code> class.  This class ensures that these
+instances use the global settings; in particular, if you change the
+global settings, you should call the static <a name="index-reload-method"></a>
+<code>reload</code> method, so that
+the instances are updated.
+</p>
+<p>Using these instances also makes the use of some classes easier; for
+instance, the beginning part of the <code>main</code> of the examples shown in
+<a href="#Customizing-Formatting">Customizing Formatting</a> can be written as follows:
+</p>
+<div class="example">
+<pre class="example"><b>#include</b> <tt>&quot;srchilite/langdefmanager.h&quot;</tt>
+<b>#include</b> <tt>&quot;srchilite/instances.h&quot;</tt>
+
+<b>int</b> main() {
+  <span class="roman"><i>// we highlight C++ code for simplicity</i></span>
+  srchilite::SourceHighlighter highlighter
+    (srchilite::Instances::getLangDefManager().getHighlightState(
+            DATADIR, <tt>&quot;cpp.lang&quot;</tt>));
+
+</pre></div>
+
+<p>If you know that you will not use these instances anymore in your
+application, and it is crucial to recover all the memory used by these
+instances, you then need to call the static <a name="index-unload-method"></a>
+<code>unload</code> method, and the
+memory of these instances will be released.
+</p>
+<hr>
+<a name="Problems"></a>
+<div class="header">
+<p>
+Next: <a href="#Mailing-Lists" accesskey="n" rel="next">Mailing Lists</a>, Previous: <a href="#Global-instances" accesskey="p" rel="prev">Global instances</a>, Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Concept-Index" title="Index" rel="index">Index</a>]</p>
+</div>
+<a name="Reporting-Bugs"></a>
+<h2 class="chapter">5 Reporting Bugs</h2>
+<a name="index-bugs"></a>
+<a name="index-problems"></a>
+
+<p>If you find a bug in <code>source-highlight</code>, please send electronic
+mail to
+</p>
+<p><code>bug-source-highlight at gnu dot org</code>
+</p>
+<p>Include the version
+number, which you can find by running &lsquo;<samp><span class="nolinebreak">source-highlight</span>&nbsp;<span class="nolinebreak">--version</span></samp>&rsquo;<!-- /@w -->.  Also include in your message the output that the program
+produced and the output you expected.
+</p>
+<p>If you have other questions, comments or suggestions about
+<code>source-highlight</code>, contact the author via electronic mail
+(find the address at <a href="http://www.lorenzobettini.it">http://www.lorenzobettini.it</a>).  The author will try to help
+you out, although he may not have time to fix your problems.
+</p>
+<hr>
+<a name="Mailing-Lists"></a>
+<div class="header">
+<p>
+Next: <a href="#Concept-Index" accesskey="n" rel="next">Concept Index</a>, Previous: <a href="#Problems" accesskey="p" rel="prev">Problems</a>, Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Concept-Index" title="Index" rel="index">Index</a>]</p>
+</div>
+<a name="Mailing-Lists-1"></a>
+<h2 class="chapter">6 Mailing Lists</h2>
+<a name="index-mailing-list"></a>
+
+<p>The following mailing lists are available: 
+</p>
+<p><code>help-source-highlight at gnu dot org</code>
+</p>
+<p>for generic discussions about the program and for asking for help about
+it (open mailing list),
+<a href="http://mail.gnu.org/mailman/listinfo/help-source-highlight">http://mail.gnu.org/mailman/listinfo/help-source-highlight</a>
+</p> 
+<p><code>info-source-highlight at gnu dot org</code>
+</p>
+<p>for receiving information about new releases and features (read-only
+mailing list),
+<a href="http://mail.gnu.org/mailman/listinfo/info-source-highlight">http://mail.gnu.org/mailman/listinfo/info-source-highlight</a>.
+</p> 
+<p>If you want to subscribe to a mailing list just go to the URL and follow
+the instructions, or send me an e-mail and I&rsquo;ll subscribe you.
+</p>
+<p>I&rsquo;ll describe new features in new releases also in my blog, at
+this URL:
+</p>
+<p><a href="http://tronprog.blogspot.com/search/label/source-highlight">http://tronprog.blogspot.com/search/label/source-highlight</a>
+</p>
+<hr>
+<a name="Concept-Index"></a>
+<div class="header">
+<p>
+Previous: <a href="#Mailing-Lists" accesskey="p" rel="prev">Mailing Lists</a>, Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Concept-Index" title="Index" rel="index">Index</a>]</p>
+</div>
+<a name="Concept-Index-1"></a>
+<h2 class="unnumbered">Concept Index</h2>
+
+<a name="index-tail-recursion"></a>
+<table><tr><th valign="top">Jump to: &nbsp; </th><td><a class="summary-letter" href="#Concept-Index_cp_symbol-1"><b>-</b></a>
+ &nbsp; 
+<br>
+<a class="summary-letter" href="#Concept-Index_cp_letter-A"><b>A</b></a>
+ &nbsp; 
+<a class="summary-letter" href="#Concept-Index_cp_letter-B"><b>B</b></a>
+ &nbsp; 
+<a class="summary-letter" href="#Concept-Index_cp_letter-C"><b>C</b></a>
+ &nbsp; 
+<a class="summary-letter" href="#Concept-Index_cp_letter-D"><b>D</b></a>
+ &nbsp; 
+<a class="summary-letter" href="#Concept-Index_cp_letter-F"><b>F</b></a>
+ &nbsp; 
+<a class="summary-letter" href="#Concept-Index_cp_letter-G"><b>G</b></a>
+ &nbsp; 
+<a class="summary-letter" href="#Concept-Index_cp_letter-H"><b>H</b></a>
+ &nbsp; 
+<a class="summary-letter" href="#Concept-Index_cp_letter-I"><b>I</b></a>
+ &nbsp; 
+<a class="summary-letter" href="#Concept-Index_cp_letter-L"><b>L</b></a>
+ &nbsp; 
+<a class="summary-letter" href="#Concept-Index_cp_letter-M"><b>M</b></a>
+ &nbsp; 
+<a class="summary-letter" href="#Concept-Index_cp_letter-N"><b>N</b></a>
+ &nbsp; 
+<a class="summary-letter" href="#Concept-Index_cp_letter-P"><b>P</b></a>
+ &nbsp; 
+<a class="summary-letter" href="#Concept-Index_cp_letter-R"><b>R</b></a>
+ &nbsp; 
+<a class="summary-letter" href="#Concept-Index_cp_letter-S"><b>S</b></a>
+ &nbsp; 
+<a class="summary-letter" href="#Concept-Index_cp_letter-T"><b>T</b></a>
+ &nbsp; 
+<a class="summary-letter" href="#Concept-Index_cp_letter-U"><b>U</b></a>
+ &nbsp; 
+</td></tr></table>
+<table class="index-cp" border="0">
+<tr><td></td><th align="left">Index Entry</th><td>&nbsp;</td><th align="left"> Section</th></tr>
+<tr><td colspan="4"> <hr></td></tr>
+<tr><th><a name="Concept-Index_cp_symbol-1">-</a></th><td></td><td></td></tr>
+<tr><td></td><td valign="top"><a href="#index-_002d_002dwith_002ddoxygen"><code>--with-doxygen</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#Installation">Installation</a></td></tr>
+<tr><td colspan="4"> <hr></td></tr>
+<tr><th><a name="Concept-Index_cp_letter-A">A</a></th><td></td><td></td></tr>
+<tr><td></td><td valign="top"><a href="#index-automaton">automaton</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Completely-Customized-Formatting">Completely Customized Formatting</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-automaton-1">automaton</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Global-instances">Global instances</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-autotools">autotools</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Using-Automake-and-Autotools">Using Automake and Autotools</a></td></tr>
+<tr><td colspan="4"> <hr></td></tr>
+<tr><th><a name="Concept-Index_cp_letter-B">B</a></th><td></td><td></td></tr>
+<tr><td></td><td valign="top"><a href="#index-bugs">bugs</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Problems">Problems</a></td></tr>
+<tr><td colspan="4"> <hr></td></tr>
+<tr><th><a name="Concept-Index_cp_letter-C">C</a></th><td></td><td></td></tr>
+<tr><td></td><td valign="top"><a href="#index-createFormatter-method"><code>createFormatter</code> method</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Style_002dbased-Customized-Formatting">Style-based Customized Formatting</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-createFormatter-method-1"><code>createFormatter</code> method</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Style_002dbased-Customized-Formatting">Style-based Customized Formatting</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-createFormatter-method-2"><code>createFormatter</code> method</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Style_002dbased-Customized-Formatting">Style-based Customized Formatting</a></td></tr>
+<tr><td colspan="4"> <hr></td></tr>
+<tr><th><a name="Concept-Index_cp_letter-D">D</a></th><td></td><td></td></tr>
+<tr><td></td><td valign="top"><a href="#index-data-dir">data dir</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Settings">Settings</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-DebugListener-class"><code>DebugListener</code> class</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Events-and-Listeners">Events and Listeners</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-doxygen">doxygen</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Installation">Installation</a></td></tr>
+<tr><td colspan="4"> <hr></td></tr>
+<tr><th><a name="Concept-Index_cp_letter-F">F</a></th><td></td><td></td></tr>
+<tr><td></td><td valign="top"><a href="#index-features">features</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Introduction">Introduction</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-format-method"><code>format</code> method</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Customizing-Formatting">Customizing Formatting</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-format-method-1"><code>format</code> method</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Customizing-Formatting">Customizing Formatting</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-Formatter-class"><code>Formatter</code> class</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Customizing-Formatting">Customizing Formatting</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-FormatterFactory-class"><code>FormatterFactory</code> class</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Style_002dbased-Customized-Formatting">Style-based Customized Formatting</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-FormatterFactory-class-1"><code>FormatterFactory</code> class</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Style_002dbased-Customized-Formatting">Style-based Customized Formatting</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-FormatterFactory-class-2"><code>FormatterFactory</code> class</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Style_002dbased-Customized-Formatting">Style-based Customized Formatting</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-FormatterManager-class"><code>FormatterManager</code> class</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Customizing-Formatting">Customizing Formatting</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-FormatterManager-class-1"><code>FormatterManager</code> class</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Completely-Customized-Formatting">Completely Customized Formatting</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-FormatterManager-class-2"><code>FormatterManager</code> class</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Style_002dbased-Customized-Formatting">Style-based Customized Formatting</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-FormatterParams-class"><code>FormatterParams</code> class</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Customizing-Formatting">Customizing Formatting</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-FormatterParams-class-1"><code>FormatterParams</code> class</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Completely-Customized-Formatting">Completely Customized Formatting</a></td></tr>
+<tr><td colspan="4"> <hr></td></tr>
+<tr><th><a name="Concept-Index_cp_letter-G">G</a></th><td></td><td></td></tr>
+<tr><td></td><td valign="top"><a href="#index-getHighlightState-method"><code>getHighlightState</code> method</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Completely-Customized-Formatting">Completely Customized Formatting</a></td></tr>
+<tr><td colspan="4"> <hr></td></tr>
+<tr><th><a name="Concept-Index_cp_letter-H">H</a></th><td></td><td></td></tr>
+<tr><td></td><td valign="top"><a href="#index-headers">headers</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Use-of-GNU-Source_002dhighlight-Library">Use of GNU Source-highlight Library</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-highlight-method"><code>highlight</code> method</a>:</td><td>&nbsp;</td><td valign="top"><a href="#SourceHighlight-class">SourceHighlight class</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-highlight-method-1"><code>highlight</code> method</a>:</td><td>&nbsp;</td><td valign="top"><a href="#SourceHighlight-class">SourceHighlight class</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-HighlightEvent-class"><code>HighlightEvent</code> class</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Events-and-Listeners">Events and Listeners</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-HighlightEvent-class-1"><code>HighlightEvent</code> class</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Events-and-Listeners">Events and Listeners</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-HighlightEventListener-class"><code>HighlightEventListener</code> class</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Events-and-Listeners">Events and Listeners</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-HighlightEventType-enum"><code>HighlightEventType</code> enum</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Events-and-Listeners">Events and Listeners</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-highlightParagraph-method"><code>highlightParagraph</code> method</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Completely-Customized-Formatting">Completely Customized Formatting</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-HighlightRuleFactory-class"><code>HighlightRuleFactory</code> class</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Completely-Customized-Formatting">Completely Customized Formatting</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-HighlightState-class"><code>HighlightState</code> class</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Completely-Customized-Formatting">Completely Customized Formatting</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-HighlightToken-class"><code>HighlightToken</code> class</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Events-and-Listeners">Events and Listeners</a></td></tr>
+<tr><td colspan="4"> <hr></td></tr>
+<tr><th><a name="Concept-Index_cp_letter-I">I</a></th><td></td><td></td></tr>
+<tr><td></td><td valign="top"><a href="#index-Instances-class"><code>Instances</code> class</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Global-instances">Global instances</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-introduction">introduction</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Introduction">Introduction</a></td></tr>
+<tr><td colspan="4"> <hr></td></tr>
+<tr><th><a name="Concept-Index_cp_letter-L">L</a></th><td></td><td></td></tr>
+<tr><td></td><td valign="top"><a href="#index-LangDefManager-class"><code>LangDefManager</code> class</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Completely-Customized-Formatting">Completely Customized Formatting</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-LangDefManager-class-1"><code>LangDefManager</code> class</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Completely-Customized-Formatting">Completely Customized Formatting</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-LangDefManager-class-2"><code>LangDefManager</code> class</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Global-instances">Global instances</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-LangMap-class"><code>LangMap</code> class</a>:</td><td>&nbsp;</td><td valign="top"><a href="#SourceHighlight-class">SourceHighlight class</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-LangMap-class-1"><code>LangMap</code> class</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Global-instances">Global instances</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-libsource_002dhighlight">libsource-highlight</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Use-of-GNU-Source_002dhighlight-Library">Use of GNU Source-highlight Library</a></td></tr>
+<tr><td colspan="4"> <hr></td></tr>
+<tr><th><a name="Concept-Index_cp_letter-M">M</a></th><td></td><td></td></tr>
+<tr><td></td><td valign="top"><a href="#index-mailing-list">mailing list</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Mailing-Lists">Mailing Lists</a></td></tr>
+<tr><td colspan="4"> <hr></td></tr>
+<tr><th><a name="Concept-Index_cp_letter-N">N</a></th><td></td><td></td></tr>
+<tr><td></td><td valign="top"><a href="#index-namespace">namespace</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Use-of-GNU-Source_002dhighlight-Library">Use of GNU Source-highlight Library</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-notify-method"><code>notify</code> method</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Events-and-Listeners">Events and Listeners</a></td></tr>
+<tr><td colspan="4"> <hr></td></tr>
+<tr><th><a name="Concept-Index_cp_letter-P">P</a></th><td></td><td></td></tr>
+<tr><td></td><td valign="top"><a href="#index-parseCssStyleFile-method"><code>parseCssStyleFile</code> method</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Style_002dbased-Customized-Formatting">Style-based Customized Formatting</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-parseStyleFile-method"><code>parseStyleFile</code> method</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Style_002dbased-Customized-Formatting">Style-based Customized Formatting</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-pkg_002dconfig">pkg-config</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Using-Automake-and-Autotools">Using Automake and Autotools</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-PKG_005fCONFIG_005fPATH"><code>PKG_CONFIG_PATH</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#Using-Automake-and-Autotools">Using Automake and Autotools</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-problems">problems</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Problems">Problems</a></td></tr>
+<tr><td colspan="4"> <hr></td></tr>
+<tr><th><a name="Concept-Index_cp_letter-R">R</a></th><td></td><td></td></tr>
+<tr><td></td><td valign="top"><a href="#index-RegexRuleFactory-class"><code>RegexRuleFactory</code> class</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Completely-Customized-Formatting">Completely Customized Formatting</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-reload-method"><code>reload</code> method</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Global-instances">Global instances</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-retrieveDataDir-method"><code>retrieveDataDir</code> method</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Settings">Settings</a></td></tr>
+<tr><td colspan="4"> <hr></td></tr>
+<tr><th><a name="Concept-Index_cp_letter-S">S</a></th><td></td><td></td></tr>
+<tr><td></td><td valign="top"><a href="#index-setGlobalDataDir-method"><code>setGlobalDataDir</code> method</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Settings">Settings</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-setGlobalDataDir-method-1"><code>setGlobalDataDir</code> method</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Settings">Settings</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-Settings-class"><code>Settings</code> class</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Settings">Settings</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-shared-pointers">shared pointers</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Main-Classes">Main Classes</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-source_002dhighlight"><code>source-highlight</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SourceHighlight-class">SourceHighlight class</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-source_002dhighlight-1"><code>source-highlight</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SourceHighlight-class">SourceHighlight class</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-source_002dhighlight-2"><code>source-highlight</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#Events-and-Listeners">Events and Listeners</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-source_002dhighlight-3"><code>source-highlight</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#Settings">Settings</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-source_002dhighlight_002dsettings"><code>source-highlight-settings</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SourceHighlight-class">SourceHighlight class</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-source_002dhighlight_002dsettings-1"><code>source-highlight-settings</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#Settings">Settings</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-source_002dhighlight_002dsettings-2"><code>source-highlight-settings</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#Settings">Settings</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-SourceHighlight-class"><code>SourceHighlight</code> class</a>:</td><td>&nbsp;</td><td valign="top"><a href="#SourceHighlight-class">SourceHighlight class</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-SourceHighlight-class-1"><code>SourceHighlight</code> class</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Completely-Customized-Formatting">Completely Customized Formatting</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-SourceHighlighter-class"><code>SourceHighlighter</code> class</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Completely-Customized-Formatting">Completely Customized Formatting</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-SourceHighlighter-class-1"><code>SourceHighlighter</code> class</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Completely-Customized-Formatting">Completely Customized Formatting</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-SourceHighlightUtils-class"><code>SourceHighlightUtils</code> class</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Utility-functions">Utility functions</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-SOURCE_005fHIGHLIGHT_005fDATADIR"><code>SOURCE_HIGHLIGHT_DATADIR</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#Settings">Settings</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-SOURCE_005fHIGHLIGHT_005fDATADIR-1"><code>SOURCE_HIGHLIGHT_DATADIR</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#Settings">Settings</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-start-field"><code>start</code> field</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Completely-Customized-Formatting">Completely Customized Formatting</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-start-field-1"><code>start</code> field</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Completely-Customized-Formatting">Completely Customized Formatting</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-std_003a_003aexception-class"><code>std::exception</code> class</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Main-Classes">Main Classes</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-StyleConstants-enum"><code>StyleConstants</code> enum</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Style_002dbased-Customized-Formatting">Style-based Customized Formatting</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-StyleFileParser-class"><code>StyleFileParser</code> class</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Style_002dbased-Customized-Formatting">Style-based Customized Formatting</a></td></tr>
+<tr><td colspan="4"> <hr></td></tr>
+<tr><th><a name="Concept-Index_cp_letter-T">T</a></th><td></td><td></td></tr>
+<tr><td></td><td valign="top"><a href="#index-tail-recursion">tail recursion</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Concept-Index">Concept Index</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-TextStyleFormatterFactory-class"><code>TextStyleFormatterFactory</code> class</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Style_002dbased-Customized-Formatting">Style-based Customized Formatting</a></td></tr>
+<tr><td colspan="4"> <hr></td></tr>
+<tr><th><a name="Concept-Index_cp_letter-U">U</a></th><td></td><td></td></tr>
+<tr><td></td><td valign="top"><a href="#index-unload-method"><code>unload</code> method</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Global-instances">Global instances</a></td></tr>
+<tr><td colspan="4"> <hr></td></tr>
+</table>
+<table><tr><th valign="top">Jump to: &nbsp; </th><td><a class="summary-letter" href="#Concept-Index_cp_symbol-1"><b>-</b></a>
+ &nbsp; 
+<br>
+<a class="summary-letter" href="#Concept-Index_cp_letter-A"><b>A</b></a>
+ &nbsp; 
+<a class="summary-letter" href="#Concept-Index_cp_letter-B"><b>B</b></a>
+ &nbsp; 
+<a class="summary-letter" href="#Concept-Index_cp_letter-C"><b>C</b></a>
+ &nbsp; 
+<a class="summary-letter" href="#Concept-Index_cp_letter-D"><b>D</b></a>
+ &nbsp; 
+<a class="summary-letter" href="#Concept-Index_cp_letter-F"><b>F</b></a>
+ &nbsp; 
+<a class="summary-letter" href="#Concept-Index_cp_letter-G"><b>G</b></a>
+ &nbsp; 
+<a class="summary-letter" href="#Concept-Index_cp_letter-H"><b>H</b></a>
+ &nbsp; 
+<a class="summary-letter" href="#Concept-Index_cp_letter-I"><b>I</b></a>
+ &nbsp; 
+<a class="summary-letter" href="#Concept-Index_cp_letter-L"><b>L</b></a>
+ &nbsp; 
+<a class="summary-letter" href="#Concept-Index_cp_letter-M"><b>M</b></a>
+ &nbsp; 
+<a class="summary-letter" href="#Concept-Index_cp_letter-N"><b>N</b></a>
+ &nbsp; 
+<a class="summary-letter" href="#Concept-Index_cp_letter-P"><b>P</b></a>
+ &nbsp; 
+<a class="summary-letter" href="#Concept-Index_cp_letter-R"><b>R</b></a>
+ &nbsp; 
+<a class="summary-letter" href="#Concept-Index_cp_letter-S"><b>S</b></a>
+ &nbsp; 
+<a class="summary-letter" href="#Concept-Index_cp_letter-T"><b>T</b></a>
+ &nbsp; 
+<a class="summary-letter" href="#Concept-Index_cp_letter-U"><b>U</b></a>
+ &nbsp; 
+</td></tr></table>
+
+<a name="SEC_Overview"></a>
+<h2 class="shortcontents-heading">Short Table of Contents</h2>
+
+<div class="shortcontents">
+<ul class="no-bullet">
+<li><a name="stoc-Introduction-1" href="#toc-Introduction-1">1 Introduction</a></li>
+<li><a name="stoc-Installation-1" href="#toc-Installation-1">2 Installation</a></li>
+<li><a name="stoc-Use-of-GNU-Source_002dhighlight-Library-1" href="#toc-Use-of-GNU-Source_002dhighlight-Library-1">3 Use of GNU Source-highlight Library</a></li>
+<li><a name="stoc-Main-Classes-1" href="#toc-Main-Classes-1">4 Main Classes</a></li>
+<li><a name="stoc-Reporting-Bugs" href="#toc-Reporting-Bugs">5 Reporting Bugs</a></li>
+<li><a name="stoc-Mailing-Lists-1" href="#toc-Mailing-Lists-1">6 Mailing Lists</a></li>
+<li><a name="stoc-Concept-Index-1" href="#toc-Concept-Index-1">Concept Index</a></li>
+</ul>
+</div>
+
+
+
+<div class="footnote">
+<hr>
+<h4 class="footnotes-heading">Footnotes</h4>
+
+<h3><a name="FOOT1" href="#DOCF1">(1)</a></h3>
+<p>The extension of course depends
+on the library being shared or static, e.g., <code>.so</code>, <code>.la</code>,
+<code>.a</code>, and on the system</p>
+<h3><a name="FOOT2" href="#DOCF2">(2)</a></h3>
+<p><a href="http://pkg-config.freedesktop.org">http://pkg-config.freedesktop.org</a>.</p>
+</div>
+<hr>
+
+
+
+</body>
+</html>

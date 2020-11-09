@@ -1,0 +1,44 @@
+@c Generator: GNU source-highlight, by Lorenzo Bettini, http://www.gnu.org/software/src-highlite
+@example
+@r{@i{# definitions for C}}
+
+@b{include} @t{"c_comment.lang"}
+
+@t{@i{label}} = @t{'^[[:blank:]]*[[:alnum:]]+:[[:blank:]]*\z'}
+
+(@t{@i{keyword}},@t{@i{normal}},@t{@i{classname}}) = 
+  @t{`(\<(?:enum|struct|union))([[:blank:]]+)([[:alnum:]_]+)`}
+
+@b{include} @t{"c_preprocessor.lang"}
+
+@b{include} @t{"number.lang"}
+
+@b{include} @t{"c_string.lang"}
+
+@t{@i{keyword}} = @t{"__asm|__cdecl|__declspec|__export|__far16"},
+  @t{"__fastcall|__fortran|__import"},
+  @t{"__pascal|__rtti|__stdcall|_asm|_cdecl"},
+  @t{"__except|_export|_far16|_fastcall"},
+  @t{"__finally|_fortran|_import|_pascal|_stdcall|__thread|__try|asm|auto"},
+  @t{"_Alignas|_Alignof|_Atomic|_Generic|_Noreturn|_Static_assert|_Thread_local"},
+  @t{"break|case|catch|cdecl|const|continue|default"},
+  @t{"do|else|enum|extern|for|goto"},
+  @t{"if|pascal"},
+  @t{"register|restrict|return|sizeof|static"},
+  @t{"struct|switch"},
+  @t{"typedef|union"},
+  @t{"volatile|while"}
+
+@t{@i{type}} = @t{"bool|char|double|float|int|long"},
+  @t{"short|signed|unsigned|void|wchar_t"},
+  @t{"_Bool|_Complex|_Imaginary"}
+
+@b{include} @t{"symbols.lang"}
+
+@t{@i{cbracket}} = @t{"@{|@}"}
+
+@b{include} @t{"function.lang"}
+
+@b{include} @t{"clike_vardeclaration.lang"}
+
+@end example
