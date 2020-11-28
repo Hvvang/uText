@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.17.3)
+cmake_minimum_required(VERSION 3.17.1)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_EXTENSIONS OFF)
@@ -23,5 +23,5 @@ add_compile_options(
 )
 
 add_subdirectory(src)
-add_executable(utext main.cpp src/mainwindow.h)
+add_executable(utext main.cpp)
 target_link_libraries(utext src_lib Qt5::Core Qt5::Widgets)
