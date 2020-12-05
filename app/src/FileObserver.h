@@ -18,7 +18,6 @@
 
 class FileObserver : public QTreeView {
     Q_OBJECT
-
 public:
     explicit FileObserver(QWidget *parent = Q_NULLPTR);
     void setRootPath(const QString& sPath);
@@ -31,9 +30,9 @@ protected:
 
 public slots:
     void ShowContextMenu(const QPoint &pos);
-private:
-    void CreateFile(QString path);
-    void CreateFolder(QString path);
+public:
+    void CreateFile(const QString& sPath);
+    void CreateFolder(const QString& sPath);
     void Rename(QString file);
     void Delete(QString file);
 

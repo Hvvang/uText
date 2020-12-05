@@ -15,7 +15,9 @@ FileObserver::FileObserver(QWidget *parent) : QTreeView(parent) {
     for (int i = 1; i < observerModel->columnCount(); ++i) {
         hideColumn(i);
     }
+    setContextMenuPolicy(Qt::ContextMenuPolicy::CustomContextMenu);
     observerModel->setHeaderData(0,Qt::Vertical,"Project");
+    connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(ShowContextMenu(const QPoint &)));
 }
 
 void FileObserver::dragEnterEvent(QDragEnterEvent *event) {
@@ -41,11 +43,12 @@ void FileObserver::dropEvent(QDropEvent *event) {
 
 
 void FileObserver::ShowContextMenu(const QPoint &pos) {
-    QMenu contextMenu(tr("Context menu"), this);
+    QMenu contextMenu(tr("Context menu1"), this);
     QAction action1(tr("New File"), this);
     QAction action2(tr("New Folder"), this);
     QAction action3(tr("Rename"), this);
     QAction action4(tr("Delete"), this);
+    QAction action14(tr("ppp"), this);
     auto file = dynamic_cast<QFileSystemModel *>(model())->filePath(indexAt(pos));
 
     contextMenu.addAction(&action1);
@@ -56,10 +59,15 @@ void FileObserver::ShowContextMenu(const QPoint &pos) {
     connect(&action3, &QAction::triggered, this, [=] { Rename(file); });
     contextMenu.addAction(&action4);
     connect(&action4, &QAction::triggered, this, [=] { Delete(file); });
+    contextMenu.addAction(&action14);
+    connect(&action14, &QAction::triggered, this, [=] { Delete(file); });
 
     contextMenu.exec(mapToGlobal(pos));
 }
-//void FileObserver::CreateFile(QString path) {
+void FileObserver::CreateFile(const QString& sPath) {
+    QFile file(sPath);
+    file.open(QIODevice::ReadWrite);
+    file.close();
 //    auto *dialog = new TreeViewContextDialog(this);
 //
 //    if (path.isEmpty())
@@ -76,23 +84,10 @@ void FileObserver::ShowContextMenu(const QPoint &pos) {
 //        file.open(QIODevice::ReadWrite);
 //        file.close();
 //    }
-//}
-void FileObserver::CreateFolder(QString path) {
-//    TreeViewContextDialog *dialog = new TreeViewContextDialog(this);
-//
-//    if (path.isEmpty())
-//        path = dynamic_cast<QFileSystemModel *>(model())->filePath(rootIndex());
-//
-//    if (dialog->exec()) {
-//        if (QFileInfo(path).isDir())
-//            path.append("/");
-//        else
-//            path.remove(path.lastIndexOf("/"), path.size()).append("/");
-//        QString text = dialog->getEdit()->text();
-//        QDir dir;
-//
-//        dir.mkpath(path + text);
-//    }
+}
+void FileObserver::CreateFolder(const QString& sPath) {
+    QDir dir;
+    dir.mkpath(sPath);
 }
 void FileObserver::Rename(QString file) {
 //    TreeViewContextDialog *dialog = new TreeViewContextDialog(this);
@@ -137,11 +132,8 @@ void FileObserver::Delete(QString file) {
 //    }
 }
 
-void FileObserver::CreateFile(QString path) {
-
-}
-
 void FileObserver::setRootPath(const QString& sPath) {
     observerModel->setRootPath(sPath);
     setRootIndex(observerModel->index(sPath));
 }
+

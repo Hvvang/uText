@@ -17,14 +17,22 @@ public:
     MainWindow(QString sPath = "/", QWidget *parent = nullptr);
     ~MainWindow();
 
-private:
+public:
     void menuConnector();
     void newCallback();
+    void newFileCallback(const QString& sPath);
+    void newDirCallback(const QString& sPath);
     void openCallback();
     void saveCallback();
     void saveAsCallback();
     void saveAllCallback();
     void closeCallback();
+
+    void browserSwitch();
+
+signals:
+    void closeTabs();
+
 
 private:
     Ui::MainWindow *ui;

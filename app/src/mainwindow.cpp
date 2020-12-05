@@ -11,6 +11,11 @@ MainWindow::MainWindow(QString sPath, QWidget *parent)
     , ui(new Ui::MainWindow) {
     ui->setupUi(this);
     ui->textEdit->setHidden(true);
+    ui->BrowserView->setHidden(true);
+    ui->preview->setMaximumWidth(window()->width() / 4);
+    connect(ui->addFolderBtn, &QPushButton::released, this, &MainWindow::openCallback);
+    connect(this, &MainWindow::closeTabs, this, &MainWindow::browserSwitch);
+    connect(ui->BrowserView, &FileBrowser::closeTabs, this, &MainWindow::browserSwitch);
     menuConnector();
 }
 
@@ -41,6 +46,16 @@ void MainWindow::openCallback() {
     }
 }
 
+void MainWindow::newFileCallback(const QString& sPath) {
+//  create new tab in panel
+    qDebug() << "123";
+}
+
+void MainWindow::newDirCallback(const QString& sPath) {
+//  create new tab in panel
+    qDebug() << "123";
+}
+
 void MainWindow::newCallback() {
 //  create new tab in panel
 }
@@ -60,3 +75,12 @@ void MainWindow::saveAllCallback() {
 void MainWindow::closeCallback() {
 
 }
+
+void MainWindow::browserSwitch() {
+    auto browser = ui->BrowserView;
+    auto preview = ui->preview;
+
+    preview->isHidden() ? preview->show() : preview->hide();
+    browser->isHidden() ? browser->show() : browser->hide();
+}
+
