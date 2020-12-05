@@ -6,7 +6,7 @@
 #include <QFileSystemModel>
 #include <QtWidgets/QMenu>
 #include <QHeaderView>
-
+#include "FileTab.h"
 #include "ObserverModel.h"
 
 FileObserver::FileObserver(QWidget *parent) : QTreeView(parent) {
@@ -17,7 +17,6 @@ FileObserver::FileObserver(QWidget *parent) : QTreeView(parent) {
     }
     observerModel->setHeaderData(0,Qt::Vertical,"Project");
 }
-
 
 void FileObserver::dragEnterEvent(QDragEnterEvent *event) {
     event->acceptProposedAction();
@@ -39,14 +38,8 @@ void FileObserver::dropEvent(QDropEvent *event) {
         setRootIndex(index);
     }
 }
-void FileObserver::mouseDoubleClickEvent(QMouseEvent *event) {
-//    QTreeView::mouseDoubleClickEvent(event);
-//    auto *file = new QFileInfo(dynamic_cast<QFileSystemModel *>(model())->filePath(currentIndex()));
-//
-//    if (file->isFile() && parentWidget()->findChild<EmptyWidget *>())
-//        parentWidget()->findChild<EmptyWidget *>()->AddPageToLastFocus(file->fileName(),
-//                                                                       new QFile(file->absoluteFilePath()));
-}
+
+
 void FileObserver::ShowContextMenu(const QPoint &pos) {
     QMenu contextMenu(tr("Context menu"), this);
     QAction action1(tr("New File"), this);

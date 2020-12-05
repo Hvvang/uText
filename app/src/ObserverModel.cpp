@@ -23,3 +23,7 @@ QVariant ObserverModel::headerData(int section, Qt::Orientation orientation, int
     }
 }
 
+void ObserverModel::pushData(QFileSystemModel *model) {
+
+}
+

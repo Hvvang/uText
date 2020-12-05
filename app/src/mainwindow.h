@@ -17,7 +17,14 @@ public:
     MainWindow(QString sPath = "/", QWidget *parent = nullptr);
     ~MainWindow();
 
-
+private:
+    void menuConnector();
+    void newCallback();
+    void openCallback();
+    void saveCallback();
+    void saveAsCallback();
+    void saveAllCallback();
+    void closeCallback();
 
 private:
     Ui::MainWindow *ui;
