@@ -13,9 +13,12 @@ MainWindow::MainWindow(QString sPath, QWidget *parent)
     ui->textEdit->setHidden(true);
     ui->BrowserView->setHidden(true);
     ui->preview->setMaximumWidth(window()->width() / 4);
-    connect(ui->addFolderBtn, &QPushButton::released, this, &MainWindow::openCallback);
+
     connect(this, &MainWindow::closeTabs, this, &MainWindow::browserSwitch);
+    connect(ui->addFolderBtn, &QPushButton::released, this, &MainWindow::openCallback);
+    connect(ui->BrowserView, &FileBrowser::addFileProgect, this, &MainWindow::openCallback);
     connect(ui->BrowserView, &FileBrowser::closeTabs, this, &MainWindow::browserSwitch);
+
     menuConnector();
 }
 

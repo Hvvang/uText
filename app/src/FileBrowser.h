@@ -16,6 +16,8 @@ public:
     void addFolder(const QString &sPath);
     void CreateFile(const QString& sPath);
     void CreateFolder(const QString& sPath);
+    void CopyFullPath(const QString &sPath);
+
 
 public slots:
     void ShowContextMenu(const QPoint &pos);
@@ -23,6 +25,7 @@ public slots:
 
 signals:
     void closeTabs();
+    void addFileProgect();
 
 private:
     QMap<QString, FileObserver *> tabs;

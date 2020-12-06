@@ -8,6 +8,7 @@
 #include <QHeaderView>
 #include "FileTab.h"
 #include "ObserverModel.h"
+#include "PopupDialog.h"
 
 FileObserver::FileObserver(QWidget *parent) : QTreeView(parent) {
     observerModel = new ObserverModel(this);
@@ -56,7 +57,8 @@ void FileObserver::ShowContextMenu(const QPoint &pos) {
     contextMenu.addAction(&action2);
     connect(&action2, &QAction::triggered, this, [=] { CreateFolder(file); });
     contextMenu.addAction(&action3);
-    connect(&action3, &QAction::triggered, this, [=] { Rename(file); });
+//    connect(&action3, &QAction::triggered, this, [=] {
+//        Rename(file, PopupDialog("Enter the path for the new file.", Type::NewFile, this)); });
     contextMenu.addAction(&action4);
     connect(&action4, &QAction::triggered, this, [=] { Delete(file); });
     contextMenu.addAction(&action14);
@@ -89,7 +91,19 @@ void FileObserver::CreateFolder(const QString& sPath) {
     QDir dir;
     dir.mkpath(sPath);
 }
-void FileObserver::Rename(QString file) {
+void FileObserver::Rename(const QString& sPath, const QString& newName) {
+    auto res = sPath;
+
+    QFileInfo info(sPath);
+    res.remove(newName.lastIndexOf("/"), newName.size()).append("/" + newName);
+    if (info.isDir()) {
+        QDir dir(sPath);
+        dir.rename(sPath, res);
+    } else {
+        QFile file(sPath);
+        file.rename(sPath, res);
+    }
+
 //    TreeViewContextDialog *dialog = new TreeViewContextDialog(this);
 //
 //    if (dialog->exec()) {

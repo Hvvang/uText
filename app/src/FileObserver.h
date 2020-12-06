@@ -33,7 +33,7 @@ public slots:
 public:
     void CreateFile(const QString& sPath);
     void CreateFolder(const QString& sPath);
-    void Rename(QString file);
+    void Rename(const QString& sPath, const QString& newName);
     void Delete(QString file);
 
 

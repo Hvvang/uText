@@ -24,15 +24,15 @@ PopupDialog::~PopupDialog() {
 }
 
 void PopupDialog::accept() {
-    auto sPath = ui->entry->text();
+    auto entry = ui->entry->text();
     auto browser = static_cast<FileBrowser *>(parent());
 
     switch (type) {
         case Type::NewFile:
-            browser->CreateFile(sPath);
+            browser->CreateFile(entry);
             break;
         case Type::NewDir:
-            browser->CreateFolder(sPath);
+            browser->CreateFolder(entry);
             break;
     }
     QDialog::accept();

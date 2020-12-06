@@ -19,7 +19,9 @@ FileBrowser::FileBrowser(QWidget *parent) : QTabWidget(parent) {
 
 void FileBrowser::addFolder(const QString &sPath) {
     auto file = new QFileInfo(sPath);
-    if (!file->isFile() && file->isReadable() && !tabs.contains(sPath)) {
+    auto splitName =  sPath.split('/').last();
+
+    if (!file->isFile() && file->isReadable() && !tabs.contains(splitName)) {
         auto layout = new QVBoxLayout();
         auto model = new FileObserver(this);
         auto widget = new QWidget(this);
@@ -27,10 +29,10 @@ void FileBrowser::addFolder(const QString &sPath) {
         model->setRootPath(sPath);
         layout->addWidget(model);
         widget->setLayout(layout);
-        insertTab(0, widget, sPath);
+        insertTab(0, widget, splitName);
         if (tabs.empty())
                 emit closeTabs();
-        tabs[sPath] = model;
+        tabs[splitName] = model;
     }
 }
 
@@ -46,8 +48,6 @@ void FileBrowser::ShowContextMenu(const QPoint &pos) {
     QMenu contextMenu(tr("Context menu"), this);
     QAction action1(tr("New File"), this);
     QAction action2(tr("New Folder"), this);
-    QAction action3(tr("Rename"), this);
-    QAction action4(tr("Delete"), this);
     QAction action5(tr("Add Project Folder"), this);
     QAction action6(tr("Remove Project Folder"), this);
     QAction action7(tr("Copy Full Path"), this);
@@ -57,9 +57,6 @@ void FileBrowser::ShowContextMenu(const QPoint &pos) {
     contextMenu.addAction(&action1);
     contextMenu.addAction(&action2);
     contextMenu.addAction(contextMenu.addSeparator());
-    contextMenu.addAction(&action3);
-    contextMenu.addAction(&action4);
-    contextMenu.addAction(contextMenu.addSeparator());
     contextMenu.addAction(&action5);
     contextMenu.addAction(&action6);
     contextMenu.addAction(contextMenu.addSeparator());
@@ -67,16 +64,16 @@ void FileBrowser::ShowContextMenu(const QPoint &pos) {
     contextMenu.addAction(&action8);
     contextMenu.addAction(&action9);
 
-
     connect(&action1, &QAction::triggered, this, [this] {
         new PopupDialog("Enter the path for the new file.", Type::NewFile, this);
     });
     connect(&action2, &QAction::triggered, this, [this] {
         new PopupDialog("Enter the path for the new folder.", Type::NewDir, this);
     });
-//    connect(&action2, &QAction::triggered, this, [=] { CreateFile(file); });
-//    connect(&action3, &QAction::triggered, this, [=] { CreateFile(file); });
-//    connect(&action4, &QAction::triggered, this, [=] { CreateFile(file); });
+    connect(&action5, &QAction::triggered, this, [this] { emit addFileProgect();});
+
+    connect(&action6, &QAction::triggered, this, [=] { removeFolder(tabBar()->tabAt(pos)); });
+    connect(&action7, &QAction::triggered, this, [=] { CopyFullPath(tabText(tabBar()->tabAt(pos))); });
     contextMenu.exec(mapToGlobal(pos));
 
 //    contextMenu.addAction(&action5);
@@ -85,11 +82,21 @@ void FileBrowser::ShowContextMenu(const QPoint &pos) {
 }
 
 void FileBrowser::CreateFile(const QString &sPath) {
-    auto dirPath = tabText(currentIndex());
-    tabs[dirPath]->CreateFile(dirPath + "/" + sPath);
+    auto dirName = tabText(currentIndex());
+    auto dirPath = static_cast<QFileSystemModel *>(tabs[dirName]->model())->filePath(tabs[dirName]->rootIndex());
+    tabs[dirName]->CreateFile(dirPath + "/" + sPath);
 }
 
 void FileBrowser::CreateFolder(const QString &sPath) {
-    auto dirPath = tabText(currentIndex());
-    tabs[dirPath]->CreateFolder(dirPath + "/" + sPath);
+    auto dirName = tabText(currentIndex());
+    auto dirPath = static_cast<QFileSystemModel *>(tabs[dirName]->model())->filePath(tabs[dirName]->rootIndex());
+    tabs[dirName]->CreateFolder(dirPath + "/" + sPath);
 }
+
+void FileBrowser::CopyFullPath(const QString &sPath) {
+    auto dirPath = static_cast<QFileSystemModel *>(tabs[sPath]->model())->filePath(tabs[sPath]->rootIndex());
+    QClipboard *clipboard = QApplication::clipboard();
+    clipboard->setText(dirPath);
+}
+
+
