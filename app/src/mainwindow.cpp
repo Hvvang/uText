@@ -16,9 +16,8 @@ MainWindow::MainWindow(QString sPath, QWidget *parent)
 
     connect(this, &MainWindow::closeTabs, this, &MainWindow::browserSwitch);
     connect(ui->addFolderBtn, &QPushButton::released, this, &MainWindow::openCallback);
-    connect(ui->BrowserView, &FileBrowser::addFileProgect, this, &MainWindow::openCallback);
+    connect(ui->BrowserView, &FileBrowser::AddFileProject, this, &MainWindow::openCallback);
     connect(ui->BrowserView, &FileBrowser::closeTabs, this, &MainWindow::browserSwitch);
-
     menuConnector();
 }
 

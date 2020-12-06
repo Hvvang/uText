@@ -77,6 +77,15 @@
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
+     <property name="frame">
+      <bool>false</bool>
+     </property>
+     <property name="cursorPosition">
+      <number>0</number>
+     </property>
+     <property name="clearButtonEnabled">
+      <bool>false</bool>
+     </property>
     </widget>
    </item>
   </layout>

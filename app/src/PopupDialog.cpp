@@ -9,40 +9,48 @@
 #include <qdebug.h>
 
 
-PopupDialog::PopupDialog(const QString &msg, const Type& type, QWidget *parent) :
+PopupDialog::PopupDialog(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::PopupDialog),
-    type(type) {
+    ui(new Ui::PopupDialog) {
     ui->setupUi(this);
     setFixedSize(std::max(parent->window()->width() / 4, 300), 85);
-    ui->msg->setText(msg);
-    exec();
 }
 
 PopupDialog::~PopupDialog() {
     delete ui;
 }
 
+void PopupDialog::setParams(const QString& msg, const QString& defaultEntry, const Type& type) {
+    this->type = type;
+    ui->msg->setText(msg);
+    ui->entry->setText(defaultEntry);
+    exec();
+}
+
 void PopupDialog::accept() {
     auto entry = ui->entry->text();
-    auto browser = static_cast<FileBrowser *>(parent());
 
     switch (type) {
         case Type::NewFile:
-            browser->CreateFileCallback(entry);
+            emit NewFile(entry);
             break;
         case Type::NewDir:
-            browser->CreateFolderCallback(entry);
+            emit NewFolder(entry);
             break;
         case Type::SearchFile:
-            browser->SearchFileCallback(entry);
+            emit SearchFile(entry);
             break;
         case Type::SearchInDir:
-            browser->SearchInFolderCallback(entry);
+            emit SearchInDir(entry);
+            break;
+        case Type::Rename:
+            emit Rename(entry);
             break;
     }
     QDialog::accept();
 }
+
+
 
 
 

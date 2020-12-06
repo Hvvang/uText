@@ -14,23 +14,26 @@ Q_OBJECT
 public:
     explicit FileBrowser(QWidget* parent = nullptr);
     void addFolderCallback(const QString &sPath);
+
+    void CopyFullPathCallback(const QString &sPath);
+public slots:
+
+    void ShowContextMenu(const QPoint &pos);
     void CreateFileCallback(const QString& sPath);
     void CreateFolderCallback(const QString& sPath);
-    void CopyFullPathCallback(const QString &sPath);
     void SearchFileCallback(const QString &file);
     void SearchInFolderCallback(const QString &data);
-
-
-public slots:
-    void ShowContextMenu(const QPoint &pos);
     void removeFolderCallback(int index);
+    void revealFinderCallback(const QString& sPath);
 
 signals:
     void closeTabs();
-    void addFileProgect();
+    void AddFileProject();
+    void NewFile(const QString& file);
 
 private:
     QMap<QString, FileObserver *> tabs;
+
 };
 
 

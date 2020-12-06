@@ -30,13 +30,23 @@ protected:
 
 public slots:
     void ShowContextMenu(const QPoint &pos);
+    void PreCreateFileCallback(const QString& sPath);
+    void PreCreateDirCallback(const QString& sPath);
+    void Rename(const QString& newName);
+
 public:
     void CreateFile(const QString& sPath);
     void CreateFolder(const QString& sPath);
-    void Rename(const QString& sPath, const QString& newName);
-    void Delete(QString file);
-
-
+    void DuplicateItem(const QString& fileName);
+    void DeleteItem(const QString& file);
+    void CopyItem(const QString& file);
+    void CutItem(const QString& file);
+    void PasteItem(const QString& file);
+    void openCallback();
+    void CopyPath(const QString& path);
+    void RevealInFinder(const QString& file);
+signals:
+    void addFolderCallback(const QString& file);
 private:
     QFileSystemModel *observerModel;
 };

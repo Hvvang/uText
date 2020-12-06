@@ -18,16 +18,25 @@ enum class Type {
     NewDir,
     SearchFile,
     SearchInDir,
+    Rename,
 };
 
 class PopupDialog : public QDialog {
 Q_OBJECT
 
 public:
-    PopupDialog(const QString& msg, const Type& type, QWidget *parent = nullptr);
+    PopupDialog(QWidget *parent = nullptr);
     ~PopupDialog();
 
     void accept() override;
+    void setParams(const QString& msg, const QString& defaultEntry, const Type& type);
+
+signals:
+    void NewFile(const QString& file);
+    void NewFolder(const QString& file);
+    void SearchFile(const QString& file);
+    void SearchInDir(const QString& data);
+    void Rename(const QString& newName);
 
 private:
     Ui::PopupDialog *ui;
