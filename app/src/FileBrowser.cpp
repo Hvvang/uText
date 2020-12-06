@@ -27,7 +27,6 @@ void FileBrowser::addFolderCallback(const QString &sPath) {
         auto widget = new QWidget(this);
 
         connect(model, SIGNAL(addFolderCallback(const QString&)), this, SLOT(addFolderCallback(const QString&)));
-        connect(model, SIGNAL(RevealFinder(const QString&)), this, SLOT(revealFinderCallback(const QString&)));
 
         model->setRootPath(sPath);
         layout->addWidget(model);

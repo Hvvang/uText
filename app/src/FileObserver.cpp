@@ -20,6 +20,8 @@ FileObserver::FileObserver(QWidget *parent) : QTreeView(parent) {
         hideColumn(i);
     }
     setContextMenuPolicy(Qt::ContextMenuPolicy::CustomContextMenu);
+    setDragEnabled(true);
+    setDragDropMode(DragDropMode::DropOnly);
     observerModel->setHeaderData(0,Qt::Vertical,"Project");
     connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(ShowContextMenu(const QPoint &)));
 
@@ -35,14 +37,15 @@ void FileObserver::dragMoveEvent(QDragMoveEvent *event) {
     event->accept();
 }
 void FileObserver::dropEvent(QDropEvent *event) {
-    if (!event->mimeData()->hasUrls())
+    if (!event->mimeData()->hasUrls()) {
         return;
+    }
     auto droppedData = event->mimeData()->urls();
     if (droppedData.count() == 1) {
-        if (!QDir(droppedData.at(0).toString().remove(0, 7)).exists())
+        auto dir = QDir(droppedData.at(0).toString().remove(0, 7));
+        if (!dir.exists())
             return;
-        auto index = dynamic_cast<QFileSystemModel *>(model())->index(droppedData.at(0).toString().remove(0, 7));
-        setRootIndex(index);
+        emit addFolderCallback(dir.canonicalPath());
     }
 }
 

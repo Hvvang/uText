@@ -13,11 +13,11 @@ class FileBrowser : public QTabWidget {
 Q_OBJECT
 public:
     explicit FileBrowser(QWidget* parent = nullptr);
-    void addFolderCallback(const QString &sPath);
+
 
     void CopyFullPathCallback(const QString &sPath);
 public slots:
-
+    void addFolderCallback(const QString &sPath);
     void ShowContextMenu(const QPoint &pos);
     void CreateFileCallback(const QString& sPath);
     void CreateFolderCallback(const QString& sPath);
