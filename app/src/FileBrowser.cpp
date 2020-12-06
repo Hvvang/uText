@@ -14,7 +14,6 @@
 FileBrowser::FileBrowser(QWidget *parent) : QTabWidget(parent) {
     this->setMaximumWidth(parent->window()->width() / 4);
     QObject::connect(this, SIGNAL(tabCloseRequested(int)), SLOT(removeFolderCallback(int)));
-    QObject::connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(ShowContextMenu(const QPoint &)));
 }
 
 void FileBrowser::addFolderCallback(const QString &sPath) {
@@ -46,61 +45,6 @@ void FileBrowser::removeFolderCallback(int index) {
         emit closeTabs();
     }
 }
-
-void FileBrowser::ShowContextMenu(const QPoint &pos) {
-    auto dialog = new PopupDialog(this);
-    QMenu contextMenu(tr("Context menu"), this);
-    QAction action1(tr("New File"), this);
-    QAction action2(tr("New Folder"), this);
-    QAction action3(tr("Add Project Folder"), this);
-    QAction action4(tr("Remove Project Folder"), this);
-    QAction action5(tr("Copy Full Path"), this);
-    QAction action6(tr("Copy Project Path"), this);
-    QAction action7(tr("Search File"), this);
-    QAction action8(tr("Search in Folder"), this);
-    QAction action9(tr("Reveal in Finder"), this);
-
-    contextMenu.addAction(&action1);
-    contextMenu.addAction(&action2);
-    contextMenu.addAction(contextMenu.addSeparator());
-    contextMenu.addAction(&action3);
-    contextMenu.addAction(&action4);
-    contextMenu.addAction(contextMenu.addSeparator());
-    contextMenu.addAction(&action5);
-    contextMenu.addAction(&action6);
-    contextMenu.addAction(&action7);
-    contextMenu.addAction(&action8);
-    contextMenu.addAction(contextMenu.addSeparator());
-    contextMenu.addAction(&action9);
-
-    connect(&action1, &QAction::triggered, this, [=] {
-        connect(dialog, SIGNAL(NewFile(const QString&)), this, SLOT(CreateFileCallback(const QString&)));
-        dialog->setParams("Enter the path for the new file.", "", Type::NewFile);
-    });
-    connect(&action2, &QAction::triggered, this, [=] {
-        connect(dialog, SIGNAL(NewFolder(const QString&)), this, SLOT(CreateFolderCallback(const QString&)));
-        dialog->setParams("Enter the path for the new folder.", "", Type::NewDir);
-    });
-    connect(&action3, &QAction::triggered, this, [this] { emit AddFileProject();});
-
-    connect(&action4, &QAction::triggered, this, [=] { removeFolderCallback(tabBar()->tabAt(pos)); });
-    connect(&action5, &QAction::triggered, this, [=] { CopyFullPathCallback(tabText(tabBar()->tabAt(pos))); });
-    connect(&action6, &QAction::triggered, this, [=] { CopyFullPathCallback(tabText(tabBar()->tabAt(pos))); });
-    connect(&action7, &QAction::triggered, this, [=] {
-        setCurrentIndex(tabBar()->tabAt(pos));
-        connect(dialog, SIGNAL(SearchFile(const QString&)), this, SLOT(SearchFileCallback(const QString&)));
-        dialog->setParams("Enter the path for the search file.", "", Type::SearchFile);
-    });
-    connect(&action8, &QAction::triggered, this, [=] {
-        connect(dialog, SIGNAL(SearchInDir(const QString&)), this, SLOT(SearchInFolderCallback(const QString&)));
-        dialog->setParams("Enter smth you want to find in files.", "", Type::SearchInDir);
-    });
-    connect(&action9, &QAction::triggered, this, [=] {
-        revealFinderCallback(tabText(tabBar()->tabAt(pos)));
-    });
-    contextMenu.exec(mapToGlobal(pos));
-}
-
 
 void FileBrowser::CreateFileCallback(const QString &sPath) {
     auto dirName = tabText(currentIndex());

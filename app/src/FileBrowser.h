@@ -9,22 +9,23 @@
 #include <qdebug.h>
 #include "FileObserver.h"
 
+//template <class T>
 class FileBrowser : public QTabWidget {
 Q_OBJECT
 public:
     explicit FileBrowser(QWidget* parent = nullptr);
 
 
-    void CopyFullPathCallback(const QString &sPath);
+
 public slots:
     void addFolderCallback(const QString &sPath);
-    void ShowContextMenu(const QPoint &pos);
     void CreateFileCallback(const QString& sPath);
     void CreateFolderCallback(const QString& sPath);
     void SearchFileCallback(const QString &file);
     void SearchInFolderCallback(const QString &data);
     void removeFolderCallback(int index);
     void revealFinderCallback(const QString& sPath);
+    void CopyFullPathCallback(const QString &sPath);
 
 signals:
     void closeTabs();
