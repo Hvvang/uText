@@ -13,11 +13,11 @@
 
 FileBrowser::FileBrowser(QWidget *parent) : QTabWidget(parent) {
     this->setMaximumWidth(parent->window()->width() / 4);
-    QObject::connect(this, SIGNAL(tabCloseRequested(int)), SLOT(removeFolder(int)));
+    QObject::connect(this, SIGNAL(tabCloseRequested(int)), SLOT(removeFolderCallback(int)));
     QObject::connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(ShowContextMenu(const QPoint &)));
 }
 
-void FileBrowser::addFolder(const QString &sPath) {
+void FileBrowser::addFolderCallback(const QString &sPath) {
     auto file = new QFileInfo(sPath);
     auto splitName =  sPath.split('/').last();
 
@@ -36,7 +36,7 @@ void FileBrowser::addFolder(const QString &sPath) {
     }
 }
 
-void FileBrowser::removeFolder(int index) {
+void FileBrowser::removeFolderCallback(int index) {
     tabs.remove(tabText(index));
     removeTab(index);
     if (tabs.empty()) {
@@ -72,8 +72,15 @@ void FileBrowser::ShowContextMenu(const QPoint &pos) {
     });
     connect(&action5, &QAction::triggered, this, [this] { emit addFileProgect();});
 
-    connect(&action6, &QAction::triggered, this, [=] { removeFolder(tabBar()->tabAt(pos)); });
-    connect(&action7, &QAction::triggered, this, [=] { CopyFullPath(tabText(tabBar()->tabAt(pos))); });
+    connect(&action6, &QAction::triggered, this, [=] { removeFolderCallback(tabBar()->tabAt(pos)); });
+    connect(&action7, &QAction::triggered, this, [=] { CopyFullPathCallback(tabText(tabBar()->tabAt(pos))); });
+    connect(&action8, &QAction::triggered, this, [=] {
+        setCurrentIndex(tabBar()->tabAt(pos));
+        new PopupDialog("Enter the path for the search file.", Type::SearchFile, this);
+    });
+    connect(&action9, &QAction::triggered, this, [=] {
+        new PopupDialog("Enter smth you want to find in files.", Type::SearchInDir, this);
+    });
     contextMenu.exec(mapToGlobal(pos));
 
 //    contextMenu.addAction(&action5);
@@ -81,22 +88,34 @@ void FileBrowser::ShowContextMenu(const QPoint &pos) {
 //    auto file = dynamic_cast<QFileSystemModel *>(model())->filePath(indexAt(pos));
 }
 
-void FileBrowser::CreateFile(const QString &sPath) {
+void FileBrowser::CreateFileCallback(const QString &sPath) {
     auto dirName = tabText(currentIndex());
     auto dirPath = static_cast<QFileSystemModel *>(tabs[dirName]->model())->filePath(tabs[dirName]->rootIndex());
     tabs[dirName]->CreateFile(dirPath + "/" + sPath);
 }
 
-void FileBrowser::CreateFolder(const QString &sPath) {
+void FileBrowser::CreateFolderCallback(const QString &sPath) {
     auto dirName = tabText(currentIndex());
     auto dirPath = static_cast<QFileSystemModel *>(tabs[dirName]->model())->filePath(tabs[dirName]->rootIndex());
     tabs[dirName]->CreateFolder(dirPath + "/" + sPath);
 }
 
-void FileBrowser::CopyFullPath(const QString &sPath) {
+void FileBrowser::CopyFullPathCallback(const QString &sPath) {
     auto dirPath = static_cast<QFileSystemModel *>(tabs[sPath]->model())->filePath(tabs[sPath]->rootIndex());
     QClipboard *clipboard = QApplication::clipboard();
     clipboard->setText(dirPath);
+}
+
+void FileBrowser::SearchFileCallback(const QString &file) {
+    auto dirName = tabText(currentIndex());
+    auto dirPath = static_cast<QFileSystemModel *>(tabs[dirName]->model())->filePath(tabs[dirName]->rootIndex());
+    auto model = static_cast<QFileSystemModel *>(tabs[dirName]->model());
+
+    tabs[dirName]->setCurrentIndex(model->index(dirPath + "/" + file));
+}
+
+void FileBrowser::SearchInFolderCallback(const QString &data) {
+
 }
 
 

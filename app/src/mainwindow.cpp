@@ -42,7 +42,7 @@ void MainWindow::openCallback() {
     if (dialog.exec() == QDialog::Accepted) {
         QString dirName = dialog.selectedFiles().front();
         if (QDir(dirName).isReadable()) {
-            ui->BrowserView->addFolder(dirName);
+            ui->BrowserView->addFolderCallback(dirName);
         } else {
             QMessageBox::warning(this, tr("Error"), tr("Not enough permission!"), QMessageBox::Ok);
         }

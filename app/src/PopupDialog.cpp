@@ -29,10 +29,16 @@ void PopupDialog::accept() {
 
     switch (type) {
         case Type::NewFile:
-            browser->CreateFile(entry);
+            browser->CreateFileCallback(entry);
             break;
         case Type::NewDir:
-            browser->CreateFolder(entry);
+            browser->CreateFolderCallback(entry);
+            break;
+        case Type::SearchFile:
+            browser->SearchFileCallback(entry);
+            break;
+        case Type::SearchInDir:
+            browser->SearchInFolderCallback(entry);
             break;
     }
     QDialog::accept();

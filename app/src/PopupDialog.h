@@ -16,6 +16,8 @@ QT_END_NAMESPACE
 enum class Type {
     NewFile,
     NewDir,
+    SearchFile,
+    SearchInDir,
 };
 
 class PopupDialog : public QDialog {
