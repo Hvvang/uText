@@ -21,6 +21,7 @@ public slots:
     void addContextMenuForBrowser(const QPoint &pos);
     void newFileCallback(const QString& sPath);
     void newFolderCallback(const QString& sPath);
+//    void splitDown();
 
 public:
     void menuConnector();

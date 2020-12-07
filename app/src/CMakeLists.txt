@@ -19,7 +19,7 @@ set(HEADERS
 set(UI
     ${CMAKE_CURRENT_SOURCE_DIR}/mainwindow.ui
     ${CMAKE_CURRENT_SOURCE_DIR}/popup.ui
-)
+        Test.cpp Test.h)
 
 add_library(src_lib STATIC ${SOURCES} ${HEADERS} ${UI})
 

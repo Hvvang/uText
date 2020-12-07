@@ -18,26 +18,34 @@
 //#include "textArea.h"
 #include <QTextEdit>
 
-QT_BEGIN_NAMESPACE
-namespace Ui { class MainWindow; }
-QT_END_NAMESPACE
 
 class FileTab : public QTabWidget {
 Q_OBJECT
 private:
     std::map<QString, QTextEdit *> tab_content;
+    QPair<int, int> pos;
+
 
 public:
-    explicit FileTab(QWidget* parent = nullptr);
+    explicit FileTab(QPair<int, int> pos, QWidget* parent = nullptr);
 
     void dragEnterEvent(QDragEnterEvent *event) override;
     void dropEvent(QDropEvent *event) override;
 
-    void addFile(QString filePath, Ui::MainWindow *ui);
+    [[nodiscard]] const QPair<int, int> &getPos() const;
+    [[nodiscard]] const int &splitterPos() const;
+    [[nodiscard]] const int &indexPos() const;
+
+    void setPos(const QPair<int, int> &pos);
+    bool event(QEvent *event) override;
+//    void addFile(QString filePath, Ui::MainWindow *ui);
 
 //    TextArea *getTextArea();
 //    TextArea *getTextArea(const QString& filename);
 //    QString getFilename(int index);
+
+signals:
+    void grabFocus(QWidget *widget);
 
 public slots:
     void closeTab(int index);

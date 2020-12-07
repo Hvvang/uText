@@ -14,6 +14,7 @@ MainWindow::MainWindow(QString sPath, QWidget *parent)
     ui->textEdit->setHidden(true);
     ui->BrowserView->setHidden(true);
     ui->preview->setMaximumWidth(window()->width() / 4);
+    ui->Panel->setRootSplitter(ui->RootSplitter);
 
     connect(ui->addFolderBtn, &QPushButton::released, this, &MainWindow::openCallback);
     connect(ui->BrowserView, &FileBrowser::AddFileProject, this, &MainWindow::openCallback);
@@ -42,6 +43,11 @@ void MainWindow::menuConnector() {
     connect(ui->actionSave_as, &QAction::triggered, this, &MainWindow::saveAsCallback);
     connect(ui->actionSave_all, &QAction::triggered, this, &MainWindow::saveAllCallback);
     connect(ui->actionClose, &QAction::triggered, this, &MainWindow::closeCallback);
+    connect(ui->actionSplit_Up, &QAction::triggered, ui->Panel, &Test::splitUp);
+    connect(ui->actionSplit_Down, &QAction::triggered, ui->Panel, &Test::splitDown);
+    connect(ui->actionSplit_Right, &QAction::triggered, ui->Panel, &Test::splitRight);
+    connect(ui->actionSplit_Left, &QAction::triggered, ui->Panel, &Test::splitLeft);
+
 }
 
 void MainWindow::openCallback() {
@@ -193,3 +199,4 @@ void MainWindow::dropEvent(QDropEvent *event) {
         }
     }
 }
+

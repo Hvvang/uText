@@ -15,8 +15,6 @@ Q_OBJECT
 public:
     explicit FileBrowser(QWidget* parent = nullptr);
 
-
-
 public slots:
     void addFolderCallback(const QString &sPath);
     void CreateFileCallback(const QString& sPath);

@@ -6,16 +6,19 @@
 #include <QFileInfo>
 #include <QTextDocument>
 #include <QPlainTextDocumentLayout>
-#include "ui_mainwindow.h"
 
-FileTab::FileTab(QWidget *parent) :
-        QTabWidget(parent)
-{
-    setAcceptDrops(true);
-    setMovable(true);
-    setTabsClosable(true);
-    setUsesScrollButtons(true);
-    QObject::connect(this, SIGNAL(tabCloseRequested(int)), SLOT(closeTab(int)));
+
+FileTab::FileTab(QPair<int, int> pos, QWidget *parent)
+    : QTabWidget(parent)
+    , pos(pos) {
+
+
+
+//    setAcceptDrops(true);
+//    setMovable(true);
+//    setTabsClosable(true);
+//    setUsesScrollButtons(true);
+//    QObject::connect(this, SIGNAL(tabCloseRequested(int)), SLOT(closeTab(int)));
 }
 
 void FileTab::dragEnterEvent(QDragEnterEvent *event)
@@ -33,7 +36,7 @@ void FileTab::dropEvent(QDropEvent *event)
 //    addFile(filePath);
 }
 
-void FileTab::addFile(QString filePath, Ui::MainWindow *ui) {
+//void FileTab::addFile(QString filePath, Ui::MainWindow *ui) {
 //    if (tab_content.count(filePath)) {
 //        setCurrentIndex(indexOf(tab_content[filePath]));
 //        return;
@@ -60,7 +63,7 @@ void FileTab::addFile(QString filePath, Ui::MainWindow *ui) {
 //            tab_content[filePath] = area;
 //        }
 //    }
-}
+//}
 
 void FileTab::renameFile(QString oldPath, QString newPath) {
 //    if (tab_content.count(oldPath)) {
@@ -101,6 +104,30 @@ void FileTab::updateTabName() {
         return;
 
     setTabText(index, tab_text + "*");
+}
+
+const QPair<int, int> &FileTab::getPos() const {
+    return pos;
+}
+
+const int &FileTab::splitterPos() const {
+    return pos.first;
+}
+
+const int &FileTab::indexPos() const {
+    return pos.second;
+}
+
+void FileTab::setPos(const QPair<int, int> &pos) {
+    this->pos = pos;
+}
+
+bool FileTab::event(QEvent *event) {
+//    qDebug() << event;
+    if (event->type() == QEvent::MouseButtonRelease) {
+        emit grabFocus(this);
+    }
+    return QTabWidget::event(event);
 }
 
 //TextArea *FileTab::getTextArea(const QString& filename) {
