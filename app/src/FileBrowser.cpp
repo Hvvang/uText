@@ -3,7 +3,6 @@
 //
 #include "FileBrowser.h"
 #include "FileObserver.h"
-#include "PopupDialog.h"
 #include "mainwindow.h"
 #include <QFileInfo>
 #include <QVBoxLayout>
@@ -25,7 +24,6 @@ void FileBrowser::addFolderCallback(const QString &sPath) {
         auto model = new FileObserver(this);
         auto widget = new QWidget(this);
 
-        connect(model, SIGNAL(addFolderCallback(const QString&)), this, SLOT(addFolderCallback(const QString&)));
         connect(model, &FileObserver::oneClick, this, &FileBrowser::oneClickCallback);
         connect(model, &FileObserver::doubleClick, this, &FileBrowser::doubleClickCallback);
         model->setRootPath(sPath);
@@ -51,6 +49,7 @@ void FileBrowser::CreateFileCallback(const QString &sPath) {
     auto dirName = tabText(currentIndex());
     auto dirPath = static_cast<QFileSystemModel *>(tabs[dirName]->model())->filePath(tabs[dirName]->rootIndex());
     tabs[dirName]->CreateFile(dirPath + "/" + sPath);
+    emit doubleClick(dirPath + "/" + sPath);
 }
 
 void FileBrowser::CreateFolderCallback(const QString &sPath) {
@@ -71,6 +70,7 @@ void FileBrowser::SearchFileCallback(const QString &file) {
     auto model = static_cast<QFileSystemModel *>(tabs[dirName]->model());
 
     tabs[dirName]->setCurrentIndex(model->index(dirPath + "/" + file));
+    emit doubleClick(dirPath + "/" + file);
 }
 
 void FileBrowser::SearchInFolderCallback(const QString &data) {
@@ -78,8 +78,7 @@ void FileBrowser::SearchInFolderCallback(const QString &data) {
 }
 
 void FileBrowser::revealFinderCallback(const QString &sPath) {
-    auto dirPath = static_cast<QFileSystemModel *>(tabs[sPath]->model())->filePath(tabs[sPath]->rootIndex());
-    auto fileInfo = QFileInfo(dirPath);
+    auto fileInfo = QFileInfo(sPath);
 
     #ifdef WIN
         const FileName explorer = Environment::systemEnvironment().searchInPath(QLatin1String("explorer.exe"));
@@ -117,4 +116,6 @@ void FileBrowser::doubleClickCallback(const QString &sPath) {
     emit doubleClick(sPath);
 }
 
-
+const QMap<QString, FileObserver *> &FileBrowser::Tabs() const {
+    return tabs;
+}

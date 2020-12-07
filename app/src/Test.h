@@ -22,7 +22,7 @@ public:
     void splitLeft();
     void splitRight();
     void addPageToPanel(const QString& label, QFile *file);
-    void replaceCarrentPage(const QString& label, QFile *file);
+    void replaceCurrentPage(const QString& label, QFile *file);
 public slots:
     void addNewWindow(QSplitter *root, const QPair<int, int> &pos, QWidget *window);
     void LastFocusedTabController(QWidget *widget);

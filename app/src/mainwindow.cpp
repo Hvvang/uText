@@ -80,7 +80,7 @@ void MainWindow::newFolderCallback(const QString& sPath) {
 
 void MainWindow::newCallback() {
 //  create new tab in panel
-
+    ui->Panel->addPageToPanel("untitled", new QFile());
 }
 
 void MainWindow::saveCallback() {
@@ -172,7 +172,8 @@ void MainWindow::addContextMenuForBrowser(const QPoint &pos) {
         auto indexText = (browser->tabBar()->tabAt(pos) != -1)
                          ? browser->tabText(browser->tabBar()->tabAt(pos))
                          : browser->tabText(browser->currentIndex());
-        emit revealInFinder(indexText);
+        auto dirPath = static_cast<QFileSystemModel *>(browser->Tabs()[indexText]->model())->filePath(browser->Tabs()[indexText]->rootIndex());
+        emit revealInFinder(dirPath);
     });
     contextMenu.exec(mapToGlobal(pos));
 }
@@ -206,7 +207,7 @@ void MainWindow::dropEvent(QDropEvent *event) {
 void MainWindow::replaceFileInView(const QString &sPath) {
     auto label = sPath;
 
-    ui->Panel->replaceCarrentPage(label.remove(0, label.lastIndexOf('/')), new QFile(sPath));
+    ui->Panel->replaceCurrentPage(label.remove(0, label.lastIndexOf('/')), new QFile(sPath));
 }
 
 void MainWindow::addFileToView(const QString &sPath) {

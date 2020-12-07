@@ -227,48 +227,11 @@ void FileObserver::PasteItem(const QString &file) {
 }
 
 void FileObserver::openCallback() {
-    QFileDialog dialog;
-    dialog.setOptions(QFileDialog::DontResolveSymlinks);
-    dialog.setNameFilter(tr("Open..."));
-    if (dialog.exec() == QDialog::Accepted) {
-        QString dirName = dialog.selectedFiles().front();
-        if (QDir(dirName).isReadable()) {
-            emit addFolderCallback(dirName);
-        } else {
-            QMessageBox::warning(this, tr("Error"), tr("Not enough permission!"), QMessageBox::Ok);
-        }
-    }
+    emit static_cast<FileBrowser *>(parentWidget()->parentWidget()->parentWidget())->AddFileProject();
 }
 
 void FileObserver::RevealInFinder(const QString &sPath) {
-    auto fileInfo = QFileInfo(sPath);
-
-#ifdef WIN
-    const FileName explorer = Environment::systemEnvironment().searchInPath(QLatin1String("explorer.exe"));
-        if (explorer.isEmpty()) {
-            QMessageBox::warning(parent,
-                                 QApplication::translate("Core::Internal",
-                                                         "Launching Windows Explorer Failed"),
-                                 QApplication::translate("Core::Internal",
-                                                         "Could not find explorer.exe in path to launch Windows Explorer."));
-            return;
-        }
-        QStringList param;
-        if (!fileInfo.isDir())
-            param += QLatin1String("/select,");
-        param += QDir::toNativeSeparators(fileInfo.canonicalFilePath());
-        QProcess::startDetached(explorer.toString(), param);
-#else
-    QStringList scriptArgs;
-    scriptArgs << QLatin1String("-e")
-               << QString::fromLatin1("tell application \"Finder\" to reveal POSIX file \"%1\"")
-                       .arg(fileInfo.canonicalFilePath());
-    QProcess::execute(QLatin1String("/usr/bin/osascript"), scriptArgs);
-    scriptArgs.clear();
-    scriptArgs << QLatin1String("-e")
-               << QLatin1String("tell application \"Finder\" to activate");
-    QProcess::execute(QLatin1String("/usr/bin/osascript"), scriptArgs);
-#endif
+    static_cast<FileBrowser *>(parentWidget()->parentWidget()->parentWidget())->revealFinderCallback(sPath);
 }
 
 void FileObserver::CopyPath(const QString &path) {

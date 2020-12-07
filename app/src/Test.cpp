@@ -18,7 +18,8 @@ Test::~Test() {
 }
 
 void Test::addPageToPanel(const QString &label, QFile *file) {
-    if (!file->open(QIODevice::ReadOnly)) {
+
+    if (!file->fileName().isEmpty() && !file->open(QIODevice::ReadOnly)) {
         QErrorMessage msg;
         msg.showMessage("Cant open file!");
         msg.exec();
@@ -26,23 +27,25 @@ void Test::addPageToPanel(const QString &label, QFile *file) {
     }
     file->close();
     auto widget = new QTextEdit();
-    if (file->open(QIODevice::ReadWrite)) {
+    if (!file->fileName().isEmpty() && file->open(QIODevice::ReadWrite)) {
         widget->setPlainText(file->readAll());
         file->close();
     }
-
     if (m_lastFocus) {
-        static_cast<FileTab *>(m_lastFocus)->addTab(widget, label);
+        auto window = static_cast<FileTab *>(m_lastFocus);
+        window->addTab(widget, label);
+        window->setCurrentIndex(window->indexOf(widget));
 
     } else {
         auto window = new FileTab({0, 0});
         window->addTab(widget, label);
+        window->setCurrentIndex(window->indexOf(widget));
         addNewWindow(rootSplitter, {0, 0}, window);
     }
 
 }
 
-void Test::replaceCarrentPage(const QString &label, QFile *file) {
+void Test::replaceCurrentPage(const QString &label, QFile *file) {
     if (m_lastFocus) {
         if (!file->open(QIODevice::ReadOnly)) {
             QErrorMessage msg;
@@ -81,10 +84,6 @@ void Test::setRootSplitter(QSplitter *rootSplitter) {
 
 void Test::LastFocusedTabController(QWidget *widget) {
     m_lastFocus = widget;
-    qDebug() << widget;
-//    auto tab = static_cast<FileTab *>(m_lastFocus);
-//    qDebug() << tab->getPos() << "  " << static_cast<QSplitter *>(tab->parentWidget())->orientation();
-
 }
 
 QWidget *Test::copyWindow() {
