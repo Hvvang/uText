@@ -6,6 +6,7 @@
 #include <QGridLayout>
 #include <qdebug.h>
 #include <QLabel>
+#include <QErrorMessage>
 
 Test::Test(QWidget *parent)
     : QWidget(parent) {
@@ -17,35 +18,61 @@ Test::~Test() {
 }
 
 void Test::addPageToPanel(const QString &label, QFile *file) {
+    if (!file->open(QIODevice::ReadOnly)) {
+        QErrorMessage msg;
+        msg.showMessage("Cant open file!");
+        msg.exec();
+        return;
+    }
+    file->close();
+    auto widget = new QTextEdit();
+    if (file->open(QIODevice::ReadWrite)) {
+        widget->setPlainText(file->readAll());
+        file->close();
+    }
+
     if (m_lastFocus) {
+        static_cast<FileTab *>(m_lastFocus)->addTab(widget, label);
 
     } else {
-
+        auto window = new FileTab({0, 0});
+        window->addTab(widget, label);
+        addNewWindow(rootSplitter, {0, 0}, window);
     }
 
 }
 
-void Test::addNewWindow(QSplitter *root, const QPair<int, int> &pos) {
+void Test::replaceCarrentPage(const QString &label, QFile *file) {
+    if (m_lastFocus) {
+        if (!file->open(QIODevice::ReadOnly)) {
+            QErrorMessage msg;
+            msg.showMessage("Cant open file!");
+            msg.exec();
+            return;
+        }
+        file->close();
+        if (file->open(QIODevice::ReadWrite)) {
+            auto tab = static_cast<FileTab *>(m_lastFocus);
+            tab->setTabText(tab->currentIndex(), label);
+            static_cast<QTextEdit *>(tab->currentWidget())->setPlainText(file->readAll());
+            file->close();
+        }
+    } else {
+        addPageToPanel(label, file);
+    }
+}
+
+
+void Test::addNewWindow(QSplitter *root, const QPair<int, int> &pos, QWidget *window) {
     auto splitH = new QSplitter(Qt::Orientation::Horizontal, root);
     auto splitV = new QSplitter(Qt::Orientation::Vertical, splitH);
 
-    auto window = new FileTab(pos, splitV);
-
-    connect(window, &FileTab::grabFocus, this, &Test::LastFocusedTabController);
-    window->addTab(new QWidget(), "page inserted" + QString::number(pos.second));
-
+    window->setParent(splitV);
+    connect(static_cast<FileTab *>(window), &FileTab::grabFocus, this, &Test::LastFocusedTabController);
     splitH->addWidget(splitV);
     splitV->addWidget(window);
     root->insertWidget(pos.second, splitH);
     LastFocusedTabController(window);
-//    auto split = new QSplitter(Qt::Orientation::Vertical, rootSplitter);
-//    auto window = new FileTab({splitterPos, indexPos}, split);
-//
-//    LastFocusedTabController(window);
-//    connect(window, &FileTab::grabFocus, this, &Test::LastFocusedTabController);
-//    window->addTab(new QWidget(), "page" + QString::number(indexPos));
-//    rootSplitter->insertWidget(indexPos, split);
-//    split->addWidget(window);
 }
 
 void Test::setRootSplitter(QSplitter *rootSplitter) {
@@ -54,9 +81,20 @@ void Test::setRootSplitter(QSplitter *rootSplitter) {
 
 void Test::LastFocusedTabController(QWidget *widget) {
     m_lastFocus = widget;
-    auto tab = static_cast<FileTab *>(m_lastFocus);
-    qDebug() << tab->getPos() << "  " << static_cast<QSplitter *>(tab->parentWidget())->orientation();
+    qDebug() << widget;
+//    auto tab = static_cast<FileTab *>(m_lastFocus);
+//    qDebug() << tab->getPos() << "  " << static_cast<QSplitter *>(tab->parentWidget())->orientation();
 
+}
+
+QWidget *Test::copyWindow() {
+    auto currTab = static_cast<FileTab *>(m_lastFocus);
+    auto widget = new QTextEdit();
+    auto w = new FileTab(currTab->getPos());
+
+    widget->setPlainText(static_cast<QTextEdit *>(currTab->currentWidget())->toPlainText());
+    w->addTab(widget, currTab->tabText(currTab->currentIndex()));
+    return w;
 }
 
 void Test::splitUp() {
@@ -69,8 +107,9 @@ void Test::splitUp() {
         auto split = static_cast<FileTab *>(root->widget(i));
         split->setPos({pos.first, i + 1});
     }
-    addNewWindow(root, pos);
+    addNewWindow(root, pos, copyWindow());
 }
+
 
 void Test::splitDown() {
     auto root = static_cast<QSplitter *>(m_lastFocus->parentWidget());
@@ -83,7 +122,7 @@ void Test::splitDown() {
         auto split = static_cast<FileTab *>(root->widget(i));
         split->setPos({pos.first, i + 1});
     }
-    addNewWindow(root, pos);
+    addNewWindow(root, pos, copyWindow());
 }
 
 void Test::splitRight() {
@@ -98,7 +137,7 @@ void Test::splitRight() {
         auto tab = static_cast<FileTab *>(split->widget(0));
         tab->setPos({pos.first, i + 1});
     }
-    addNewWindow(root, pos);
+    addNewWindow(root, pos, copyWindow());
 }
 
 void Test::splitLeft() {
@@ -112,5 +151,5 @@ void Test::splitLeft() {
         auto tab = static_cast<FileTab *>(split->widget(0));
         tab->setPos({pos.first, i + 1});
     }
-    addNewWindow(root, pos);
+    addNewWindow(root, pos, copyWindow());
 }

@@ -16,17 +16,19 @@ public:
 
     explicit Test(QWidget *parent = Q_NULLPTR);
     virtual ~Test();
-
     void setRootSplitter(QSplitter *rootSpliter);
     void splitUp();
     void splitDown();
     void splitLeft();
     void splitRight();
     void addPageToPanel(const QString& label, QFile *file);
+    void replaceCarrentPage(const QString& label, QFile *file);
 public slots:
-    void addNewWindow(QSplitter *root, const QPair<int, int> &pos);
+    void addNewWindow(QSplitter *root, const QPair<int, int> &pos, QWidget *window);
     void LastFocusedTabController(QWidget *widget);
 
+private:
+    QWidget *copyWindow();
 //    void dragMoveEvent(QDragMoveEvent *event) override;
 //    void dragEnterEvent(QDragEnterEvent *event) override;
 //    void dropEvent(QDropEvent *event) override;

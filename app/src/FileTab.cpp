@@ -11,15 +11,106 @@
 FileTab::FileTab(QPair<int, int> pos, QWidget *parent)
     : QTabWidget(parent)
     , pos(pos) {
-
-
-
+    this->setStyleSheet(
+            "QTabWidget::pane {\n"
+            "    border: 1px solid black;\n"
+            "    background: white;\n"
+            "}\n"
+            "\n"
+            "QTabWidget::tab-bar:top {\n"
+            "    top: 1px;\n"
+            "}\n"
+            "\n"
+            "QTabWidget::tab-bar:bottom {\n"
+            "    bottom: 1px;\n"
+            "}\n"
+            "\n"
+            "QTabWidget::tab-bar:left {\n"
+            "    right: 1px;\n"
+            "}\n"
+            "\n"
+            "QTabWidget::tab-bar:right {\n"
+            "    left: 1px;\n"
+            "}\n"
+            "\n"
+            "QTabBar::tab {\n"
+            "    border: 1px solid black;\n"
+            "}\n"
+            "\n"
+            "QTabBar::tab:selected {\n"
+            "    background: white;\n"
+            "}\n"
+            "\n"
+            "QTabBar::tab:!selected {\n"
+            "    background: silver;\n"
+            "}\n"
+            "\n"
+            "QTabBar::tab:!selected:hover {\n"
+            "    background: #999;\n"
+            "}\n"
+            "\n"
+            "QTabBar::tab:top:!selected {\n"
+            "    margin-top: 3px;\n"
+            "}\n"
+            "\n"
+            "QTabBar::tab:bottom:!selected {\n"
+            "    margin-bottom: 3px;\n"
+            "}\n"
+            "\n"
+            "QTabBar::tab:top, QTabBar::tab:bottom {\n"
+            "    min-width: 8ex;\n"
+            "    margin-right: -1px;\n"
+            "    padding: 5px 10px 5px 10px;\n"
+            "}\n"
+            "\n"
+            "QTabBar::tab:top:selected {\n"
+            "    border-bottom-color: none;\n"
+            "}\n"
+            "\n"
+            "QTabBar::tab:bottom:selected {\n"
+            "    border-top-color: none;\n"
+            "}\n"
+            "\n"
+            "QTabBar::tab:top:last, QTabBar::tab:bottom:last,\n"
+            "QTabBar::tab:top:only-one, QTabBar::tab:bottom:only-one {\n"
+            "    margin-right: 0;\n"
+            "}\n"
+            "\n"
+            "QTabBar::tab:left:!selected {\n"
+            "    margin-right: 3px;\n"
+            "}\n"
+            "\n"
+            "QTabBar::tab:right:!selected {\n"
+            "    margin-left: 3px;\n"
+            "}\n"
+            "\n"
+            "QTabBar::tab:left, QTabBar::tab:right {\n"
+            "    min-height: 8ex;\n"
+            "    margin-bottom: -1px;\n"
+            "    padding: 10px 5px 10px 5px;\n"
+            "}\n"
+            "\n"
+            "QTabBar::tab:left:selected {\n"
+            "    border-left-color: none;\n"
+            "}\n"
+            "\n"
+            "QTabBar::tab:right:selected {\n"
+            "    border-right-color: none;\n"
+            "}\n"
+            "\n"
+            "QTabBar::tab:left:last, QTabBar::tab:right:last,\n"
+            "QTabBar::tab:left:only-one, QTabBar::tab:right:only-one {\n"
+            "    margin-bottom: 0;\n"
+            "}");
+    setDocumentMode(true);
+    connect(this, &FileTab::tabBarClicked, this, [=] { emit grabFocus(this);});
 //    setAcceptDrops(true);
 //    setMovable(true);
 //    setTabsClosable(true);
 //    setUsesScrollButtons(true);
 //    QObject::connect(this, SIGNAL(tabCloseRequested(int)), SLOT(closeTab(int)));
 }
+
 
 void FileTab::dragEnterEvent(QDragEnterEvent *event)
 {
@@ -123,12 +214,13 @@ void FileTab::setPos(const QPair<int, int> &pos) {
 }
 
 bool FileTab::event(QEvent *event) {
-//    qDebug() << event;
     if (event->type() == QEvent::MouseButtonRelease) {
         emit grabFocus(this);
     }
     return QTabWidget::event(event);
 }
+
+
 
 //TextArea *FileTab::getTextArea(const QString& filename) {
 //    return tab_content[filename];

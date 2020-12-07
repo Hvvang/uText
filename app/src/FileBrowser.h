@@ -24,11 +24,15 @@ public slots:
     void removeFolderCallback(int index);
     void revealFinderCallback(const QString& sPath);
     void CopyFullPathCallback(const QString &sPath);
+    void oneClickCallback(const QString &sPath);
+    void doubleClickCallback(const QString &sPath);
 
 signals:
     void closeTabs();
     void AddFileProject();
     void NewFile(const QString& file);
+    void oneClick(const QString &sPath);
+    void doubleClick(const QString &sPath);
 
 private:
     QMap<QString, FileObserver *> tabs;

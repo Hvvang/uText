@@ -28,7 +28,6 @@ private:
 
 public:
     explicit FileTab(QPair<int, int> pos, QWidget* parent = nullptr);
-
     void dragEnterEvent(QDragEnterEvent *event) override;
     void dropEvent(QDropEvent *event) override;
 

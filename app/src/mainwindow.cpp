@@ -29,6 +29,9 @@ MainWindow::MainWindow(QString sPath, QWidget *parent)
     connect(this, &MainWindow::searchFile, ui->BrowserView, &FileBrowser::SearchFileCallback);
     connect(this, &MainWindow::searchInFolder, ui->BrowserView, &FileBrowser::SearchInFolderCallback);
     connect(this, &MainWindow::revealInFinder, ui->BrowserView, &FileBrowser::revealFinderCallback);
+
+//    connect(ui->BrowserView, &FileBrowser::oneClick, this, &MainWindow::replaceFileInView);
+    connect(ui->BrowserView, &FileBrowser::doubleClick, this, &MainWindow::addFileToView);
     menuConnector();
 }
 
@@ -200,3 +203,14 @@ void MainWindow::dropEvent(QDropEvent *event) {
     }
 }
 
+void MainWindow::replaceFileInView(const QString &sPath) {
+    auto label = sPath;
+
+    ui->Panel->replaceCarrentPage(label.remove(0, label.lastIndexOf('/')), new QFile(sPath));
+}
+
+void MainWindow::addFileToView(const QString &sPath) {
+    auto label = sPath;
+
+    ui->Panel->addPageToPanel(label.remove(0, label.lastIndexOf('/')), new QFile(sPath));
+}

@@ -13,12 +13,12 @@
 
 FileBrowser::FileBrowser(QWidget *parent) : QTabWidget(parent) {
     this->setMaximumWidth(parent->window()->width() / 4);
-    QObject::connect(this, SIGNAL(tabCloseRequested(int)), SLOT(removeFolderCallback(int)));
+    connect(this, SIGNAL(tabCloseRequested(int)), SLOT(removeFolderCallback(int)));
 }
 
 void FileBrowser::addFolderCallback(const QString &sPath) {
     auto file = new QFileInfo(sPath);
-    auto splitName =  sPath.split('/').last();
+    auto splitName = sPath.split('/').last();
 
     if (!file->isFile() && file->isReadable() && !tabs.contains(splitName)) {
         auto layout = new QVBoxLayout();
@@ -26,7 +26,8 @@ void FileBrowser::addFolderCallback(const QString &sPath) {
         auto widget = new QWidget(this);
 
         connect(model, SIGNAL(addFolderCallback(const QString&)), this, SLOT(addFolderCallback(const QString&)));
-
+        connect(model, &FileObserver::oneClick, this, &FileBrowser::oneClickCallback);
+        connect(model, &FileObserver::doubleClick, this, &FileBrowser::doubleClickCallback);
         model->setRootPath(sPath);
         layout->addWidget(model);
         widget->setLayout(layout);
@@ -108,5 +109,12 @@ void FileBrowser::revealFinderCallback(const QString &sPath) {
     #endif
 }
 
+void FileBrowser::oneClickCallback(const QString &sPath) {
+    emit oneClick(sPath);
+}
+
+void FileBrowser::doubleClickCallback(const QString &sPath) {
+    emit doubleClick(sPath);
+}
 
 

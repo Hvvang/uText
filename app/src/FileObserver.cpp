@@ -22,7 +22,6 @@ FileObserver::FileObserver(QWidget *parent) : QTreeView(parent) {
     setContextMenuPolicy(Qt::ContextMenuPolicy::CustomContextMenu);
     observerModel->setHeaderData(0,Qt::Vertical,"Project");
     connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(ShowContextMenu(const QPoint &)));
-
 }
 
 void FileObserver::setRootPath(const QString& sPath) {
@@ -277,4 +276,19 @@ void FileObserver::CopyPath(const QString &path) {
     clipboard->setText(path);
 }
 
+void FileObserver::mouseDoubleClickEvent(QMouseEvent *event) {
+    QTreeView::mouseDoubleClickEvent(event);
+    auto *file = new QFileInfo(static_cast<QFileSystemModel *>(model())->filePath(indexAt(event->pos())));
+    if (file->isFile()) {
+        emit doubleClick(file->filePath());
+    }
+}
+
+void FileObserver::mouseReleaseEvent(QMouseEvent *event) {
+    QTreeView::mouseReleaseEvent(event);
+    auto *file = new QFileInfo(static_cast<QFileSystemModel *>(model())->filePath(indexAt(event->pos())));
+    if (file->isFile()) {
+        emit oneClick(file->filePath());
+    }
+}
 

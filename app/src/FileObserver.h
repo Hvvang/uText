@@ -27,6 +27,8 @@ public slots:
     void PreCreateFileCallback(const QString& sPath);
     void PreCreateDirCallback(const QString& sPath);
     void Rename(const QString& newName);
+    void mouseDoubleClickEvent(QMouseEvent *event) override;
+    void mouseReleaseEvent(QMouseEvent *event) override;
 
 public:
     void CreateFile(const QString& sPath);
@@ -40,7 +42,10 @@ public:
     void CopyPath(const QString& path);
     void RevealInFinder(const QString& file);
 signals:
+    void oneClick(const QString &sPath);
+    void doubleClick(const QString &sPath);
     void addFolderCallback(const QString& file);
+
 private:
     QFileSystemModel *observerModel;
 };
