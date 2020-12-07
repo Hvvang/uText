@@ -7,14 +7,27 @@
 #include <QFileDialog>
 #include <QMessageBox>
 
-MainWindow::MainWindow(QString sPath, QWidget *parent)
+MainWindow::MainWindow(const QString &sPath, QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow) {
     ui->setupUi(this);
     ui->textEdit->setHidden(true);
     ui->BrowserView->setHidden(true);
     ui->preview->setMaximumWidth(window()->width() / 4);
-    ui->Panel->setRootSplitter(ui->RootSplitter);
+    ui->SplitPanel->setRootSplitter(ui->RootSplitter);
+
+    if (sPath.isEmpty()) {
+        newCallback();
+    } else {
+        QDir dir(sPath);
+        if (dir.isReadable()) {
+            qDebug() << dir.canonicalPath();
+            ui->BrowserView->addFolderCallback(dir.canonicalPath());
+            emit browserSwitch();
+        } else {
+            addFileToView(sPath);
+        }
+    }
 
     connect(ui->addFolderBtn, &QPushButton::released, this, &MainWindow::openCallback);
     connect(ui->BrowserView, &FileBrowser::AddFileProject, this, &MainWindow::openCallback);
@@ -46,10 +59,10 @@ void MainWindow::menuConnector() {
     connect(ui->actionSave_as, &QAction::triggered, this, &MainWindow::saveAsCallback);
     connect(ui->actionSave_all, &QAction::triggered, this, &MainWindow::saveAllCallback);
     connect(ui->actionClose, &QAction::triggered, this, &MainWindow::closeCallback);
-    connect(ui->actionSplit_Up, &QAction::triggered, ui->Panel, &Test::splitUp);
-    connect(ui->actionSplit_Down, &QAction::triggered, ui->Panel, &Test::splitDown);
-    connect(ui->actionSplit_Right, &QAction::triggered, ui->Panel, &Test::splitRight);
-    connect(ui->actionSplit_Left, &QAction::triggered, ui->Panel, &Test::splitLeft);
+    connect(ui->actionSplit_Up, &QAction::triggered, ui->SplitPanel, &Panel::splitUp);
+    connect(ui->actionSplit_Down, &QAction::triggered, ui->SplitPanel, &Panel::splitDown);
+    connect(ui->actionSplit_Right, &QAction::triggered, ui->SplitPanel, &Panel::splitRight);
+    connect(ui->actionSplit_Left, &QAction::triggered, ui->SplitPanel, &Panel::splitLeft);
 
 }
 
@@ -80,7 +93,7 @@ void MainWindow::newFolderCallback(const QString& sPath) {
 
 void MainWindow::newCallback() {
 //  create new tab in panel
-    ui->Panel->addPageToPanel("untitled", new QFile());
+    ui->SplitPanel->addPageToPanel("untitled", new QFile());
 }
 
 void MainWindow::saveCallback() {
@@ -207,11 +220,11 @@ void MainWindow::dropEvent(QDropEvent *event) {
 void MainWindow::replaceFileInView(const QString &sPath) {
     auto label = sPath;
 
-    ui->Panel->replaceCurrentPage(label.remove(0, label.lastIndexOf('/')), new QFile(sPath));
+    ui->SplitPanel->replaceCurrentPage(label.remove(0, label.lastIndexOf('/')), new QFile(sPath));
 }
 
 void MainWindow::addFileToView(const QString &sPath) {
     auto label = sPath;
 
-    ui->Panel->addPageToPanel(label.remove(0, label.lastIndexOf('/')), new QFile(sPath));
+    ui->SplitPanel->addPageToPanel(label.remove(0, label.lastIndexOf('/')), new QFile(sPath));
 }

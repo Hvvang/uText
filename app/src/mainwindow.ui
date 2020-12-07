@@ -180,7 +180,7 @@
         <bool>true</bool>
        </property>
       </widget>
-      <widget class="Test" name="Panel" native="true">
+      <widget class="Panel" name="SplitPanel" native="true">
        <layout class="QGridLayout" name="gridLayout_2">
         <item row="0" column="0">
          <widget class="QSplitter" name="RootSplitter">
@@ -534,9 +534,9 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>Test</class>
+   <class>Panel</class>
    <extends>QWidget</extends>
-   <header>Test.h</header>
+   <header>Panel.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

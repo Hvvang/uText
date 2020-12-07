@@ -1,23 +1,20 @@
 //
 // Created by Artem Shemidko on 07.12.2020.
 //
-#include "Test.h"
+#include "Panel.h"
 #include "FileTab.h"
 #include <QGridLayout>
 #include <qdebug.h>
 #include <QLabel>
 #include <QErrorMessage>
 
-Test::Test(QWidget *parent)
+Panel::Panel(QWidget *parent)
     : QWidget(parent) {
     setAcceptDrops(true);
 }
 
-Test::~Test() {
-//    delete m_split;
-}
 
-void Test::addPageToPanel(const QString &label, QFile *file) {
+void Panel::addPageToPanel(const QString &label, QFile *file) {
 
     if (!file->fileName().isEmpty() && !file->open(QIODevice::ReadOnly)) {
         QErrorMessage msg;
@@ -45,7 +42,7 @@ void Test::addPageToPanel(const QString &label, QFile *file) {
 
 }
 
-void Test::replaceCurrentPage(const QString &label, QFile *file) {
+void Panel::replaceCurrentPage(const QString &label, QFile *file) {
     if (m_lastFocus) {
         if (!file->open(QIODevice::ReadOnly)) {
             QErrorMessage msg;
@@ -66,27 +63,27 @@ void Test::replaceCurrentPage(const QString &label, QFile *file) {
 }
 
 
-void Test::addNewWindow(QSplitter *root, const QPair<int, int> &pos, QWidget *window) {
+void Panel::addNewWindow(QSplitter *root, const QPair<int, int> &pos, QWidget *window) {
     auto splitH = new QSplitter(Qt::Orientation::Horizontal, root);
     auto splitV = new QSplitter(Qt::Orientation::Vertical, splitH);
 
     window->setParent(splitV);
-    connect(static_cast<FileTab *>(window), &FileTab::grabFocus, this, &Test::LastFocusedTabController);
+    connect(static_cast<FileTab *>(window), &FileTab::grabFocus, this, &Panel::LastFocusedTabController);
     splitH->addWidget(splitV);
     splitV->addWidget(window);
     root->insertWidget(pos.second, splitH);
     LastFocusedTabController(window);
 }
 
-void Test::setRootSplitter(QSplitter *rootSplitter) {
+void Panel::setRootSplitter(QSplitter *rootSplitter) {
     this->rootSplitter = rootSplitter;
 }
 
-void Test::LastFocusedTabController(QWidget *widget) {
+void Panel::LastFocusedTabController(QWidget *widget) {
     m_lastFocus = widget;
 }
 
-QWidget *Test::copyWindow() {
+QWidget *Panel::copyWindow() {
     auto currTab = static_cast<FileTab *>(m_lastFocus);
     auto widget = new QTextEdit();
     auto w = new FileTab(currTab->getPos());
@@ -96,7 +93,7 @@ QWidget *Test::copyWindow() {
     return w;
 }
 
-void Test::splitUp() {
+void Panel::splitUp() {
     auto root = static_cast<QSplitter *>(m_lastFocus->parentWidget());
     if (root->orientation() != Qt::Vertical)
         root = static_cast<QSplitter *>(root->parentWidget());
@@ -110,7 +107,7 @@ void Test::splitUp() {
 }
 
 
-void Test::splitDown() {
+void Panel::splitDown() {
     auto root = static_cast<QSplitter *>(m_lastFocus->parentWidget());
     if (root->orientation() != Qt::Vertical)
         root = static_cast<QSplitter *>(root->parentWidget());
@@ -124,7 +121,7 @@ void Test::splitDown() {
     addNewWindow(root, pos, copyWindow());
 }
 
-void Test::splitRight() {
+void Panel::splitRight() {
     auto root = static_cast<QSplitter *>(m_lastFocus->parentWidget());
     if (root->orientation() != Qt::Horizontal)
         root = static_cast<QSplitter *>(root->parentWidget());
@@ -139,7 +136,7 @@ void Test::splitRight() {
     addNewWindow(root, pos, copyWindow());
 }
 
-void Test::splitLeft() {
+void Panel::splitLeft() {
     auto root = static_cast<QSplitter *>(m_lastFocus->parentWidget());
     if (root->orientation() != Qt::Horizontal)
         root = static_cast<QSplitter *>(root->parentWidget());

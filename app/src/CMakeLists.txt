@@ -5,6 +5,7 @@ set(SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/FileTab.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/FileBrowser.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/PopupDialog.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/Panel.cpp
 )
 
 set(HEADERS
@@ -14,12 +15,13 @@ set(HEADERS
     ${CMAKE_CURRENT_SOURCE_DIR}/FileTab.h
     ${CMAKE_CURRENT_SOURCE_DIR}/FileBrowser.h
     ${CMAKE_CURRENT_SOURCE_DIR}/PopupDialog.h
-        )
+    ${CMAKE_CURRENT_SOURCE_DIR}/Panel.h
+)
 
 set(UI
     ${CMAKE_CURRENT_SOURCE_DIR}/mainwindow.ui
     ${CMAKE_CURRENT_SOURCE_DIR}/popup.ui
-        Test.cpp Test.h)
+)
 
 add_library(src_lib STATIC ${SOURCES} ${HEADERS} ${UI})
 

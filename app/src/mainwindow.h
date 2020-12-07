@@ -14,7 +14,7 @@ QT_END_NAMESPACE
 class MainWindow : public QMainWindow {
     Q_OBJECT
 public:
-    MainWindow(QString sPath = "/", QWidget *parent = nullptr);
+    MainWindow(const QString &sPath, QWidget *parent = nullptr);
     ~MainWindow();
 
 public slots:
