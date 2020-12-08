@@ -11,7 +11,9 @@
 Panel::Panel(QWidget *parent)
     : QWidget(parent) {
     setAcceptDrops(true);
-    connect(this, &Panel::closeTab, this, [=] { emit dynamic_cast<FileTab *>(m_lastFocus)->TabAboutToClose(); });
+    connect(this, &Panel::closeTab, this, [=] {
+        if (m_lastFocus) emit dynamic_cast<FileTab *>(m_lastFocus)->TabAboutToClose();
+    });
 }
 
 
@@ -69,10 +71,6 @@ void Panel::setRootSplitter(QSplitter *root) {
 
 void Panel::LastFocusedTabController(QWidget *widget) {
     m_lastFocus = widget;
-//    auto split = dynamic_cast<QSplitter *>(m_lastFocus->parentWidget());
-//    qDebug() << "[WRAP]" << split->orientation() << " - " << split->count() << "\tm_lastFocus = " << m_lastFocus;
-//    auto root = dynamic_cast<QSplitter *>(split->parentWidget());
-//    qDebug() << "[ROOT]" <<  root->orientation() << " - " << root->count() << root->indexOf(split);
 }
 
 QWidget *Panel::copyWindow() {
@@ -89,61 +87,67 @@ QWidget *Panel::copyWindow() {
 }
 
 void Panel::splitUp() {
-    auto root = dynamic_cast<QSplitter *>(m_lastFocus->parentWidget());
-    auto splitV = new QSplitter(Qt::Orientation::Vertical, this);
+    if (m_lastFocus) {
+        auto root = dynamic_cast<QSplitter *>(m_lastFocus->parentWidget());
+        auto splitV = new QSplitter(Qt::Orientation::Vertical, this);
 
-    auto pos = root->indexOf(m_lastFocus);
-    auto w = copyWindow();
-    w->setParent(splitV);
-    auto widget = root->replaceWidget(pos, splitV);
-    splitV->setParent(root);
-    splitV->addWidget(w);
-    splitV->addWidget(widget);
-    LastFocusedTabController(w);
+        auto pos = root->indexOf(m_lastFocus);
+        auto w = copyWindow();
+        w->setParent(splitV);
+        auto widget = root->replaceWidget(pos, splitV);
+        splitV->setParent(root);
+        splitV->addWidget(w);
+        splitV->addWidget(widget);
+        LastFocusedTabController(w);
+    }
 }
 
 void Panel::splitDown() {
-    auto root = dynamic_cast<QSplitter *>(m_lastFocus->parentWidget());
-    auto splitV = new QSplitter(Qt::Orientation::Vertical, this);
+    if (m_lastFocus) {
+        auto root = dynamic_cast<QSplitter *>(m_lastFocus->parentWidget());
+        auto splitV = new QSplitter(Qt::Orientation::Vertical, this);
 
-    auto pos = root->indexOf(m_lastFocus);
-    auto w = copyWindow();
-    w->setParent(splitV);
-    auto widget = root->replaceWidget(pos, splitV);
-    splitV->setParent(root);
-    splitV->addWidget(widget);
-    splitV->addWidget(w);
-    LastFocusedTabController(w);
-
+        auto pos = root->indexOf(m_lastFocus);
+        auto w = copyWindow();
+        w->setParent(splitV);
+        auto widget = root->replaceWidget(pos, splitV);
+        splitV->setParent(root);
+        splitV->addWidget(widget);
+        splitV->addWidget(w);
+        LastFocusedTabController(w);
+    }
 }
 
 void Panel::splitRight() {
-    auto root = dynamic_cast<QSplitter *>(m_lastFocus->parentWidget());
-    auto splitV = new QSplitter(Qt::Orientation::Horizontal, this);
+    if (m_lastFocus) {
+        auto root = dynamic_cast<QSplitter *>(m_lastFocus->parentWidget());
+        auto splitV = new QSplitter(Qt::Orientation::Horizontal, this);
 
-    auto pos = root->indexOf(m_lastFocus);
-    auto w = copyWindow();
-    w->setParent(splitV);
-    auto widget = root->replaceWidget(pos, splitV);
-    splitV->setParent(root);
-    splitV->addWidget(widget);
-    splitV->addWidget(w);
-    LastFocusedTabController(w);
-
+        auto pos = root->indexOf(m_lastFocus);
+        auto w = copyWindow();
+        w->setParent(splitV);
+        auto widget = root->replaceWidget(pos, splitV);
+        splitV->setParent(root);
+        splitV->addWidget(widget);
+        splitV->addWidget(w);
+        LastFocusedTabController(w);
+    }
 }
 
 void Panel::splitLeft() {
-    auto root = dynamic_cast<QSplitter *>(m_lastFocus->parentWidget());
-    auto splitV = new QSplitter(Qt::Orientation::Horizontal, this);
+    if (m_lastFocus) {
+        auto root = dynamic_cast<QSplitter *>(m_lastFocus->parentWidget());
+        auto splitV = new QSplitter(Qt::Orientation::Horizontal, this);
 
-    auto pos = root->indexOf(m_lastFocus);
-    auto w = copyWindow();
-    w->setParent(splitV);
-    auto widget = root->replaceWidget(pos, splitV);
-    splitV->setParent(root);
-    splitV->addWidget(w);
-    splitV->addWidget(widget);
-    LastFocusedTabController(w);
+        auto pos = root->indexOf(m_lastFocus);
+        auto w = copyWindow();
+        w->setParent(splitV);
+        auto widget = root->replaceWidget(pos, splitV);
+        splitV->setParent(root);
+        splitV->addWidget(w);
+        splitV->addWidget(widget);
+        LastFocusedTabController(w);
+    }
 }
 
 void Panel::closePanel() {
