@@ -96,7 +96,7 @@ void MainWindow::newCallback() {
 }
 
 void MainWindow::saveCallback() {
-
+    emit ui->SplitPanel->saveFile();
 }
 
 void MainWindow::saveAsCallback() {
@@ -104,7 +104,7 @@ void MainWindow::saveAsCallback() {
 }
 
 void MainWindow::saveAllCallback() {
-
+    emit ui->SplitPanel->saveAllFiles();
 }
 
 void MainWindow::closeCallback() {
@@ -229,5 +229,5 @@ void MainWindow::dropEvent(QDropEvent *event) {
 void MainWindow::addFileToView(const QString &sPath) {
     auto label = sPath;
 
-    ui->SplitPanel->addPageToPanel(label.remove(0, label.lastIndexOf('/')), new QFile(sPath));
+    ui->SplitPanel->addPageToPanel(label, new QFile(sPath));
 }

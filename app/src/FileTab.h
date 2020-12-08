@@ -14,8 +14,6 @@
 #include <QFormLayout>
 #include <QSplitter>
 #include <QTabWidget>
-//#include "tabchanger.h"
-//#include "textArea.h"
 #include <QTextEdit>
 
 
@@ -26,6 +24,7 @@ public:
     explicit FileTab(QWidget* parent = nullptr);
     bool event(QEvent *event) override;
     void addFile(const QString &label, QTextEdit *widget);
+    const QString &Path(const QString &label) const;
 
 signals:
     void grabFocus(QWidget *widget);
@@ -33,7 +32,12 @@ signals:
 
 public slots:
     void removeFileCallback(int index);
+    void saveFileCallback(int index);
+    void saveFileAsCallback(QString &file);
     void TabAboutToClose();
+    void TabAboutToSave();
+    void TabAboutToSaveAs();
+    void TabAboutToSaveAll();
     void TabAboutToRename(const QString &oldPath, const QString &newPath);
 
 private:

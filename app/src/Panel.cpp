@@ -14,6 +14,12 @@
     connect(this, &Panel::closeTab, this, [=] {
         if (m_lastFocus) emit dynamic_cast<FileTab *>(m_lastFocus)->TabAboutToClose();
     });
+    connect(this, &Panel::saveFile, this, [=] {
+        if (m_lastFocus) emit dynamic_cast<FileTab *>(m_lastFocus)->TabAboutToSave();
+    });
+    connect(this, &Panel::saveAllFiles, this, [=] {
+        if (m_lastFocus) emit dynamic_cast<FileTab *>(m_lastFocus)->TabAboutToSaveAll();
+    });
 }
 
 
@@ -82,7 +88,12 @@ QWidget *Panel::copyWindow() {
     connect(this, &Panel::renameTabs, dynamic_cast<FileTab *>(window), &FileTab::TabAboutToRename);
     connect(dynamic_cast<FileTab *>(window), &FileTab::closePanel, this, &Panel::closePanel);
     widget->setPlainText(dynamic_cast<QTextEdit *>(currTab->currentWidget())->toPlainText());
-    window->addFile(currTab->tabText(currTab->currentIndex()), widget);
+    auto path = currTab->Path(currTab->tabText(currTab->currentIndex()));
+    if (path == currTab->tabText(currTab->currentIndex())) {
+        throw ;
+    } else {
+        window->addFile(path, widget);
+    }
     return window;
 }
 
@@ -98,6 +109,11 @@ void Panel::splitUp() {
         splitV->setParent(root);
         splitV->addWidget(w);
         splitV->addWidget(widget);
+        auto sizes = splitV->sizes();
+        for (auto &s : sizes) {
+            s = root->size().height() / root->count();
+        }
+        splitV->setSizes(sizes);
         LastFocusedTabController(w);
     }
 }
@@ -114,6 +130,11 @@ void Panel::splitDown() {
         splitV->setParent(root);
         splitV->addWidget(widget);
         splitV->addWidget(w);
+        auto sizes = splitV->sizes();
+        for (auto &s : sizes) {
+            s = root->size().height() / root->count();
+        }
+        splitV->setSizes(sizes);
         LastFocusedTabController(w);
     }
 }
@@ -130,6 +151,11 @@ void Panel::splitRight() {
         splitV->setParent(root);
         splitV->addWidget(widget);
         splitV->addWidget(w);
+        auto sizes = splitV->sizes();
+        for (auto &s : sizes) {
+            s = root->size().width() / root->count();
+        }
+        splitV->setSizes(sizes);
         LastFocusedTabController(w);
     }
 }
@@ -146,6 +172,11 @@ void Panel::splitLeft() {
         splitV->setParent(root);
         splitV->addWidget(w);
         splitV->addWidget(widget);
+        auto sizes = splitV->sizes();
+        for (auto &s : sizes) {
+            s = root->size().width() / root->count();
+        }
+        splitV->setSizes(sizes);
         LastFocusedTabController(w);
     }
 }
@@ -171,4 +202,5 @@ void Panel::closePanel() {
         m_lastFocus = dynamic_cast<QSplitter *>(m_lastFocus)->widget(0);
     }
 }
+
 

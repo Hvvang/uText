@@ -21,14 +21,15 @@ public:
     void splitDown();
     void splitLeft();
     void splitRight();
-    void addPageToPanel(const QString& label, QFile *file);
     void replaceCurrentPage(const QString& label, QFile *file);
+    void addPageToPanel(const QString& label, QFile *file);
 public slots:
     void LastFocusedTabController(QWidget *widget);
     void closePanel();
-
 signals:
     void closeTab();
+    void saveFile();
+    void saveAllFiles();
     void renameTabs(const QString &oldPath, const QString &newPath);
 
 

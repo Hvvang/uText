@@ -5,6 +5,9 @@
 #include "FileTab.h"
 #include <QFileInfo>
 #include <QPlainTextDocumentLayout>
+#include <QFileDialog.h>
+#include <QMessageBox>
+
 
 FileTab::FileTab(QWidget *parent)
     : QTabWidget(parent) {
@@ -117,7 +120,7 @@ FileTab::FileTab(QWidget *parent)
 }
 
 void FileTab::removeFileCallback(int index) {
-    tabs.remove(tabText(index));
+    tabs.remove(Path(tabText(index)));
     removeTab(index);
     if (tabs.empty()) {
         emit grabFocus(this);
@@ -132,12 +135,14 @@ bool FileTab::event(QEvent *event) {
     return QTabWidget::event(event);
 }
 
-void FileTab::addFile(const QString &label, QTextEdit *widget) {
-    if (!tabs.contains(label)) {
-        tabs[label] = widget;
+void FileTab::addFile(const QString &path, QTextEdit *widget) {
+    auto label = path.mid(path.lastIndexOf("/"));
+
+    if (!tabs.contains(path)) {
+        tabs[path] = widget;
         insertTab(currentIndex() + 1, widget, label);
     }
-    setCurrentIndex(indexOf(tabs[label]));
+    setCurrentIndex(indexOf(tabs[path]));
 }
 
 void FileTab::TabAboutToClose() {
@@ -145,41 +150,65 @@ void FileTab::TabAboutToClose() {
 }
 
 void FileTab::TabAboutToRename(const QString &oldPath, const QString &newPath) {
-    auto oldName = oldPath.mid(oldPath.lastIndexOf("/"));
     auto newName = newPath.mid(newPath.lastIndexOf("/"));
 
-    if (tabs.contains(oldName)) {
-        tabs[newName] = tabs[oldName];
-        tabs.remove(oldName);
-        setTabText(indexOf(tabs[newName]), newName);
+    if (tabs.contains(oldPath)) {
+        tabs[newPath] = tabs[oldPath];
+        tabs.remove(oldPath);
+        setTabText(indexOf(tabs[newPath]), newName);
     }
+}
+
+void FileTab::TabAboutToSave() {
+    emit saveFileCallback(currentIndex());
+}
+
+const QString &FileTab::Path(const QString &label) const {
+    for(const auto &key : tabs.keys()) {
+        const auto &cmp = key.mid(key.lastIndexOf('/'));
+        if (cmp == label) {
+            return key;
+        }
+    }
+    return label;
+}
+
+void FileTab::saveFileCallback(int index) {
+    auto file = Path(tabText(index));
+
+    if (file == "untitled") {
+        saveFileAsCallback(file);
+    }
+    QFile f(file);
+    if (f.open(QIODevice::ReadWrite | QIODevice::Text | QIODevice::Truncate)) {
+        auto text = tabs[file]->toPlainText();
+        f.write(text.toStdString().c_str());
+        f.close();
+    }
+}
+
+void FileTab::saveFileAsCallback(QString &file) {
+    auto res = QFileDialog::getSaveFileName(this, tr("All Files (*)"), file);
+    if (!res.isEmpty()) {
+        QFile f(res);
+        f.open(QIODevice::ReadWrite);
+        f.close();
+        emit TabAboutToRename(file, res);
+        file = res;
+    }
+}
+
+void FileTab::TabAboutToSaveAll() {
+    for (int index = 0; index < tabs.count(); ++index) {
+        emit saveFileCallback(index);
+    }
+}
+
+void FileTab::TabAboutToSaveAs() {
+    auto file = Path(tabText(currentIndex()));
+    saveFileAsCallback(file);
+    emit saveFileCallback(currentIndex());
 }
 
 
 
-
-//TextArea *FileTab::getTextArea(const QString& filename) {
-//    return tab_content[filename];
-//}
-
-//TextArea *FileTab::getTextArea() {
-//    int index = currentIndex();
-//
-//    if (index == -1)
-//        return nullptr;
-//
-//    QString filename = getFilename(index);
-//    return tab_content[filename];
-//}
-
-//QString FileTab::getFilename(int index) {
-//    QString filename = tabText(index);
-//
-//    if (filename[filename.size() - 1] == '*') {
-//        std::string std_fname = filename.toStdString();
-//        std::string new_fname(std_fname.begin(), std_fname.end() - 1);
-//        return QString(new_fname.c_str());
-//    }
-//
-//    return filename;
-//}
