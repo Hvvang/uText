@@ -10,7 +10,6 @@
 #include "ObserverModel.h"
 #include "PopupDialog.h"
 #include <QtGui>
-#include <QFileDialog>
 #include <QMessageBox>
 
 FileObserver::FileObserver(QWidget *parent) : QTreeView(parent) {
@@ -31,9 +30,9 @@ void FileObserver::setRootPath(const QString& sPath) {
 
 void FileObserver::ShowContextMenu(const QPoint &pos) {
     auto dialog = new PopupDialog(this);
-    auto file = static_cast<QFileSystemModel *>(model())->filePath(indexAt(pos));
+    auto file = dynamic_cast<QFileSystemModel *>(model())->filePath(indexAt(pos));
     QFileInfo info(file);
-    auto dirPath = static_cast<QFileSystemModel *>(model())->filePath(rootIndex());
+    auto dirPath = dynamic_cast<QFileSystemModel *>(model())->filePath(rootIndex());
     auto entry = file;
     entry = entry.remove(0, dirPath.size());
 
@@ -87,7 +86,8 @@ void FileObserver::ShowContextMenu(const QPoint &pos) {
     });
     connect(&action4, &QAction::triggered, this, [=] {
         connect(dialog, SIGNAL(Rename(const QString&)), this, SLOT(Rename(const QString&)));
-        dialog->setParams("Enter the new path for the " + (info.isFile()) ? "file." : "folder.", entry, Type::Rename);
+        QString type = (info.isFile()) ? "file." : "folder.";
+        dialog->setParams("Enter the new path for the " + type, entry, Type::Rename);
     });
     connect(&action5, &QAction::triggered, this, [=] {
         DuplicateItem(file);
@@ -121,12 +121,12 @@ void FileObserver::ShowContextMenu(const QPoint &pos) {
 }
 
 void FileObserver::PreCreateFileCallback(const QString &sPath) {
-    auto dirPath = static_cast<QFileSystemModel *>(model())->filePath(rootIndex());
+    auto dirPath = dynamic_cast<QFileSystemModel *>(model())->filePath(rootIndex());
     CreateFile(dirPath + sPath);
 }
 
 void FileObserver::PreCreateDirCallback(const QString &sPath) {
-    auto dirPath = static_cast<QFileSystemModel *>(model())->filePath(rootIndex());
+    auto dirPath = dynamic_cast<QFileSystemModel *>(model())->filePath(rootIndex());
     CreateFolder(dirPath + sPath);
 }
 
@@ -142,21 +142,25 @@ void FileObserver::CreateFolder(const QString& sPath) {
 }
 
 void FileObserver::Rename(const QString& newName) {
-    auto path = static_cast<QFileSystemModel *>(model())->filePath(currentIndex());
+    auto path = dynamic_cast<QFileSystemModel *>(model())->filePath(currentIndex());
 
-    auto res = path;
+    auto res = dynamic_cast<QFileSystemModel *>(model())->filePath(rootIndex());
     QFileInfo info(path);
-    res.remove(res.lastIndexOf("/"), res.size()).append("/" + newName);
-    if (info.isDir()) {
-        QDir dir(path);
-        dir.rename(path, res);
-    } else {
-        QFile file(path);
-        file.rename(path, res);
+    res.append(newName);
+
+    if (path != res) {
+        if (info.isDir()) {
+            QDir dir(path);
+            dir.rename(path, res);
+        } else {
+            QFile file(path);
+            file.rename(path, res);
+            emit dynamic_cast<FileBrowser *>(parentWidget()->parentWidget()->parentWidget())->FileRename(path, res);
+        }
     }
 }
 
-void copyPath(QString src, QString dst) {
+void copyPath(const QString &src, const QString &dst) {
     QDir dir(src);
     if (! dir.exists())
         return;
@@ -216,22 +220,27 @@ void FileObserver::DeleteItem(const QString &file) {
 
 void FileObserver::CopyItem(const QString &file) {
 // copy files/folders to clipboard doesn`t support on mac
+    qDebug() << "[WARNING] - COPY FILE - " << file << " - copy files/folders to clipboard doesn`t support on mac";
 }
 
 void FileObserver::CutItem(const QString &file) {
-// paste files/folders to clipboard doesn`t support on mac
+// copy/paste files/folders to clipboard doesn`t support on mac
+    qDebug() << "[WARNING] - CUT FILE - " << file << " - copy/paste files/folders to clipboard doesn`t support on mac";
+
 }
 
 void FileObserver::PasteItem(const QString &file) {
 // paste files/folders to clipboard doesn`t support on mac
+    qDebug() << "[WARNING] - PASTE FILE - " << file << " - paste files/folders to clipboard doesn`t support on mac";
+
 }
 
 void FileObserver::openCallback() {
-    emit static_cast<FileBrowser *>(parentWidget()->parentWidget()->parentWidget())->AddFileProject();
+    emit dynamic_cast<FileBrowser *>(parentWidget()->parentWidget()->parentWidget())->AddFileProject();
 }
 
 void FileObserver::RevealInFinder(const QString &sPath) {
-    static_cast<FileBrowser *>(parentWidget()->parentWidget()->parentWidget())->revealFinderCallback(sPath);
+    dynamic_cast<FileBrowser *>(parentWidget()->parentWidget()->parentWidget())->revealFinderCallback(sPath);
 }
 
 void FileObserver::CopyPath(const QString &path) {
@@ -241,7 +250,7 @@ void FileObserver::CopyPath(const QString &path) {
 
 void FileObserver::mouseDoubleClickEvent(QMouseEvent *event) {
     QTreeView::mouseDoubleClickEvent(event);
-    auto *file = new QFileInfo(static_cast<QFileSystemModel *>(model())->filePath(indexAt(event->pos())));
+    auto *file = new QFileInfo(dynamic_cast<QFileSystemModel *>(model())->filePath(indexAt(event->pos())));
     if (file->isFile()) {
         emit doubleClick(file->filePath());
     }
@@ -249,7 +258,7 @@ void FileObserver::mouseDoubleClickEvent(QMouseEvent *event) {
 
 void FileObserver::mouseReleaseEvent(QMouseEvent *event) {
     QTreeView::mouseReleaseEvent(event);
-    auto *file = new QFileInfo(static_cast<QFileSystemModel *>(model())->filePath(indexAt(event->pos())));
+    auto *file = new QFileInfo(dynamic_cast<QFileSystemModel *>(model())->filePath(indexAt(event->pos())));
     if (file->isFile()) {
         emit oneClick(file->filePath());
     }

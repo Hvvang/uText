@@ -11,23 +11,10 @@ MainWindow::MainWindow(const QString &sPath, QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow) {
     ui->setupUi(this);
-    ui->textEdit->setHidden(true);
     ui->BrowserView->setHidden(true);
     ui->preview->setMaximumWidth(window()->width() / 4);
     ui->SplitPanel->setRootSplitter(ui->RootSplitter);
 
-    if (sPath.isEmpty()) {
-        newCallback();
-    } else {
-        QDir dir(sPath);
-        if (dir.isReadable()) {
-            qDebug() << dir.canonicalPath();
-            ui->BrowserView->addFolderCallback(dir.canonicalPath());
-            emit browserSwitch();
-        } else {
-            addFileToView(sPath);
-        }
-    }
 
     connect(ui->addFolderBtn, &QPushButton::released, this, &MainWindow::openCallback);
     connect(ui->BrowserView, &FileBrowser::AddFileProject, this, &MainWindow::openCallback);
@@ -43,8 +30,20 @@ MainWindow::MainWindow(const QString &sPath, QWidget *parent)
     connect(this, &MainWindow::searchInFolder, ui->BrowserView, &FileBrowser::SearchInFolderCallback);
     connect(this, &MainWindow::revealInFinder, ui->BrowserView, &FileBrowser::revealFinderCallback);
 
-//    connect(ui->BrowserView, &FileBrowser::oneClick, this, &MainWindow::replaceFileInView);
+    //    connect(ui->BrowserView, &FileBrowser::oneClick, this, &MainWindow::replaceFileInView);
     connect(ui->BrowserView, &FileBrowser::doubleClick, this, &MainWindow::addFileToView);
+
+    if (sPath.isEmpty()) {
+        newCallback();
+    } else {
+        QDir dir(sPath);
+        if (dir.isReadable()) {
+            ui->BrowserView->addFolderCallback(dir.canonicalPath());
+        } else {
+            addFileToView(sPath);
+        }
+    }
+
     menuConnector();
 }
 
@@ -109,7 +108,11 @@ void MainWindow::saveAllCallback() {
 }
 
 void MainWindow::closeCallback() {
+    emit ui->SplitPanel->closeTab();
+}
 
+void MainWindow::renameFile(const QString &oldPath, const QString &newPath) {
+    emit ui->SplitPanel->renameTabs(oldPath, newPath);
 }
 
 void MainWindow::browserSwitch() {
@@ -185,7 +188,7 @@ void MainWindow::addContextMenuForBrowser(const QPoint &pos) {
         auto indexText = (browser->tabBar()->tabAt(pos) != -1)
                          ? browser->tabText(browser->tabBar()->tabAt(pos))
                          : browser->tabText(browser->currentIndex());
-        auto dirPath = static_cast<QFileSystemModel *>(browser->Tabs()[indexText]->model())->filePath(browser->Tabs()[indexText]->rootIndex());
+        auto dirPath = dynamic_cast<QFileSystemModel *>(browser->Tabs()[indexText]->model())->filePath(browser->Tabs()[indexText]->rootIndex());
         emit revealInFinder(dirPath);
     });
     contextMenu.exec(mapToGlobal(pos));
@@ -217,7 +220,7 @@ void MainWindow::dropEvent(QDropEvent *event) {
     }
 }
 
-void MainWindow::replaceFileInView(const QString &sPath) {
+[[maybe_unused]] void MainWindow::replaceFileInView(const QString &sPath) {
     auto label = sPath;
 
     ui->SplitPanel->replaceCurrentPage(label.remove(0, label.lastIndexOf('/')), new QFile(sPath));

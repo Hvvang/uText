@@ -9,6 +9,7 @@
 #include <QFile>
 #include <QSplitter>
 #include <QTabWidget>
+#include "FileTab.h"
 
 class Panel : public QWidget {
     Q_OBJECT
@@ -25,6 +26,11 @@ public:
 public slots:
     void addNewWindow(QSplitter *root, const QPair<int, int> &pos, QWidget *window);
     void LastFocusedTabController(QWidget *widget);
+    void closePanel();
+signals:
+    void closeTab();
+    void renameTabs(const QString &oldPath, const QString &newPath);
+
 
 private:
     QWidget *copyWindow();
@@ -38,7 +44,7 @@ private:
 private:
     QWidget *m_lastFocus{Q_NULLPTR};
     QSplitter *rootSplitter{Q_NULLPTR};
-
+    QVector<QWidget *> w;
 };
 
 

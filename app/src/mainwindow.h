@@ -14,14 +14,14 @@ QT_END_NAMESPACE
 class MainWindow : public QMainWindow {
     Q_OBJECT
 public:
-    MainWindow(const QString &sPath, QWidget *parent = nullptr);
-    ~MainWindow();
+    explicit MainWindow(const QString &sPath, QWidget *parent = nullptr);
+    ~MainWindow() override;
 
 public slots:
     void addContextMenuForBrowser(const QPoint &pos);
     void newFileCallback(const QString& sPath);
     void newFolderCallback(const QString& sPath);
-    void replaceFileInView(const QString &sPath);
+    [[maybe_unused]] void replaceFileInView(const QString &sPath);
     void addFileToView(const QString &sPath);
 
 public:
@@ -44,6 +44,10 @@ signals:
     void searchInFolder(const QString& sPath);
     void revealInFinder(const QString& sPath);
     void closeTabs();
+
+public slots:
+    void renameFile(const QString &oldPath, const QString &newPath);
+
 
 protected:
     void dragMoveEvent(QDragMoveEvent *event) override;

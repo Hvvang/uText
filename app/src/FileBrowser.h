@@ -34,10 +34,10 @@ signals:
     void NewFile(const QString& file);
     void oneClick(const QString &sPath);
     void doubleClick(const QString &sPath);
+    void FileRename(const QString &oldPath, const QString &newPath);
+
 private:
     QMap<QString, FileObserver *> tabs;
-
-
 };
 
 

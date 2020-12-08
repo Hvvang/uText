@@ -24,25 +24,6 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="2" column="0">
-     <widget class="QTextEdit" name="textEdit">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>16777215</width>
-        <height>300</height>
-       </size>
-      </property>
-      <property name="readOnly">
-       <bool>true</bool>
-      </property>
-     </widget>
-    </item>
     <item row="1" column="0">
      <widget class="QSplitter" name="splitter">
       <property name="sizePolicy">
@@ -312,7 +293,7 @@
     <bool>false</bool>
    </property>
    <property name="text">
-    <string>&amp;New...</string>
+    <string>&amp;New File</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+N</string>
@@ -336,7 +317,7 @@
   </action>
   <action name="actionClose">
    <property name="text">
-    <string>&amp;Close</string>
+    <string>&amp;Close Tab</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+W</string>
@@ -540,6 +521,8 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="../resources/res.qrc"/>
+ </resources>
  <connections/>
 </ui>

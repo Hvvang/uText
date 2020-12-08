@@ -31,20 +31,19 @@ public slots:
     void mouseReleaseEvent(QMouseEvent *event) override;
 
 public:
-    void CreateFile(const QString& sPath);
-    void CreateFolder(const QString& sPath);
-    void DuplicateItem(const QString& fileName);
-    void DeleteItem(const QString& file);
-    void CopyItem(const QString& file);
-    void CutItem(const QString& file);
-    void PasteItem(const QString& file);
+    static void CreateFile(const QString& sPath);
+    static void CreateFolder(const QString& sPath);
+    static void DuplicateItem(const QString& fileName);
+    static void DeleteItem(const QString& file);
+    static void CopyItem(const QString& file);
+    static void CutItem(const QString& file);
+    void static PasteItem(const QString& file);
     void openCallback();
-    void CopyPath(const QString& path);
+    static void CopyPath(const QString& path);
     void RevealInFinder(const QString& file);
 signals:
     void oneClick(const QString &sPath);
     void doubleClick(const QString &sPath);
-    void addFolderCallback(const QString& file);
 
 private:
     QFileSystemModel *observerModel;
