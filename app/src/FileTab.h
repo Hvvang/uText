@@ -23,15 +23,10 @@ class FileTab : public QTabWidget {
 Q_OBJECT
 
 public:
-    explicit FileTab(QPair<int, int> pos, QWidget* parent = nullptr);
+    explicit FileTab(QWidget* parent = nullptr);
     void dragEnterEvent(QDragEnterEvent *event) override;
     void dropEvent(QDropEvent *event) override;
 
-    [[nodiscard]] const QPair<int, int> &getPos() const;
-    [[nodiscard]] const int &splitterPos() const;
-    [[nodiscard]] const int &indexPos() const;
-
-    void setPos(const QPair<int, int> &pos);
     bool event(QEvent *event) override;
     void addFile(const QString &label, QTextEdit *widget);
 
@@ -52,7 +47,6 @@ public slots:
 
 
 private:
-    QPair<int, int> pos;
     QMap<QString, QTextEdit *> tabs;
 
 };

@@ -24,9 +24,9 @@ public:
     void addPageToPanel(const QString& label, QFile *file);
     void replaceCurrentPage(const QString& label, QFile *file);
 public slots:
-    void addNewWindow(QSplitter *root, const QPair<int, int> &pos, QWidget *window);
     void LastFocusedTabController(QWidget *widget);
     void closePanel();
+
 signals:
     void closeTab();
     void renameTabs(const QString &oldPath, const QString &newPath);
@@ -44,7 +44,6 @@ private:
 private:
     QWidget *m_lastFocus{Q_NULLPTR};
     QSplitter *rootSplitter{Q_NULLPTR};
-    QVector<QWidget *> w;
 };
 
 

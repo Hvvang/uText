@@ -8,9 +8,8 @@
 #include <QPlainTextDocumentLayout>
 
 
-FileTab::FileTab(QPair<int, int> pos, QWidget *parent)
-    : QTabWidget(parent)
-    , pos(pos) {
+FileTab::FileTab(QWidget *parent)
+    : QTabWidget(parent) {
     this->setStyleSheet(
             "QTabWidget::pane {\n"
             "    border: 1px solid black;\n"
@@ -113,13 +112,11 @@ FileTab::FileTab(QPair<int, int> pos, QWidget *parent)
     setDocumentMode(true);
     connect(this, &FileTab::tabBarClicked, this, [=] { emit grabFocus(this);});
     connect(this, SIGNAL(tabCloseRequested(int)), SLOT(removeFileCallback(int)));
-//    connect(this, SIGNAL(TabAboutToClose()), SLOT(removeFileCallback(currentIndex())));
 
 //    setAcceptDrops(true);
     setMovable(true);
     setTabsClosable(true);
     setUsesScrollButtons(true);
-//    QObject::connect(this, SIGNAL(tabCloseRequested(int)), SLOT(closeTab(int)));
 }
 
 
@@ -139,27 +136,12 @@ void FileTab::dropEvent(QDropEvent *event)
 }
 
 void FileTab::removeFileCallback(int index) {
-    qDebug() << tabs;
     tabs.remove(tabText(index));
     removeTab(index);
     if (tabs.empty()) {
-        auto parent = dynamic_cast<QSplitter *>(parentWidget()->parentWidget());
-        if (parent->count() == 1) {
-            parent->deleteLater();
-        } else {
-            parent->widget(0)->deleteLater();
-        }
+        emit grabFocus(this);
         emit closePanel();
-//        emit dynamic_cast<QSplitter *>(parentWidget()->parentWidget())->closePanel();
     }
-}
-
-const QPair<int, int> &FileTab::getPos() const {
-    return pos;
-}
-
-void FileTab::setPos(const QPair<int, int> &pos) {
-    this->pos = pos;
 }
 
 bool FileTab::event(QEvent *event) {
@@ -220,4 +202,3 @@ void FileTab::TabAboutToRename(const QString &oldPath, const QString &newPath) {
 //
 //    return filename;
 //}
-
