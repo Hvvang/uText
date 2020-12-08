@@ -11,6 +11,7 @@
 
 ObserverModel::ObserverModel(QWidget *parent)
     : QFileSystemModel() {
+    (void)parent;
 }
 
 QVariant ObserverModel::headerData(int section, Qt::Orientation orientation, int role) const {
@@ -21,9 +22,5 @@ QVariant ObserverModel::headerData(int section, Qt::Orientation orientation, int
     } else {
         return QFileSystemModel::headerData(section, orientation, role);
     }
-}
-
-void ObserverModel::pushData(QFileSystemModel *model) {
-
 }
 

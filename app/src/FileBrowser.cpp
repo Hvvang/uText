@@ -10,7 +10,7 @@
 #include <QAction>
 #include <QMessageBox>
 
-FileBrowser::FileBrowser(QWidget *parent) : QTabWidget(parent) {
+[[maybe_unused]] FileBrowser::FileBrowser(QWidget *parent) : QTabWidget(parent) {
     this->setStyleSheet(
             "QTabWidget::pane {\n"
             "    border: 1px solid black;\n"
@@ -140,33 +140,34 @@ void FileBrowser::removeFolderCallback(int index) {
 
 void FileBrowser::CreateFileCallback(const QString &sPath) {
     auto dirName = tabText(currentIndex());
-    auto dirPath = static_cast<QFileSystemModel *>(tabs[dirName]->model())->filePath(tabs[dirName]->rootIndex());
+    auto dirPath = dynamic_cast<QFileSystemModel *>(tabs[dirName]->model())->filePath(tabs[dirName]->rootIndex());
     tabs[dirName]->CreateFile(dirPath + "/" + sPath);
     emit doubleClick(dirPath + "/" + sPath);
 }
 
 void FileBrowser::CreateFolderCallback(const QString &sPath) {
     auto dirName = tabText(currentIndex());
-    auto dirPath = static_cast<QFileSystemModel *>(tabs[dirName]->model())->filePath(tabs[dirName]->rootIndex());
+    auto dirPath = dynamic_cast<QFileSystemModel *>(tabs[dirName]->model())->filePath(tabs[dirName]->rootIndex());
     tabs[dirName]->CreateFolder(dirPath + "/" + sPath);
 }
 
 void FileBrowser::CopyFullPathCallback(const QString &sPath) {
-    auto dirPath = static_cast<QFileSystemModel *>(tabs[sPath]->model())->filePath(tabs[sPath]->rootIndex());
+    auto dirPath = dynamic_cast<QFileSystemModel *>(tabs[sPath]->model())->filePath(tabs[sPath]->rootIndex());
     QClipboard *clipboard = QApplication::clipboard();
     clipboard->setText(dirPath);
 }
 
 void FileBrowser::SearchFileCallback(const QString &file) {
     auto dirName = tabText(currentIndex());
-    auto dirPath = static_cast<QFileSystemModel *>(tabs[dirName]->model())->filePath(tabs[dirName]->rootIndex());
-    auto model = static_cast<QFileSystemModel *>(tabs[dirName]->model());
+    auto dirPath = dynamic_cast<QFileSystemModel *>(tabs[dirName]->model())->filePath(tabs[dirName]->rootIndex());
+    auto model = dynamic_cast<QFileSystemModel *>(tabs[dirName]->model());
 
     tabs[dirName]->setCurrentIndex(model->index(dirPath + "/" + file));
     emit doubleClick(dirPath + "/" + file);
 }
 
 void FileBrowser::SearchInFolderCallback(const QString &data) {
+    qDebug() << "[WARNING] - SEARCH IN FOLDER - " << data << " - future release";
 
 }
 
@@ -191,7 +192,7 @@ void FileBrowser::revealFinderCallback(const QString &sPath) {
     #else
         QStringList scriptArgs;
         scriptArgs << QLatin1String("-e")
-                   << QString::fromLatin1("tell application \"Finder\" to reveal POSIX file \"%1\"")
+                   << QString::fromLatin1(R"(tell application "Finder" to reveal POSIX file "%1")")
                            .arg(fileInfo.canonicalFilePath());
         QProcess::execute(QLatin1String("/usr/bin/osascript"), scriptArgs);
         scriptArgs.clear();

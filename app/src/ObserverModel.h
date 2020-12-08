@@ -13,10 +13,8 @@ Q_OBJECT
 public:
     explicit ObserverModel(QWidget *parent = Q_NULLPTR);
 
-    void pushData(QFileSystemModel *model);
-
 private:
-    QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
+    [[nodiscard]] QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
 
 };
 

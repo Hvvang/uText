@@ -8,7 +8,7 @@
 #include <QLabel>
 #include <QErrorMessage>
 
-Panel::Panel(QWidget *parent)
+[[maybe_unused]] Panel::Panel(QWidget *parent)
     : QWidget(parent) {
     setAcceptDrops(true);
     connect(this, &Panel::closeTab, this, [=] {

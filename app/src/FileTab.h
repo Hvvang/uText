@@ -24,31 +24,20 @@ Q_OBJECT
 
 public:
     explicit FileTab(QWidget* parent = nullptr);
-    void dragEnterEvent(QDragEnterEvent *event) override;
-    void dropEvent(QDropEvent *event) override;
-
     bool event(QEvent *event) override;
     void addFile(const QString &label, QTextEdit *widget);
-
-//    TextArea *getTextArea();
-//    TextArea *getTextArea(const QString& filename);
-//    QString getFilename(int index);
-
 
 signals:
     void grabFocus(QWidget *widget);
     void closePanel();
-
 
 public slots:
     void removeFileCallback(int index);
     void TabAboutToClose();
     void TabAboutToRename(const QString &oldPath, const QString &newPath);
 
-
 private:
     QMap<QString, QTextEdit *> tabs;
-
 };
 
 

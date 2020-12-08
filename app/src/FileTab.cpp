@@ -4,9 +4,7 @@
 
 #include "FileTab.h"
 #include <QFileInfo>
-#include <QTextDocument>
 #include <QPlainTextDocumentLayout>
-
 
 FileTab::FileTab(QWidget *parent)
     : QTabWidget(parent) {
@@ -113,26 +111,9 @@ FileTab::FileTab(QWidget *parent)
     connect(this, &FileTab::tabBarClicked, this, [=] { emit grabFocus(this);});
     connect(this, SIGNAL(tabCloseRequested(int)), SLOT(removeFileCallback(int)));
 
-//    setAcceptDrops(true);
     setMovable(true);
     setTabsClosable(true);
     setUsesScrollButtons(true);
-}
-
-
-void FileTab::dragEnterEvent(QDragEnterEvent *event)
-{
-    event->accept();
-}
-
-void FileTab::dropEvent(QDropEvent *event)
-{
-//    if (event->mimeData()->urls().empty()) {
-//        return;
-//    }
-//    QString filePath = event->mimeData()->urls()[0].toLocalFile();
-
-//    addFile(filePath);
 }
 
 void FileTab::removeFileCallback(int index) {

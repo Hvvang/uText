@@ -14,7 +14,7 @@
 class Panel : public QWidget {
     Q_OBJECT
 public:
-    explicit Panel(QWidget *parent = Q_NULLPTR);
+    [[maybe_unused]] explicit Panel(QWidget *parent = Q_NULLPTR);
 
     void setRootSplitter(QSplitter *rootSpliter);
     void splitUp();

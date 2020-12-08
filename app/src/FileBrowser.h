@@ -9,29 +9,28 @@
 #include <qdebug.h>
 #include "FileObserver.h"
 
-//template <class T>
 class FileBrowser : public QTabWidget {
 Q_OBJECT
 public:
-    explicit FileBrowser(QWidget* parent = nullptr);
+    [[maybe_unused]] explicit FileBrowser(QWidget* parent = nullptr);
 
 public slots:
     void addFolderCallback(const QString &sPath);
     void CreateFileCallback(const QString& sPath);
     void CreateFolderCallback(const QString& sPath);
     void SearchFileCallback(const QString &file);
-    void SearchInFolderCallback(const QString &data);
+    static void SearchInFolderCallback(const QString &data);
     void removeFolderCallback(int index);
-    void revealFinderCallback(const QString& sPath);
+    static void revealFinderCallback(const QString& sPath);
     void CopyFullPathCallback(const QString &sPath);
     void oneClickCallback(const QString &sPath);
     void doubleClickCallback(const QString &sPath);
-    const QMap<QString, FileObserver *> &Tabs() const;
+    [[nodiscard]] const QMap<QString, FileObserver *> &Tabs() const;
 
 signals:
     void closeTabs();
     void AddFileProject();
-    void NewFile(const QString& file);
+//    void NewFile(const QString& file);
     void oneClick(const QString &sPath);
     void doubleClick(const QString &sPath);
     void FileRename(const QString &oldPath, const QString &newPath);
