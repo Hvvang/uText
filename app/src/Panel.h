@@ -29,6 +29,7 @@ public slots:
 signals:
     void closeTab();
     void saveFile();
+    void saveFileAs();
     void saveAllFiles();
     void renameTabs(const QString &oldPath, const QString &newPath);
 

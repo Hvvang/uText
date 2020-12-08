@@ -100,7 +100,7 @@ void MainWindow::saveCallback() {
 }
 
 void MainWindow::saveAsCallback() {
-
+    emit ui->SplitPanel->saveFileAs();
 }
 
 void MainWindow::saveAllCallback() {
@@ -212,7 +212,7 @@ void MainWindow::dropEvent(QDropEvent *event) {
         auto dataName = droppedData.at(0).toString().remove(0, 7);
         QFileInfo info(dataName);
         if (info.isFile()) {
-//            ui->FileTab->addFile(dataName);
+            ui->SplitPanel->addPageToPanel(dataName, new QFile(dataName));
         } else {
             auto dir = QDir(dataName);
             ui->BrowserView->addFolderCallback(dir.canonicalPath());

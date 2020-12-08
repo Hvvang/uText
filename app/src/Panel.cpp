@@ -17,6 +17,9 @@
     connect(this, &Panel::saveFile, this, [=] {
         if (m_lastFocus) emit dynamic_cast<FileTab *>(m_lastFocus)->TabAboutToSave();
     });
+    connect(this, &Panel::saveFileAs, this, [=] {
+        if (m_lastFocus) emit dynamic_cast<FileTab *>(m_lastFocus)->TabAboutToSaveAs();
+    });
     connect(this, &Panel::saveAllFiles, this, [=] {
         if (m_lastFocus) emit dynamic_cast<FileTab *>(m_lastFocus)->TabAboutToSaveAll();
     });
@@ -90,7 +93,7 @@ QWidget *Panel::copyWindow() {
     widget->setPlainText(dynamic_cast<QTextEdit *>(currTab->currentWidget())->toPlainText());
     auto path = currTab->Path(currTab->tabText(currTab->currentIndex()));
     if (path == currTab->tabText(currTab->currentIndex())) {
-        throw ;
+//        throw ;
     } else {
         window->addFile(path, widget);
     }
