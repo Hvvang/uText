@@ -58,24 +58,41 @@ void MainWindow::menuConnector() {
     connect(ui->actionSave_as, &QAction::triggered, this, &MainWindow::saveAsCallback);
     connect(ui->actionSave_all, &QAction::triggered, this, &MainWindow::saveAllCallback);
     connect(ui->actionClose, &QAction::triggered, this, &MainWindow::closeCallback);
+
+
+    connect(ui->actionRedo, &QAction::triggered, ui->SplitPanel, &Panel::redoCallback);
+    connect(ui->actionUndo, &QAction::triggered, ui->SplitPanel, &Panel::undoCallback);
+    connect(ui->actionCut, &QAction::triggered, ui->SplitPanel, &Panel::cutCallback);
+    connect(ui->actionCopy, &QAction::triggered, ui->SplitPanel, &Panel::copyCallback);
+    connect(ui->actionPaste, &QAction::triggered, ui->SplitPanel, &Panel::pasteCallback);
+    connect(ui->actionDelete, &QAction::triggered, ui->SplitPanel, &Panel::deleteCallback);
+    connect(ui->actionSelect_All, &QAction::triggered, ui->SplitPanel, &Panel::selectAllCallback);
+
     connect(ui->actionSplit_Up, &QAction::triggered, ui->SplitPanel, &Panel::splitUp);
     connect(ui->actionSplit_Down, &QAction::triggered, ui->SplitPanel, &Panel::splitDown);
     connect(ui->actionSplit_Right, &QAction::triggered, ui->SplitPanel, &Panel::splitRight);
     connect(ui->actionSplit_Left, &QAction::triggered, ui->SplitPanel, &Panel::splitLeft);
 
+    connect(ui->actionIncrease_Font_Size, &QAction::triggered, ui->SplitPanel, &Panel::increaseZoom);
+    connect(ui->actionDecrease_Font_Size, &QAction::triggered, ui->SplitPanel, &Panel::decreaseZoom);
+    connect(ui->actionReset_Font_Size, &QAction::triggered, ui->SplitPanel, &Panel::resetZoom);
+
 }
 
 void MainWindow::openCallback() {
     QFileDialog dialog;
+    dialog.setFileMode(QFileDialog::AnyFile);
     dialog.setOptions(QFileDialog::DontResolveSymlinks);
-    dialog.setNameFilter(tr("Open..."));
+//    dialog.setNameFilter(tr("Open..."));
     if (dialog.exec() == QDialog::Accepted) {
-        QString dirName = dialog.selectedFiles().front();
-        if (QDir(dirName).isReadable()) {
-            ui->BrowserView->addFolderCallback(dirName);
-        } else {
+        QString path = dialog.selectedFiles().front();
+        QFileInfo info(path);
+        if (info.isFile() && info.isReadable())
+            ui->SplitPanel->addPageToPanel(path, new QFile(path));
+        else if (info.isDir() && info.isReadable())
+            ui->BrowserView->addFolderCallback(path);
+        else
             QMessageBox::warning(this, tr("Error"), tr("Not enough permission!"), QMessageBox::Ok);
-        }
     }
 }
 

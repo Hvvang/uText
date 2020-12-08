@@ -35,6 +35,9 @@ void Panel::addPageToPanel(const QString &label, QFile *file) {
     }
     file->close();
     auto widget = new QTextEdit();
+    widget->setFontPointSize(14);
+    widget->setLineWrapMode(QTextEdit::NoWrap);
+    
     if (!file->fileName().isEmpty() && file->open(QIODevice::ReadWrite)) {
         widget->setPlainText(file->readAll());
         file->close();
@@ -85,6 +88,9 @@ void Panel::LastFocusedTabController(QWidget *widget) {
 QWidget *Panel::copyWindow() {
     auto currTab = dynamic_cast<FileTab *>(m_lastFocus);
     auto widget = new QTextEdit();
+    widget->setFontPointSize(14);
+    widget->setLineWrapMode(QTextEdit::NoWrap);
+
     auto window = new FileTab(this);
 
     connect(dynamic_cast<FileTab *>(window), &FileTab::grabFocus, this, &Panel::LastFocusedTabController);
@@ -206,4 +212,87 @@ void Panel::closePanel() {
     }
 }
 
+void Panel::cutCallback() {
+    if (m_lastFocus) {
+        auto editor = dynamic_cast<QTextEdit *>(dynamic_cast<FileTab *>(m_lastFocus)->currentWidget());
+        editor->cut();
+    }
+}
 
+void Panel::copyCallback() {
+    if (m_lastFocus) {
+        auto editor = dynamic_cast<QTextEdit *>(dynamic_cast<FileTab *>(m_lastFocus)->currentWidget());
+        editor->copy();
+    }
+}
+
+void Panel::pasteCallback() {
+    if (m_lastFocus) {
+        auto editor = dynamic_cast<QTextEdit *>(dynamic_cast<FileTab *>(m_lastFocus)->currentWidget());
+        if (editor->canPaste())
+            editor->paste();
+    }
+}
+
+void Panel::deleteCallback() {
+    if (m_lastFocus) {
+        auto editor = dynamic_cast<QTextEdit *>(dynamic_cast<FileTab *>(m_lastFocus)->currentWidget());
+        editor->textCursor().removeSelectedText();
+    }
+}
+
+void Panel::selectAllCallback() {
+    if (m_lastFocus) {
+        auto editor = dynamic_cast<QTextEdit *>(dynamic_cast<FileTab *>(m_lastFocus)->currentWidget());
+        editor->selectAll();
+    }
+}
+
+void Panel::redoCallback() {
+    if (m_lastFocus) {
+        auto editor = dynamic_cast<QTextEdit *>(dynamic_cast<FileTab *>(m_lastFocus)->currentWidget());
+        if (editor->isUndoRedoEnabled())
+            editor->redo();
+    }
+}
+
+void Panel::undoCallback() {
+    if (m_lastFocus) {
+        auto editor = dynamic_cast<QTextEdit *>(dynamic_cast<FileTab *>(m_lastFocus)->currentWidget());
+        if (editor->isUndoRedoEnabled())
+            editor->undo();
+    }
+}
+
+void Panel::increaseZoom() {
+    if (m_lastFocus) {
+        auto editor = dynamic_cast<QTextEdit *>(dynamic_cast<FileTab *>(m_lastFocus)->currentWidget());
+        auto cursor = editor->textCursor();
+
+        editor->selectAll();
+        editor->setFontPointSize( editor->fontPointSize() + 1);
+        editor->setTextCursor(cursor);
+    }
+}
+
+void Panel::decreaseZoom() {
+    if (m_lastFocus) {
+        auto editor = dynamic_cast<QTextEdit *>(dynamic_cast<FileTab *>(m_lastFocus)->currentWidget());
+        auto cursor = editor->textCursor();
+
+        editor->selectAll();
+        editor->setFontPointSize( editor->fontPointSize() - 1);
+        editor->setTextCursor(cursor);
+    }
+}
+
+void Panel::resetZoom() {
+    if (m_lastFocus) {
+        auto editor = dynamic_cast<QTextEdit *>(dynamic_cast<FileTab *>(m_lastFocus)->currentWidget());
+        auto cursor = editor->textCursor();
+
+        editor->selectAll();
+        editor->setFontPointSize(14);
+        editor->setTextCursor(cursor);
+    }
+}

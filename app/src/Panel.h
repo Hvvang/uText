@@ -23,9 +23,23 @@ public:
     void splitRight();
     void replaceCurrentPage(const QString& label, QFile *file);
     void addPageToPanel(const QString& label, QFile *file);
+
 public slots:
     void LastFocusedTabController(QWidget *widget);
     void closePanel();
+
+    void redoCallback();
+    void undoCallback();
+    void cutCallback();
+    void copyCallback();
+    void pasteCallback();
+    void deleteCallback();
+    void selectAllCallback();
+
+    void increaseZoom();
+    void decreaseZoom();
+    void resetZoom();
+
 signals:
     void closeTab();
     void saveFile();
