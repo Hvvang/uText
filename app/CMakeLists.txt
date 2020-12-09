@@ -11,8 +11,6 @@ set(CMAKE_AUTOUIC ON)
 find_package(Qt5 COMPONENTS Widgets REQUIRED)
 qt5_add_resources(SOURCES resources/res.qrc)
 
-message("LIBRARIES = ${LIBRARIES}")
-
 include_directories(
         ./src
         ../3dparty/Scintilla/Qt4Qt5
@@ -21,8 +19,8 @@ include_directories(
 add_compile_options(
 -Wall
 -Wextra
-#-Werror
-#-Wpedantic
+-Werror
+-Wpedantic
 )
 
 add_subdirectory(src)

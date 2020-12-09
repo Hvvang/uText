@@ -141,4 +141,5 @@ bool Editor::findPrevious() {
 //    SCI_SEARCHPREV(SCI_GETSEARCHFLAGS, SCI_GETCHA);
 //    SCI_SETSEARCHFLAGS = SCI_SEARCHPREV;
 //    findNext();
+    return false;
 }

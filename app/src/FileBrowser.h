@@ -25,7 +25,7 @@ public slots:
     void CopyFullPathCallback(const QString &sPath);
     void oneClickCallback(const QString &sPath);
     void doubleClickCallback(const QString &sPath);
-    [[nodiscard]] const QMap<QString, FileObserver *> &Tabs() const;
+    const QMap<QString, FileObserver *> &Tabs() const;
 
 signals:
     void closeTabs();

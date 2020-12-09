@@ -31,7 +31,6 @@
 *.out
 *.app
 
-3dparty
 .idea
 .DS_Store
 build
