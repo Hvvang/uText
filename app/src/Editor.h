@@ -20,15 +20,15 @@ public:
     [[nodiscard]] const bool &isEdited() const;
     void setEdited(const bool &edited);
 
+
 public slots:
+    bool findPrevious();
     [[maybe_unused]] void fold_by_level(int level = 0);
 
 private:
     QFile *file{Q_NULLPTR};
     QsciLexer *lex{Q_NULLPTR};
     bool edited{false};
-
-
 };
 
 

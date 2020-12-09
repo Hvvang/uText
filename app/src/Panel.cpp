@@ -288,3 +288,30 @@ void Panel::resetZoom() {
         editor->zoomTo(0);
     }
 }
+
+void Panel::find(const QString &str) {
+    if (m_lastFocus) {
+        auto editor = dynamic_cast<QsciScintilla *>(dynamic_cast<FileTab *>(m_lastFocus)->currentWidget());
+        editor->findFirst(str, false, false, false, false);
+    }
+}
+
+void Panel::findNext() {
+    if (m_lastFocus) {
+        auto editor = dynamic_cast<QsciScintilla *>(dynamic_cast<FileTab *>(m_lastFocus)->currentWidget());
+        editor->findNext();
+    }
+}
+
+void Panel::replace(const QString &str) {
+    if (m_lastFocus) {
+        auto editor = dynamic_cast<QsciScintilla *>(dynamic_cast<FileTab *>(m_lastFocus)->currentWidget());
+        editor->replace(str);
+    }
+}
+void Panel::findPrev() {
+    if (m_lastFocus) {
+        auto editor = dynamic_cast<Editor *>(dynamic_cast<FileTab *>(m_lastFocus)->currentWidget());
+        editor->findPrevious();
+    }
+}

@@ -19,6 +19,8 @@ enum class Type {
     SearchFile,
     SearchInDir,
     Rename,
+    Find,
+    Replace
 };
 
 class PopupDialog : public QDialog {
@@ -37,6 +39,8 @@ signals:
     void SearchFile(const QString& file);
     void SearchInDir(const QString& data);
     void Rename(const QString& newName);
+    void Find(const QString& str);
+    void Replace(const QString& str);
 
 private:
     Ui::PopupDialog *ui;

@@ -40,6 +40,11 @@ public slots:
     void decreaseZoom();
     void resetZoom();
 
+    void find(const QString &str);
+    void replace(const QString &str);
+    void findNext();
+    void findPrev();
+
 signals:
     void closeTab();
     void saveFile();

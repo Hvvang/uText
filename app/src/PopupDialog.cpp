@@ -46,6 +46,12 @@ void PopupDialog::accept() {
         case Type::Rename:
             emit Rename(entry);
             break;
+        case Type::Find:
+            emit Find(entry);
+            break;
+        case Type::Replace:
+            emit Replace(entry);
+            break;
     }
     QDialog::accept();
 }

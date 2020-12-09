@@ -85,7 +85,20 @@ void MainWindow::menuConnector() {
         else { ui->toolBar->hide(); ui->actionShow_Tab_Bar->setText("Show Tool Bar"); }
     });
     connect(ui->actionToggle_Tree_View, &QAction::triggered, this, &MainWindow::toggleBrowser);
-//    connect(ui->actionReset_Font_Size, &QAction::triggered, ui->SplitPanel, &Panel::resetZoom);
+
+    connect(ui->actionFind_in_File, &QAction::triggered, this, [=] {
+        auto dialog = new PopupDialog(this);
+        connect(dialog, &PopupDialog::Find, ui->SplitPanel, &Panel::find);
+        dialog->setParams("Find in file.", "", Type::Find);
+    });
+    connect(ui->actionFind_Next, &QAction::triggered, ui->SplitPanel, &Panel::findNext);
+    connect(ui->actionFind_Previous, &QAction::triggered, ui->SplitPanel, &Panel::findPrev);
+    connect(ui->actionReplace_in_File, &QAction::triggered, this, [=] {
+        auto dialog = new PopupDialog(this);
+        connect(dialog, &PopupDialog::Replace, ui->SplitPanel, &Panel::replace);
+        dialog->setParams("Replace in file.", "", Type::Replace);
+    });
+
 }
 
 void MainWindow::openCallback() {

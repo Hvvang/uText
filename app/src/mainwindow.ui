@@ -233,6 +233,9 @@
    <addaction name="actionCopy"/>
    <addaction name="actionCut"/>
    <addaction name="actionPaste"/>
+   <addaction name="separator"/>
+   <addaction name="actionFind_in_File"/>
+   <addaction name="actionReplace_in_File"/>
   </widget>
   <widget class="QStatusBar" name="statusBar">
    <property name="sizePolicy">
@@ -319,9 +322,19 @@
     </property>
     <addaction name="actionDocumentation"/>
    </widget>
+   <widget class="QMenu" name="menuFind">
+    <property name="title">
+     <string>Find</string>
+    </property>
+    <addaction name="actionFind_in_File"/>
+    <addaction name="actionReplace_in_File"/>
+    <addaction name="actionFind_Next"/>
+    <addaction name="actionFind_Previous"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
    <addaction name="menuView"/>
+   <addaction name="menuFind"/>
    <addaction name="menuWindow"/>
    <addaction name="menuHelp"/>
   </widget>
@@ -549,6 +562,38 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+N</string>
+   </property>
+  </action>
+  <action name="actionFind_in_File">
+   <property name="text">
+    <string>Find in File</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+F</string>
+   </property>
+  </action>
+  <action name="actionReplace_in_File">
+   <property name="text">
+    <string>Replace in File</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Alt+F</string>
+   </property>
+  </action>
+  <action name="actionFind_Next">
+   <property name="text">
+    <string>Find Next</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+G</string>
+   </property>
+  </action>
+  <action name="actionFind_Previous">
+   <property name="text">
+    <string>Find Previous</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+G</string>
    </property>
   </action>
  </widget>

@@ -135,3 +135,10 @@ const bool &Editor::isEdited() const {
 void Editor::setEdited(const bool &edited) {
     Editor::edited = edited;
 }
+
+bool Editor::findPrevious() {
+//    qDebug() << SCI_GETT;
+//    SCI_SEARCHPREV(SCI_GETSEARCHFLAGS, SCI_GETCHA);
+//    SCI_SETSEARCHFLAGS = SCI_SEARCHPREV;
+//    findNext();
+}
