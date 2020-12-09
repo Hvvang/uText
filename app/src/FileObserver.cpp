@@ -18,6 +18,7 @@ FileObserver::FileObserver(QWidget *parent) : QTreeView(parent) {
     for (int i = 1; i < observerModel->columnCount(); ++i) {
         hideColumn(i);
     }
+    setMinimumWidth(0);
     setContextMenuPolicy(Qt::ContextMenuPolicy::CustomContextMenu);
     observerModel->setHeaderData(0, Qt::Vertical,"Project");
     connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(ShowContextMenu(const QPoint &)));

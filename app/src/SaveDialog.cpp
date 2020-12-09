@@ -4,6 +4,7 @@
 
 #include "SaveDialog.h"
 #include "ui_beforeclosedialog.h"
+#include <QPicture>
 
 SaveDialog::SaveDialog(const QString &label, QWidget *parent)
     : QDialog(parent)

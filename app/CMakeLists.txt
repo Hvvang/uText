@@ -9,6 +9,7 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 
 find_package(Qt5 COMPONENTS Widgets REQUIRED)
+qt5_add_resources(SOURCES resources/res.qrc)
 
 message("LIBRARIES = ${LIBRARIES}")
 
@@ -25,5 +26,5 @@ add_compile_options(
 )
 
 add_subdirectory(src)
-add_executable(utext main.cpp)
+add_executable(utext main.cpp ${SOURCES})
 target_link_libraries(utext src_lib Qt5::Core Qt5::Widgets )

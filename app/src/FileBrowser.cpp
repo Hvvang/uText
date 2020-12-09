@@ -105,6 +105,8 @@
             "    margin-bottom: 0;\n"
             "}");
     this->setMaximumWidth(parent->window()->width() / 4);
+    this->setMinimumWidth(tabBar()->width());
+
     auto mainWidget = dynamic_cast<MainWindow *>(parentWidget()->parentWidget()->parentWidget());
     connect(this, &FileBrowser::FileRename, mainWidget, &MainWindow::renameFile);
     connect(this, SIGNAL(tabCloseRequested(int)), SLOT(removeFolderCallback(int)));

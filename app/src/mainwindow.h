@@ -49,7 +49,7 @@ signals:
 
 public slots:
     void renameFile(const QString &oldPath, const QString &newPath);
-
+    void toggleBrowser();
 
 protected:
     void dragMoveEvent(QDragMoveEvent *event) override;
@@ -60,6 +60,7 @@ protected:
 
 private:
     Ui::MainWindow *ui;
+    int treeSize;
 };
 
 

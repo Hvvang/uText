@@ -35,11 +35,7 @@ void Panel::addPageToPanel(const QString &label, QFile *file) {
         return;
     }
     file->close();
-    auto widget = new Editor(); // инитилизируем редактор
-     // мы же хотим читать кириллицу
-
-//    widget->setFontPointSize(14);
-//    widget->setLineWrapMode(QsciScintilla::NoWrap);
+    auto widget = new Editor();
 
     if (!file->fileName().isEmpty() && file->open(QIODevice::ReadWrite)) {
         widget->setFile(file);
@@ -85,7 +81,7 @@ void Panel::replaceCurrentPage(const QString &label, QFile *file) {
 }
 
 void Panel::setRootSplitter(QSplitter *root) {
-    this->rootSplitter = root;
+    rootSplitter = root;
 }
 
 void Panel::LastFocusedTabController(QWidget *widget) {

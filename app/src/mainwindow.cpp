@@ -13,7 +13,10 @@ MainWindow::MainWindow(const QString &sPath, QWidget *parent)
     ui->setupUi(this);
     ui->BrowserView->setHidden(true);
     ui->preview->setMaximumWidth(window()->width() / 4);
+    ui->preview->setMinimumWidth(window()->width() / 6);
+    ui->BrowserView->setMinimumWidth(0);
     ui->SplitPanel->setRootSplitter(ui->RootSplitter);
+    ui->toolBar->hide();
 
     connect(ui->addFolderBtn, &QPushButton::released, this, &MainWindow::openCallback);
     connect(ui->BrowserView, &FileBrowser::AddFileProject, this, &MainWindow::openCallback);
@@ -76,6 +79,13 @@ void MainWindow::menuConnector() {
     connect(ui->actionIncrease_Font_Size, &QAction::triggered, ui->SplitPanel, &Panel::increaseZoom);
     connect(ui->actionDecrease_Font_Size, &QAction::triggered, ui->SplitPanel, &Panel::decreaseZoom);
     connect(ui->actionReset_Font_Size, &QAction::triggered, ui->SplitPanel, &Panel::resetZoom);
+
+    connect(ui->actionShow_Tab_Bar, &QAction::triggered, ui->toolBar, [=] {
+        if (ui->toolBar->isHidden()) { ui->toolBar->show(); ui->actionShow_Tab_Bar->setText("Hide Tool Bar"); }
+        else { ui->toolBar->hide(); ui->actionShow_Tab_Bar->setText("Show Tool Bar"); }
+    });
+    connect(ui->actionToggle_Tree_View, &QAction::triggered, this, &MainWindow::toggleBrowser);
+//    connect(ui->actionReset_Font_Size, &QAction::triggered, ui->SplitPanel, &Panel::resetZoom);
 }
 
 void MainWindow::openCallback() {
@@ -247,3 +257,23 @@ void MainWindow::addFileToView(const QString &sPath) {
     ui->SplitPanel->addPageToPanel(label, new QFile(sPath));
 }
 
+void MainWindow::toggleBrowser() {
+    if (ui->preview->isHidden() && !ui->BrowserView->currentWidget()->isHidden()) {
+        ui->BrowserView->currentWidget()->hide();
+        auto width = ui->BrowserView->width();
+        auto vSize = ui->splitter->sizes();
+
+        vSize[1] -= width;
+        vSize[2] = ui->splitter->width() - ui->BrowserView->tabBar()->width();
+        ui->splitter->setSizes(vSize);
+        treeSize = width;
+    }
+    else if (ui->preview->isHidden()) {
+        auto vSize = ui->splitter->sizes();
+        ui->BrowserView->currentWidget()->show();
+
+        vSize[1] += treeSize;
+        vSize[2] -= treeSize;
+        ui->splitter->setSizes(vSize);
+    }
+}
