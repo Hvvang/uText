@@ -49,6 +49,7 @@ signals:
 
 public slots:
     void renameFile(const QString &oldPath, const QString &newPath);
+    void renameFileByDirRename(const QString &oldPath, const QString &newPath);
     void toggleBrowser();
 
 protected:

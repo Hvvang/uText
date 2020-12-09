@@ -39,6 +39,7 @@ public slots:
     void TabAboutToSaveAs();
     void TabAboutToSaveAll();
     void TabAboutToRename(const QString &oldPath, const QString &newPath);
+    void TabAboutToRenameByDir(const QString &oldPath, const QString &newPath);
 
 private:
     QMap<QString, Editor *> tabs;

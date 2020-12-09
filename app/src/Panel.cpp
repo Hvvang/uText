@@ -52,6 +52,7 @@ void Panel::addPageToPanel(const QString &label, QFile *file) {
         rootSplitter->addWidget(window);
         connect(dynamic_cast<FileTab *>(window), &FileTab::grabFocus, this, &Panel::LastFocusedTabController);
         connect(this, &Panel::renameTabs, dynamic_cast<FileTab *>(window), &FileTab::TabAboutToRename);
+        connect(this, &Panel::renameTabsByDir, dynamic_cast<FileTab *>(window), &FileTab::TabAboutToRenameByDir);
         connect(dynamic_cast<FileTab *>(window), &FileTab::closePanel, this, &Panel::closePanel);
         LastFocusedTabController(window);
     }
@@ -97,6 +98,7 @@ QWidget *Panel::copyWindow() {
 
     connect(dynamic_cast<FileTab *>(window), &FileTab::grabFocus, this, &Panel::LastFocusedTabController);
     connect(this, &Panel::renameTabs, dynamic_cast<FileTab *>(window), &FileTab::TabAboutToRename);
+    connect(this, &Panel::renameTabsByDir, dynamic_cast<FileTab *>(window), &FileTab::TabAboutToRenameByDir);
     connect(dynamic_cast<FileTab *>(window), &FileTab::closePanel, this, &Panel::closePanel);
     widget->setText(dynamic_cast<Editor *>(currTab->currentWidget())->text());
     auto path = currTab->Path(currTab->tabText(currTab->currentIndex()));

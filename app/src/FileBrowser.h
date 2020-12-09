@@ -34,6 +34,7 @@ signals:
     void oneClick(const QString &sPath);
     void doubleClick(const QString &sPath);
     void FileRename(const QString &oldPath, const QString &newPath);
+    void FileRenameByDirRename(const QString &oldPath, const QString &newPath);
 
 private:
     QMap<QString, FileObserver *> tabs;

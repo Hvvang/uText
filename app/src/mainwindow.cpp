@@ -140,6 +140,10 @@ void MainWindow::renameFile(const QString &oldPath, const QString &newPath) {
     emit ui->SplitPanel->renameTabs(oldPath, newPath);
 }
 
+void MainWindow::renameFileByDirRename(const QString &oldPath, const QString &newPath) {
+    emit ui->SplitPanel->renameTabsByDir(oldPath, newPath);
+}
+
 void MainWindow::browserSwitch() {
     auto browser = ui->BrowserView;
     auto preview = ui->preview;
@@ -277,3 +281,5 @@ void MainWindow::toggleBrowser() {
         ui->splitter->setSizes(vSize);
     }
 }
+
+

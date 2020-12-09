@@ -109,6 +109,7 @@
 
     auto mainWidget = dynamic_cast<MainWindow *>(parentWidget()->parentWidget()->parentWidget());
     connect(this, &FileBrowser::FileRename, mainWidget, &MainWindow::renameFile);
+    connect(this, &FileBrowser::FileRenameByDirRename, mainWidget, &MainWindow::renameFileByDirRename);
     connect(this, SIGNAL(tabCloseRequested(int)), SLOT(removeFolderCallback(int)));
 }
 

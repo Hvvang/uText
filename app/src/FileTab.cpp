@@ -174,6 +174,18 @@ void FileTab::TabAboutToRename(const QString &oldPath, const QString &newPath) {
     }
 }
 
+void FileTab::TabAboutToRenameByDir(const QString &oldPath, const QString &newPath) {
+    for (auto &key : tabs.keys()) {
+        if (key.contains(oldPath)) {
+            auto newFileName = key;
+            newFileName.replace(oldPath, newPath);
+            tabs[newFileName] = tabs[key];
+            tabs.remove(key);
+            tabs[newFileName]->setFile(new QFile(key));
+        }
+    }
+}
+
 void FileTab::TabAboutToSave() {
     emit saveFileCallback(currentIndex());
 }
@@ -191,7 +203,7 @@ const QString &FileTab::Path(const QString &label) const {
 void FileTab::saveFileCallback(int index) {
     auto file = Path(tabText(index));
 
-    dynamic_cast<Editor *>(widget(index))->setEdited(true);
+    dynamic_cast<Editor *>(widget(index))->setEdited(false);
     if (file == "untitled") {
         saveFileAsCallback(file);
     }
@@ -225,3 +237,4 @@ void FileTab::TabAboutToSaveAs() {
     saveFileAsCallback(file);
     emit saveFileCallback(currentIndex());
 }
+

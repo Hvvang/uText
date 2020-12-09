@@ -153,6 +153,8 @@ void FileObserver::Rename(const QString& newName) {
         if (info.isDir()) {
             QDir dir(path);
             dir.rename(path, res);
+            emit dynamic_cast<FileBrowser *>(parentWidget()->parentWidget()->parentWidget())->FileRenameByDirRename(path, res);
+
         } else {
             QFile file(path);
             file.rename(path, res);

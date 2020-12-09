@@ -46,6 +46,7 @@ signals:
     void saveFileAs();
     void saveAllFiles();
     void renameTabs(const QString &oldPath, const QString &newPath);
+    void renameTabsByDir(const QString &oldPath, const QString &newPath);
 
 
 private:
