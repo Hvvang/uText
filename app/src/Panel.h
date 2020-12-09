@@ -12,7 +12,7 @@
 #include "FileTab.h"
 
 class Panel : public QWidget {
-    Q_OBJECT
+Q_OBJECT
 public:
     [[maybe_unused]] explicit Panel(QWidget *parent = Q_NULLPTR);
 

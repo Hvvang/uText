@@ -3,11 +3,11 @@
 //
 
 #include "FileTab.h"
+#include "SaveDialog.h"
 #include <QFileInfo>
 #include <QPlainTextDocumentLayout>
 #include <QFileDialog.h>
 #include <QMessageBox>
-
 
 FileTab::FileTab(QWidget *parent)
     : QTabWidget(parent) {
@@ -120,6 +120,18 @@ FileTab::FileTab(QWidget *parent)
 }
 
 void FileTab::removeFileCallback(int index) {
+    if (dynamic_cast<Editor *>(widget(index))->isEdited()) {
+        auto dialog = new SaveDialog(tabText(index), this);
+        emit grabFocus(this);
+
+        auto result = dialog->getResult();
+        if (result == 1) {
+            return;
+        }
+        else if (result == 2) {
+            emit saveFileCallback(index);
+        }
+    }
     tabs.remove(Path(tabText(index)));
     removeTab(index);
     if (tabs.empty()) {
@@ -135,8 +147,10 @@ bool FileTab::event(QEvent *event) {
     return QTabWidget::event(event);
 }
 
-void FileTab::addFile(const QString &path, QTextEdit *widget) {
+void FileTab::addFile(const QString &path, Editor *widget) {
     auto label = path.mid(path.lastIndexOf("/"));
+
+    connect(widget, &Editor::SCN_FOCUSIN, this, [=] { emit grabFocus(this);});
 
     if (!tabs.contains(path)) {
         tabs[path] = widget;
@@ -154,6 +168,7 @@ void FileTab::TabAboutToRename(const QString &oldPath, const QString &newPath) {
 
     if (tabs.contains(oldPath)) {
         tabs[newPath] = tabs[oldPath];
+        tabs[newPath]->setFile(new QFile(newPath));
         tabs.remove(oldPath);
         setTabText(indexOf(tabs[newPath]), newName);
     }
@@ -176,12 +191,13 @@ const QString &FileTab::Path(const QString &label) const {
 void FileTab::saveFileCallback(int index) {
     auto file = Path(tabText(index));
 
+    dynamic_cast<Editor *>(widget(index))->setEdited(true);
     if (file == "untitled") {
         saveFileAsCallback(file);
     }
     QFile f(file);
     if (f.open(QIODevice::ReadWrite | QIODevice::Text | QIODevice::Truncate)) {
-        auto text = tabs[file]->toPlainText();
+        auto text = tabs[file]->text();
         f.write(text.toStdString().c_str());
         f.close();
     }
@@ -189,7 +205,7 @@ void FileTab::saveFileCallback(int index) {
 
 void FileTab::saveFileAsCallback(QString &file) {
     auto res = QFileDialog::getSaveFileName(this, tr("All Files (*)"), file);
-    if (!res.isEmpty()) {
+    if (!res.isEmpty() && file != res) {
         QFile f(res);
         f.open(QIODevice::ReadWrite);
         f.close();
@@ -209,6 +225,3 @@ void FileTab::TabAboutToSaveAs() {
     saveFileAsCallback(file);
     emit saveFileCallback(currentIndex());
 }
-
-
-

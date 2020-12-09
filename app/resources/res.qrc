@@ -2,4 +2,7 @@
   <qresource prefix="clbtn">
     <file>close.png</file>
   </qresource>
+  <qresource prefix="logo">
+    <file>logo.png</file>
+  </qresource>
 </RCC>

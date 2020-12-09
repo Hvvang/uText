@@ -14,8 +14,7 @@
 #include <QFormLayout>
 #include <QSplitter>
 #include <QTabWidget>
-#include <QTextEdit>
-
+#include "Editor.h"
 
 class FileTab : public QTabWidget {
 Q_OBJECT
@@ -23,8 +22,9 @@ Q_OBJECT
 public:
     explicit FileTab(QWidget* parent = nullptr);
     bool event(QEvent *event) override;
-    void addFile(const QString &label, QTextEdit *widget);
-    const QString &Path(const QString &label) const;
+
+    void addFile(const QString &label, Editor *widget);
+    [[nodiscard]] const QString &Path(const QString &label) const;
 
 signals:
     void grabFocus(QWidget *widget);
@@ -41,7 +41,7 @@ public slots:
     void TabAboutToRename(const QString &oldPath, const QString &newPath);
 
 private:
-    QMap<QString, QTextEdit *> tabs;
+    QMap<QString, Editor *> tabs;
 };
 
 

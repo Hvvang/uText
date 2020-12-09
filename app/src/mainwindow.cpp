@@ -15,7 +15,6 @@ MainWindow::MainWindow(const QString &sPath, QWidget *parent)
     ui->preview->setMaximumWidth(window()->width() / 4);
     ui->SplitPanel->setRootSplitter(ui->RootSplitter);
 
-
     connect(ui->addFolderBtn, &QPushButton::released, this, &MainWindow::openCallback);
     connect(ui->BrowserView, &FileBrowser::AddFileProject, this, &MainWindow::openCallback);
     connect(ui->BrowserView, &FileBrowser::customContextMenuRequested, this, &MainWindow::addContextMenuForBrowser);
@@ -52,6 +51,7 @@ MainWindow::~MainWindow() {
 }
 
 void MainWindow::menuConnector() {
+    connect(ui->actionNew_Window, &QAction::triggered, this, [=] { emit newWindowCallback(""); });
     connect(ui->actionNew, &QAction::triggered, this, &MainWindow::newCallback);
     connect(ui->actionOpen, &QAction::triggered, this, &MainWindow::openCallback);
     connect(ui->actionSave, &QAction::triggered, this, &MainWindow::saveCallback);
@@ -76,16 +76,15 @@ void MainWindow::menuConnector() {
     connect(ui->actionIncrease_Font_Size, &QAction::triggered, ui->SplitPanel, &Panel::increaseZoom);
     connect(ui->actionDecrease_Font_Size, &QAction::triggered, ui->SplitPanel, &Panel::decreaseZoom);
     connect(ui->actionReset_Font_Size, &QAction::triggered, ui->SplitPanel, &Panel::resetZoom);
-
 }
 
 void MainWindow::openCallback() {
     QFileDialog dialog;
     dialog.setFileMode(QFileDialog::AnyFile);
     dialog.setOptions(QFileDialog::DontResolveSymlinks);
-//    dialog.setNameFilter(tr("Open..."));
     if (dialog.exec() == QDialog::Accepted) {
         QString path = dialog.selectedFiles().front();
+        QString ext = QFileInfo(path).completeSuffix();
         QFileInfo info(path);
         if (info.isFile() && info.isReadable())
             ui->SplitPanel->addPageToPanel(path, new QFile(path));
@@ -99,7 +98,6 @@ void MainWindow::openCallback() {
 void MainWindow::newFileCallback(const QString& sPath) {
 //  create new tab in panel
     emit createFile(sPath);
-
 }
 
 void MainWindow::newFolderCallback(const QString& sPath) {
@@ -248,3 +246,4 @@ void MainWindow::addFileToView(const QString &sPath) {
 
     ui->SplitPanel->addPageToPanel(label, new QFile(sPath));
 }
+

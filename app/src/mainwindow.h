@@ -44,6 +44,8 @@ signals:
     void searchInFolder(const QString& sPath);
     void revealInFinder(const QString& sPath);
     void closeTabs();
+    void newWindowCallback(const QString& sPath);
+
 
 public slots:
     void renameFile(const QString &oldPath, const QString &newPath);

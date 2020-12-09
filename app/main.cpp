@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include <QApplication>
 #include <QErrorMessage>
+#include "WindowManager.h"
 
 int main(int argc, char *argv[]) {
     QApplication a(argc, argv);
@@ -10,8 +11,11 @@ int main(int argc, char *argv[]) {
         msg.exec();
         return 1;
     } else {
-        MainWindow w((QString(argv[1])));
-        w.show();
+        WindowManager manager;
+//        w.show();
+//        MainWindow w((QString(argv[1])));
+//        w.show();
+        emit manager.addWindow( QString(argv[1]));
         return a.exec();
     }
 }

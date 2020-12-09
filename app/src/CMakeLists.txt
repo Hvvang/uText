@@ -21,8 +21,11 @@ set(HEADERS
 set(UI
     ${CMAKE_CURRENT_SOURCE_DIR}/mainwindow.ui
     ${CMAKE_CURRENT_SOURCE_DIR}/popup.ui
-)
+    ${CMAKE_CURRENT_SOURCE_DIR}/beforeCloseDialog.ui
+        WindowManager.cpp WindowManager.h Editor.cpp Editor.h SaveDialog.cpp SaveDialog.h)
 
 add_library(src_lib STATIC ${SOURCES} ${HEADERS} ${UI})
 
-target_link_libraries(src_lib Qt5::Core Qt5::Widgets)
+#file(GLOB LIBRARIES "${CMAKE_CURRENT_SOURCE_DIR}/../../3dparty/Scintilla/Qt4Qt5/*.dylib")
+file(GLOB LIBRARIES "${CMAKE_CURRENT_SOURCE_DIR}/../../3dparty/Scintilla/Qt4Qt5/*.dylib")
+target_link_libraries(src_lib Qt5::Core Qt5::Widgets ${LIBRARIES})

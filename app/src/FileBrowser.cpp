@@ -4,6 +4,8 @@
 #include "FileBrowser.h"
 #include "FileObserver.h"
 #include "mainwindow.h"
+#include "SaveDialog.h"
+#include "Editor.h"
 #include <QFileInfo>
 #include <QVBoxLayout>
 #include <QMenu>

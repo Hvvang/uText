@@ -8,11 +8,13 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 
-
 find_package(Qt5 COMPONENTS Widgets REQUIRED)
+
+message("LIBRARIES = ${LIBRARIES}")
 
 include_directories(
         ./src
+        ../3dparty/Scintilla/Qt4Qt5
 )
 
 add_compile_options(
@@ -24,4 +26,4 @@ add_compile_options(
 
 add_subdirectory(src)
 add_executable(utext main.cpp)
-target_link_libraries(utext src_lib Qt5::Core Qt5::Widgets)
+target_link_libraries(utext src_lib Qt5::Core Qt5::Widgets )
