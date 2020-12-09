@@ -48,6 +48,7 @@ void Panel::addPageToPanel(const QString &label, QFile *file) {
 
     } else {
         auto window = new FileTab();
+        widget->setFile(file);
         window->addFile(label, widget);
         rootSplitter->addWidget(window);
         connect(dynamic_cast<FileTab *>(window), &FileTab::grabFocus, this, &Panel::LastFocusedTabController);
@@ -315,3 +316,4 @@ void Panel::findPrev() {
         editor->findPrevious();
     }
 }
+

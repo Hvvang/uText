@@ -20,6 +20,8 @@ class FileObserver : public QTreeView {
     Q_OBJECT
 public:
     explicit FileObserver(QWidget *parent = Q_NULLPTR);
+    virtual ~FileObserver();
+
     void setRootPath(const QString& sPath);
 
 public slots:
@@ -46,6 +48,7 @@ signals:
     void doubleClick(const QString &sPath);
 
 private:
+    QDialog *dialog;
     QFileSystemModel *observerModel;
 };
 

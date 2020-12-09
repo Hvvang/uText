@@ -18,6 +18,8 @@ MainWindow::MainWindow(const QString &sPath, QWidget *parent)
     ui->SplitPanel->setRootSplitter(ui->RootSplitter);
     ui->toolBar->hide();
 
+    dialog = new PopupDialog(this);
+
     connect(ui->addFolderBtn, &QPushButton::released, this, &MainWindow::openCallback);
     connect(ui->BrowserView, &FileBrowser::AddFileProject, this, &MainWindow::openCallback);
     connect(ui->BrowserView, &FileBrowser::customContextMenuRequested, this, &MainWindow::addContextMenuForBrowser);
@@ -51,6 +53,9 @@ MainWindow::MainWindow(const QString &sPath, QWidget *parent)
 
 MainWindow::~MainWindow() {
     delete ui;
+    if (dialog) {
+        delete dialog;
+    }
 }
 
 void MainWindow::menuConnector() {
@@ -90,6 +95,7 @@ void MainWindow::menuConnector() {
         auto dialog = new PopupDialog(this);
         connect(dialog, &PopupDialog::Find, ui->SplitPanel, &Panel::find);
         dialog->setParams("Find in file.", "", Type::Find);
+        delete dialog;
     });
     connect(ui->actionFind_Next, &QAction::triggered, ui->SplitPanel, &Panel::findNext);
     connect(ui->actionFind_Previous, &QAction::triggered, ui->SplitPanel, &Panel::findPrev);
@@ -97,16 +103,17 @@ void MainWindow::menuConnector() {
         auto dialog = new PopupDialog(this);
         connect(dialog, &PopupDialog::Replace, ui->SplitPanel, &Panel::replace);
         dialog->setParams("Replace in file.", "", Type::Replace);
+        delete dialog;
     });
 
 }
 
 void MainWindow::openCallback() {
-    QFileDialog dialog;
-    dialog.setFileMode(QFileDialog::AnyFile);
-    dialog.setOptions(QFileDialog::DontResolveSymlinks);
-    if (dialog.exec() == QDialog::Accepted) {
-        QString path = dialog.selectedFiles().front();
+    QFileDialog d;
+    d.setFileMode(QFileDialog::AnyFile);
+    d.setOptions(QFileDialog::DontResolveSymlinks);
+    if (d.exec() == QDialog::Accepted) {
+        QString path = d.selectedFiles().front();
         QString ext = QFileInfo(path).completeSuffix();
         QFileInfo info(path);
         if (info.isFile() && info.isReadable())
@@ -166,7 +173,6 @@ void MainWindow::browserSwitch() {
 }
 
 void MainWindow::addContextMenuForBrowser(const QPoint &pos) {
-    auto dialog = new PopupDialog(this);
     QMenu contextMenu(tr("Context menu"), ui->BrowserView);
     QAction action1(tr("New File"), this);
     QAction action2(tr("New Folder"), this);
@@ -190,12 +196,12 @@ void MainWindow::addContextMenuForBrowser(const QPoint &pos) {
     contextMenu.addAction(&action8);
 
     connect(&action1, &QAction::triggered, this, [=] {
-        connect(dialog, &PopupDialog::NewFile, this, &MainWindow::newFileCallback);
-        dialog->setParams("Enter the path for the new file.", "", Type::NewFile);
+        connect(dynamic_cast<PopupDialog *>(dialog), &PopupDialog::NewFile, this, &MainWindow::newFileCallback);
+        dynamic_cast<PopupDialog *>(dialog)->setParams("Enter the path for the new file.", "", Type::NewFile);
     });
     connect(&action2, &QAction::triggered, this, [=] {
-        connect(dialog, &PopupDialog::NewFolder, this, &MainWindow::newFolderCallback);
-        dialog->setParams("Enter the path for the new folder.", "", Type::NewDir);
+        connect(dynamic_cast<PopupDialog *>(dialog), &PopupDialog::NewFolder, this, &MainWindow::newFolderCallback);
+        dynamic_cast<PopupDialog *>(dialog)->setParams("Enter the path for the new folder.", "", Type::NewDir);
     });
     connect(&action3, &QAction::triggered, this, [this] {
         emit openDialog();
@@ -218,12 +224,12 @@ void MainWindow::addContextMenuForBrowser(const QPoint &pos) {
         auto browser = ui->BrowserView;
         if (browser->tabBar()->tabAt(pos) != -1)
             browser->setCurrentIndex(browser->tabBar()->tabAt(pos));
-        connect(dialog, &PopupDialog::SearchFile, this, &MainWindow::searchFile);
-        dialog->setParams("Enter the path for the search file.", "", Type::SearchFile);
+        connect(dynamic_cast<PopupDialog *>(dialog), &PopupDialog::SearchFile, this, &MainWindow::searchFile);
+        dynamic_cast<PopupDialog *>(dialog)->setParams("Enter the path for the search file.", "", Type::SearchFile);
     });
     connect(&action7, &QAction::triggered, this, [=] {
-        connect(dialog, &PopupDialog::SearchInDir, this, &MainWindow::searchInFolder);
-        dialog->setParams("Enter smth you want to find in files.", "", Type::SearchInDir);
+        connect(dynamic_cast<PopupDialog *>(dialog), &PopupDialog::SearchInDir, this, &MainWindow::searchInFolder);
+        dynamic_cast<PopupDialog *>(dialog)->setParams("Enter smth you want to find in files.", "", Type::SearchInDir);
     });
     connect(&action8, &QAction::triggered, this, [=] {
         auto browser = ui->BrowserView;
@@ -294,5 +300,3 @@ void MainWindow::toggleBrowser() {
         ui->splitter->setSizes(vSize);
     }
 }
-
-

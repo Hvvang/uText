@@ -133,9 +133,11 @@ void FileBrowser::addFolderCallback(const QString &sPath) {
             emit closeTabs();
         tabs[splitName] = model;
     }
+    delete file;
 }
 
 void FileBrowser::removeFolderCallback(int index) {
+    // delete tabs[tabText(index)];
     tabs.remove(tabText(index));
     removeTab(index);
     if (tabs.empty()) {
@@ -218,3 +220,4 @@ void FileBrowser::doubleClickCallback(const QString &sPath) {
 const QMap<QString, FileObserver *> &FileBrowser::Tabs() const {
     return tabs;
 }
+

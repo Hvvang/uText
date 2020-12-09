@@ -61,6 +61,7 @@ protected:
 
 private:
     Ui::MainWindow *ui;
+    QDialog *dialog;
     int treeSize;
 };
 

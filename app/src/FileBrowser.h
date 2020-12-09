@@ -30,7 +30,6 @@ public slots:
 signals:
     void closeTabs();
     void AddFileProject();
-//    void NewFile(const QString& file);
     void oneClick(const QString &sPath);
     void doubleClick(const QString &sPath);
     void FileRename(const QString &oldPath, const QString &newPath);

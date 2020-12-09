@@ -19,9 +19,15 @@ FileObserver::FileObserver(QWidget *parent) : QTreeView(parent) {
         hideColumn(i);
     }
     setMinimumWidth(0);
+    dialog = new PopupDialog(this);
     setContextMenuPolicy(Qt::ContextMenuPolicy::CustomContextMenu);
     observerModel->setHeaderData(0, Qt::Vertical,"Project");
     connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(ShowContextMenu(const QPoint &)));
+}
+
+FileObserver::~FileObserver() {
+    if (observerModel) delete observerModel;
+    if (dialog) delete dialog;
 }
 
 void FileObserver::setRootPath(const QString& sPath) {
@@ -30,7 +36,6 @@ void FileObserver::setRootPath(const QString& sPath) {
 }
 
 void FileObserver::ShowContextMenu(const QPoint &pos) {
-    auto dialog = new PopupDialog(this);
     auto file = dynamic_cast<QFileSystemModel *>(model())->filePath(indexAt(pos));
     QFileInfo info(file);
     auto dirPath = dynamic_cast<QFileSystemModel *>(model())->filePath(rootIndex());
@@ -69,26 +74,28 @@ void FileObserver::ShowContextMenu(const QPoint &pos) {
     contextMenu.addAction(&action12);
     contextMenu.addAction(&action13);
 
+
+
     connect(&action1, &QAction::triggered, this, [=] {
 //        connect(dialog, SIGNAL(NewFile(const QString&)), this, SLOT(PreCreateFileCallback(const QString&)));
-        dialog->setParams("Enter smth you want to find in files.", "", Type::SearchInDir);
+        dynamic_cast<PopupDialog *>(dialog)->setParams("Enter smth you want to find in files.", "", Type::SearchInDir);
     });
     connect(&action2, &QAction::triggered, this, [=] {
         connect(dialog, SIGNAL(NewFile(const QString&)), this, SLOT(PreCreateFileCallback(const QString&)));
         auto temp = entry;
         auto res = (info.isDir()) ? temp : temp.remove(temp.lastIndexOf('/'), temp.size());
-        dialog->setParams("Enter the path for the new file.", res  + '/', Type::NewFile);
+        dynamic_cast<PopupDialog *>(dialog)->setParams("Enter the path for the new file.", res  + '/', Type::NewFile);
     });
     connect(&action3, &QAction::triggered, this, [=] {
         connect(dialog, SIGNAL(NewFolder(const QString&)), this, SLOT(PreCreateDirCallback(const QString&)));
         auto temp = entry;
         auto res = (info.isDir()) ? temp : temp.remove(temp.lastIndexOf('/'), temp.size());
-        dialog->setParams("Enter the path for the new file.", res  + '/', Type::NewDir);
+        dynamic_cast<PopupDialog *>(dialog)->setParams("Enter the path for the new file.", res  + '/', Type::NewDir);
     });
     connect(&action4, &QAction::triggered, this, [=] {
         connect(dialog, SIGNAL(Rename(const QString&)), this, SLOT(Rename(const QString&)));
         QString type = (info.isFile()) ? "file." : "folder.";
-        dialog->setParams("Enter the new path for the " + type, entry, Type::Rename);
+        dynamic_cast<PopupDialog *>(dialog)->setParams("Enter the new path for the " + type, entry, Type::Rename);
     });
     connect(&action5, &QAction::triggered, this, [=] {
         DuplicateItem(file);
@@ -257,6 +264,7 @@ void FileObserver::mouseDoubleClickEvent(QMouseEvent *event) {
     if (file->isFile()) {
         emit doubleClick(file->filePath());
     }
+    delete file;
 }
 
 void FileObserver::mouseReleaseEvent(QMouseEvent *event) {
@@ -265,5 +273,5 @@ void FileObserver::mouseReleaseEvent(QMouseEvent *event) {
     if (file->isFile()) {
         emit oneClick(file->filePath());
     }
+    delete file;
 }
-

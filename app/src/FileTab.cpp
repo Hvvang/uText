@@ -124,6 +124,7 @@ void FileTab::removeFileCallback(int index) {
         emit grabFocus(this);
 
         auto result = dialog->getResult();
+        delete dialog;
         if (result == 1) {
             return;
         }
@@ -131,6 +132,7 @@ void FileTab::removeFileCallback(int index) {
             emit saveFileCallback(index);
         }
     }
+    // delete tabs[Path(tabText(index))];
     tabs.remove(Path(tabText(index)));
     removeTab(index);
     if (tabs.empty()) {
@@ -168,6 +170,7 @@ void FileTab::TabAboutToRename(const QString &oldPath, const QString &newPath) {
     if (tabs.contains(oldPath)) {
         tabs[newPath] = tabs[oldPath];
         tabs[newPath]->setFile(new QFile(newPath));
+        // delete tabs[oldPath];
         tabs.remove(oldPath);
         setTabText(indexOf(tabs[newPath]), newName);
     }
@@ -179,6 +182,7 @@ void FileTab::TabAboutToRenameByDir(const QString &oldPath, const QString &newPa
             auto newFileName = key;
             newFileName.replace(oldPath, newPath);
             tabs[newFileName] = tabs[key];
+            // delete tabs[key];
             tabs.remove(key);
             tabs[newFileName]->setFile(new QFile(key));
         }
