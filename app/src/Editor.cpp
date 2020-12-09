@@ -36,7 +36,6 @@ Editor::Editor(QWidget *parent)
     setIndentationWidth(4);
     setBackspaceUnindents(true);
     setIndentationGuides(true);
-    connect(this, &Editor::textChanged, this, [=] { edited = true; });
 }
 
 void Editor::setFile(QFile *fileIn) {
@@ -48,6 +47,7 @@ void Editor::setFile(QFile *fileIn) {
     }
     file = fileIn;
     setLex(file->fileName());
+    connect(this, &Editor::textChanged, this, [=] { edited = true; });
 }
 
 void Editor::setLex(const QString &fileName) {
@@ -61,7 +61,7 @@ void Editor::setLex(const QString &fileName) {
         lex = new QsciLexerBatch(this);
     else if (ext == "coffee")
         lex = new QsciLexerCoffeeScript(this);
-    else if (ext == "cpp") {
+    else if (ext == "cpp" || ext == "h" || ext == "hpp") {
         auto temp = new QsciLexerCPP(this);
         temp->setFoldAtElse(true);
         temp->setFoldComments(true);
@@ -135,9 +135,3 @@ const bool &Editor::isEdited() const {
 void Editor::setEdited(const bool &edited) {
     Editor::edited = edited;
 }
-
-
-
-
-
-

@@ -38,8 +38,8 @@ void Panel::addPageToPanel(const QString &label, QFile *file) {
     auto widget = new Editor();
 
     if (!file->fileName().isEmpty() && file->open(QIODevice::ReadWrite)) {
-        widget->setFile(file);
         widget->setText(file->readAll());
+        widget->setFile(file);
         file->close();
     }
     if (m_lastFocus) {
@@ -72,8 +72,8 @@ void Panel::replaceCurrentPage(const QString &label, QFile *file) {
             auto editor = dynamic_cast<Editor *>(tab->currentWidget());
             tab->setTabText(tab->currentIndex(), label);
 
-            emit editor->setFile(file);
             editor->setText(file->readAll());
+            editor->setFile(file);
             file->close();
         }
     } else {
@@ -102,6 +102,7 @@ QWidget *Panel::copyWindow() {
     connect(dynamic_cast<FileTab *>(window), &FileTab::closePanel, this, &Panel::closePanel);
     widget->setText(dynamic_cast<Editor *>(currTab->currentWidget())->text());
     auto path = currTab->Path(currTab->tabText(currTab->currentIndex()));
+    widget->setFile(new QFile(path));
 //    if (path == currTab->tabText(currTab->currentIndex())) {
 //        throw ;
 //    } else {
@@ -287,4 +288,3 @@ void Panel::resetZoom() {
         editor->zoomTo(0);
     }
 }
-

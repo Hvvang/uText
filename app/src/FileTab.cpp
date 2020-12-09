@@ -7,7 +7,6 @@
 #include <QFileInfo>
 #include <QPlainTextDocumentLayout>
 #include <QFileDialog.h>
-#include <QMessageBox>
 
 FileTab::FileTab(QWidget *parent)
     : QTabWidget(parent) {
@@ -237,4 +236,3 @@ void FileTab::TabAboutToSaveAs() {
     saveFileAsCallback(file);
     emit saveFileCallback(currentIndex());
 }
-
